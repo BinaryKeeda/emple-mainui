@@ -1,0 +1,139 @@
+{
+  "title": "Search in a Sorted Matrix",
+  "description": "Determine whether a given target value exists in a 2D matrix where each row is sorted and each first element of the row is greater than the last element of the previous row. The entire matrix behaves like a flattened sorted array.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["Binary Search", "Matrix", "2D Array", "Flattened Array"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Linear Search",
+      "description": "Traverse every element in the matrix row by row to find the target value.",
+      "steps": [
+        "Iterate through each row of the matrix.",
+        "For each row, iterate through each element.",
+        "If an element equals the target, return true.",
+        "If the loop completes without finding the target, return false."
+      ],
+      "time_complexity": "O(m × n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;\n        int m = matrix.length;\n        int n = matrix[0].length;\n        for (int i = 0; i < m; i++) {\n            for (int j = 0; j < n; j++) {\n                if (matrix[i][j] == target) return true;\n            }\n        }\n        return false;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    bool searchMatrix(vector<vector<int>>& matrix, int target) {\n        if (matrix.empty() || matrix[0].empty()) return false;\n        int m = matrix.size(), n = matrix[0].size();\n        for (int i = 0; i < m; ++i) {\n            for (int j = 0; j < n; ++j) {\n                if (matrix[i][j] == target) return true;\n            }\n        }\n        return false;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Binary Search on Flattened Matrix",
+      "description": "Use binary search treating the 2D matrix as a flattened sorted array.",
+      "steps": [
+        "Initialize left = 0 and right = m × n - 1.",
+        "While left <= right:",
+        "Compute mid = left + (right - left) / 2.",
+        "Convert mid to 2D indices using: row = mid / n, col = mid % n.",
+        "Compare matrix[row][col] with target.",
+        "If equal, return true. If less, search in the right half. If greater, search in the left half.",
+        "Return false if not found."
+      ],
+      "time_complexity": "O(log(m × n))",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;\n        int m = matrix.length, n = matrix[0].length;\n        int left = 0, right = m * n - 1;\n        while (left <= right) {\n            int mid = left + (right - left) / 2;\n            int midValue = matrix[mid / n][mid % n];\n            if (midValue == target) return true;\n            else if (midValue < target) left = mid + 1;\n            else right = mid - 1;\n        }\n        return false;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    bool searchMatrix(vector<vector<int>>& matrix, int target) {\n        if (matrix.empty() || matrix[0].empty()) return false;\n        int m = matrix.size(), n = matrix[0].size();\n        int left = 0, right = m * n - 1;\n        while (left <= right) {\n            int mid = left + (right - left) / 2;\n            int midValue = matrix[mid / n][mid % n];\n            if (midValue == target) return true;\n            else if (midValue < target) left = mid + 1;\n            else right = mid - 1;\n        }\n        return false;\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": {
+        "grid": [
+          [2, 4, 6, 8],
+          [10, 12, 14, 16],
+          [18, 20, 22, 24]
+        ],
+        "value": 12
+      },
+      "output": true,
+      "explanation": "12 exists in the second row of the matrix."
+    },
+    {
+      "input": {
+        "grid": [
+          [5, 10, 15],
+          [25, 30, 35],
+          [45, 50, 55]
+        ],
+        "value": 40
+      },
+      "output": false,
+      "explanation": "40 is not present in any row of the matrix."
+    }
+  ],
+  "constraints": {
+    "1 <= m, n <= 1000": true,
+    "grid[i][j] is sorted and follows properties mentioned": true,
+    "target is an integer": true
+  },
+  "edge_cases": [
+    {
+      "input": {
+        "grid": [[1]],
+        "value": 1
+      },
+      "output": true,
+      "reason": "Matrix has one element which is the target."
+    },
+    {
+      "input": {
+        "grid": [[1]],
+        "value": 2
+      },
+      "output": false,
+      "reason": "Matrix has one element which is not the target."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": {
+        "grid": [
+          [1, 3, 5],
+          [7, 9, 11]
+        ],
+        "value": 5
+      },
+      "expected_output": true
+    },
+    {
+      "id": "tc2",
+      "input": {
+        "grid": [
+          [1, 3, 5],
+          [7, 9, 11]
+        ],
+        "value": 12
+      },
+      "expected_output": false
+    }
+  ],
+  "notes": {
+    "flattening_matrix": "You can map any index `i` of a 1D array to matrix[i / n][i % n].",
+    "matrix_property": "Matrix is strictly increasing from top-left to bottom-right as a whole."
+  },
+  "hints": [
+    "Try treating the matrix as a flat array of size m × n.",
+    "Use binary search logic directly on flattened index space.",
+    "Mid index can be transformed into matrix coordinates."
+  ],
+  "follow_up": [
+    "What if the matrix allows duplicate values?",
+    "What if the matrix is not strictly increasing row to row?",
+    "Can you modify the binary search logic for row-wise only sorted matrices?"
+  ],
+  "tags": ["Binary Search", "Matrix", "2D Array", "Divide and Conquer"]
+}

@@ -1,0 +1,114 @@
+{
+  "title": "Anagram Check",
+  "description": "Given two strings str1 and str2, determine if they are anagrams of each other. An anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.",
+  "metadata": {
+    "difficulty": "Easy",
+    "tags": ["String", "Hashing", "Sorting", "Frequency Count"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Sort and Compare",
+      "description": "Sort both strings and compare character by character.",
+      "steps": [
+        "Check if the lengths of the strings are different; if yes, return false.",
+        "Convert both strings to character arrays.",
+        "Sort both character arrays in ascending order.",
+        "Compare the sorted arrays. If identical, return true; else, false."
+      ],
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.Arrays;\nclass Solution {\n  public boolean isAnagram(String s, String t) {\n    if (s.length() != t.length()) return false;\n    char[] sChars = s.toCharArray();\n    char[] tChars = t.toCharArray();\n    Arrays.sort(sChars);\n    Arrays.sort(tChars);\n    return Arrays.equals(sChars, tChars);\n  }\n}",
+        "cpp": "#include <algorithm>\n#include <string>\nclass Solution {\npublic:\n  bool isAnagram(std::string s, std::string t) {\n    if (s.length() != t.length()) return false;\n    std::sort(s.begin(), s.end());\n    std::sort(t.begin(), t.end());\n    return s == t;\n  }\n}"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Frequency Count using Fixed Array",
+      "description": "Use a fixed-size array (26 for lowercase letters) to count frequencies.",
+      "steps": [
+        "Check if the lengths of the strings are different; if yes, return false.",
+        "Initialize an array of size 26 to store frequency counts.",
+        "Iterate over both strings simultaneously.",
+        "Increment the count for characters in the first string and decrement for the second.",
+        "After iteration, if all counts are zero, return true; else false."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n  public boolean isAnagram(String s, String t) {\n    if (s.length() != t.length()) return false;\n    int[] freq = new int[26];\n    for (int i = 0; i < s.length(); i++) {\n      freq[s.charAt(i) - 'a']++;\n      freq[t.charAt(i) - 'a']--;\n    }\n    for (int count : freq) {\n      if (count != 0) return false;\n    }\n    return true;\n  }\n}",
+        "cpp": "#include <vector>\n#include <string>\nclass Solution {\npublic:\n  bool isAnagram(std::string s, std::string t) {\n    if (s.length() != t.length()) return false;\n    std::vector<int> freq(26, 0);\n    for (int i = 0; i < s.length(); i++) {\n      freq[s[i] - 'a']++;\n      freq[t[i] - 'a']--;\n    }\n    for (int count : freq) {\n      if (count != 0) return false;\n    }\n    return true;\n  }\n}"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": ["listen", "silent"],
+      "output": true,
+      "explanation": "Both contain the same letters (e, i, l, n, s, t)."
+    },
+    {
+      "input": ["hello", "world"],
+      "output": false,
+      "explanation": "They contain different letters."
+    }
+  ],
+  "constraints": {
+    "1 <= str1.length, str2.length <= 10^5": true,
+    "str1 and str2 contain only lowercase English letters": true
+  },
+  "edge_cases": [
+    {
+      "input": ["", ""],
+      "output": true,
+      "reason": "Empty strings are trivially anagrams."
+    },
+    {
+      "input": ["a", "ab"],
+      "output": false,
+      "reason": "Different lengths cannot be anagrams."
+    },
+    {
+      "input": ["rat", "car"],
+      "output": false,
+      "reason": "Characters do not match after sorting or counting."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": ["anagram", "nagaram"],
+      "expected_output": true
+    },
+    {
+      "id": "tc2",
+      "input": ["binary", "brainy"],
+      "expected_output": true
+    },
+    {
+      "id": "tc3",
+      "input": ["debitcard", "badcredit"],
+      "expected_output": true
+    }
+  ],
+  "notes": {
+    "unicode_support": "For full Unicode support, consider using HashMap<Character, Integer> instead of fixed-size arrays.",
+    "case_sensitivity": "The given solution assumes all characters are lowercase. For case-insensitive checks, normalize both strings."
+  },
+  "hints": [
+    "What happens if you sort both strings?",
+    "Can you use a frequency array to track letter counts?",
+    "Check the string lengths before proceeding with logic."
+  ],
+  "follow_up": [
+    "How would you handle case sensitivity?",
+    "What if the strings contain Unicode characters?",
+    "Can you do it in a streaming fashion without storing the full string?"
+  ],
+  "tags": ["String", "Sorting", "Hash Map", "Frequency Array"]
+}

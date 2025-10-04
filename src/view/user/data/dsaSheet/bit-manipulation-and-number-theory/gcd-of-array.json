@@ -1,0 +1,127 @@
+{
+  "title": "GCD of Array",
+  "description": "Find the Greatest Common Divisor (GCD) of all elements in the given array.",
+  "metadata": {
+    "difficulty": "Easy",
+    "tags": ["Math", "GCD", "Array", "Euclidean Algorithm"],
+    "author": "Aryan Bhandari",
+    "created_at": "2025-06-26",
+    "updated_at": "2025-06-26",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Divisor Checking",
+      "description": "Check every number from min(arr) down to 1 and test if all elements are divisible by it.",
+      "steps": [
+        "Find the minimum element in the array.",
+        "Iterate from that minimum value down to 1.",
+        "For each value i, check if all array elements are divisible by i.",
+        "If true, return i as the GCD.",
+        "If none found, return 1."
+      ],
+      "time_complexity": "O(min * n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "public class GCDArrayBrute {\n  public static int findGCD(int[] nums) {\n    int min = nums[0];\n    for (int num : nums) min = Math.min(min, num);\n    for (int i = min; i >= 1; i--) {\n      boolean allDivisible = true;\n      for (int num : nums) {\n        if (num % i != 0) {\n          allDivisible = false;\n          break;\n        }\n      }\n      if (allDivisible) return i;\n    }\n    return 1;\n  }\n}",
+        "cpp": "#include <iostream>\n#include <vector>\nusing namespace std;\nint findGCD(vector<int>& nums) {\n  int minVal = nums[0];\n  for (int num : nums) minVal = min(minVal, num);\n  for (int i = minVal; i >= 1; --i) {\n    bool allDiv = true;\n    for (int num : nums) {\n      if (num % i != 0) {\n        allDiv = false;\n        break;\n      }\n    }\n    if (allDiv) return i;\n  }\n  return 1;\n}"
+      }
+    },
+    {
+      "category": "Better (Iterative Euclidean)",
+      "algorithm": "Iterative Euclidean Algorithm",
+      "description": "Use iterative Euclidean algorithm pairwise through the array.",
+      "steps": [
+        "Implement gcd(a, b) using while loop with Euclidean algorithm.",
+        "Initialize result with the first element of the array.",
+        "Iterate through the rest of the array, updating result = gcd(result, current).",
+        "If at any point result becomes 1, return early.",
+        "Return the final result as the GCD."
+      ],
+      "time_complexity": "O(n * log(max))",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "public class GCDArrayBetter {\n  public static int gcd(int a, int b) {\n    while (b != 0) {\n      int temp = b;\n      b = a % b;\n      a = temp;\n    }\n    return a;\n  }\n  public static int findGCD(int[] nums) {\n    int result = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n      result = gcd(result, nums[i]);\n      if (result == 1) return 1;\n    }\n    return result;\n  }\n}",
+        "cpp": "#include <iostream>\n#include <vector>\nusing namespace std;\nint gcd(int a, int b) {\n  while (b != 0) {\n    int temp = b;\n    b = a % b;\n    a = temp;\n  }\n  return a;\n}\nint findGCD(vector<int>& nums) {\n  int result = nums[0];\n  for (int i = 1; i < nums.size(); ++i) {\n    result = gcd(result, nums[i]);\n    if (result == 1) return 1;\n  }\n  return result;\n}"
+      }
+    },
+    {
+      "category": "Best (Recursive + Functional Reduce)",
+      "algorithm": "Recursive Euclidean + Functional Reduction",
+      "description": "Use recursion to compute GCD functionally across array (e.g. via reduce).",
+      "steps": [
+        "Define a recursive gcd(a, b) function: if b == 0 return a, else return gcd(b, a % b).",
+        "Use a reduce operation or recursion to apply gcd to the entire array.",
+        "In reduce: result = gcd(result, current) for each pair.",
+        "Return the reduced GCD value of the array."
+      ],
+      "time_complexity": "O(n * log(max))",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.Arrays;\npublic class GCDArrayRecursive {\n  public static int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n  public static int findGCD(int[] nums) {\n    return Arrays.stream(nums).reduce(GCDArrayRecursive::gcd).orElse(0);\n  }\n}",
+        "cpp": "#include <iostream>\n#include <vector>\nusing namespace std;\nint gcd(int a, int b) {\n  if (b == 0) return a;\n  return gcd(b, a % b);\n}\nint findGCD(vector<int>& nums, int index = 0) {\n  if (index == nums.size() - 1) return nums[index];\n  int nextGCD = findGCD(nums, index + 1);\n  return gcd(nums[index], nextGCD);\n}"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": [12, 24, 36],
+      "output": 12,
+      "explanation": "GCD(12, 24) = 12, GCD(12, 36) = 12"
+    },
+    {
+      "input": [3, 5, 7],
+      "output": 1,
+      "explanation": "No common divisor greater than 1"
+    }
+  ],
+  "constraints": {
+    "1 <= n <= 100000": true,
+    "1 <= arr[i] <= 1000000000": true
+  },
+  "edge_cases": [
+    {
+      "input": [1, 1, 1],
+      "output": 1,
+      "reason": "GCD of all 1s is 1"
+    },
+    {
+      "input": [1000000000, 1000000000],
+      "output": 1000000000,
+      "reason": "Two large equal values"
+    },
+    {
+      "input": [2],
+      "output": 2,
+      "reason": "Single element"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": [8, 16, 32],
+      "expected_output": 8
+    },
+    {
+      "id": "tc2",
+      "input": [7, 13, 29],
+      "expected_output": 1
+    }
+  ],
+  "notes": {
+    "euclidean_algorithm": "The GCD of two numbers a and b (a > b) is the same as GCD(b, a % b). This process continues until b becomes 0.",
+    "early_exit": "If GCD becomes 1 at any point, we can exit early as 1 is the lowest possible GCD."
+  },
+  "hints": [
+    "Try to reduce the problem from 3 or more numbers to 2 at a time.",
+    "Can you use the result of one GCD to reduce the next?",
+    "What's the most efficient way to find GCD of two numbers?"
+  ],
+  "follow_up": [
+    "What if the array is constantly updated and you need GCD in real-time?",
+    "Can you do it in parallel for large arrays?",
+    "What if elements are added or removed dynamically?"
+  ],
+  "tags": ["Math", "Number Theory", "Basic Algorithms", "Optimized Loop", "Recursion"]
+}

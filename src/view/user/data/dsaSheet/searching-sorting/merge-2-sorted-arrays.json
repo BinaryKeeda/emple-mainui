@@ -1,0 +1,131 @@
+{
+  "title": "Merge Two Sorted Arrays",
+  "description": "Given two sorted arrays, merge the second into the first one in-place such that the first array becomes a single sorted array.",
+  "metadata": {
+    "difficulty": "Easy",
+    "tags": ["Array", "Two Pointers", "Sorting", "In-place"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Append and Sort",
+      "description": "Copy nums2 into the end of nums1 and then sort the entire array.",
+      "steps": [
+        "Copy each element from nums2 into nums1 starting at index m.",
+        "Sort the entire nums1 array using a standard sorting algorithm."
+      ],
+      "time_complexity": "O((m + n) log(m + n))",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "import java.util.Arrays;\nclass Solution {\n    public void merge(int[] nums1, int m, int[] nums2, int n) {\n        for (int i = 0; i < n; i++) {\n            nums1[m + i] = nums2[i];\n        }\n        Arrays.sort(nums1);\n    }\n}",
+        "cpp": "#include <vector>\n#include <algorithm>\nusing namespace std;\nclass Solution {\npublic:\n    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {\n        for (int i = 0; i < n; i++) {\n            nums1[m + i] = nums2[i];\n        }\n        sort(nums1.begin(), nums1.end());\n    }\n}"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Two-Pointer Merge from End",
+      "description": "Merge both arrays from the end to avoid overwriting elements in nums1.",
+      "steps": [
+        "Initialize three pointers: i = m-1, j = n-1, k = m+n-1.",
+        "While i >= 0 and j >= 0, compare nums1[i] and nums2[j]. Place the larger at nums1[k] and move pointers accordingly.",
+        "If any elements remain in nums2, copy them to the beginning of nums1."
+      ],
+      "time_complexity": "O(m + n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public void merge(int[] nums1, int m, int[] nums2, int n) {\n        int i = m - 1;\n        int j = n - 1;\n        int k = m + n - 1;\n        while (i >= 0 && j >= 0) {\n            if (nums1[i] > nums2[j]) {\n                nums1[k--] = nums1[i--];\n            } else {\n                nums1[k--] = nums2[j--];\n            }\n        }\n        while (j >= 0) {\n            nums1[k--] = nums2[j--];\n        }\n    }\n}",
+        "cpp": "#include <vector>\nusing namespace std;\nclass Solution {\npublic:\n    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {\n        int i = m - 1;\n        int j = n - 1;\n        int k = m + n - 1;\n        while (i >= 0 && j >= 0) {\n            if (nums1[i] > nums2[j]) {\n                nums1[k--] = nums1[i--];\n            } else {\n                nums1[k--] = nums2[j--];\n            }\n        }\n        while (j >= 0) {\n            nums1[k--] = nums2[j--];\n        }\n    }\n}"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": {
+        "nums1": [1, 2, 3, 0, 0, 0],
+        "m": 3,
+        "nums2": [2, 5, 6],
+        "n": 3
+      },
+      "output": [1, 2, 2, 3, 5, 6],
+      "explanation": "Merged from the end: placed 6, 5, 3, 2, then remaining 1, 2."
+    },
+    {
+      "input": {
+        "nums1": [4, 0, 0, 0],
+        "m": 1,
+        "nums2": [1, 2, 3],
+        "n": 3
+      },
+      "output": [1, 2, 3, 4],
+      "explanation": "nums2 exhausted first, copied directly to nums1."
+    }
+  ],
+  "constraints": {
+    "0 <= m, n <= 200": true,
+    "1 <= m + n <= 200": true,
+    "-10^9 <= nums1[i], nums2[i] <= 10^9": true
+  },
+  "edge_cases": [
+    {
+      "input": {
+        "nums1": [0],
+        "m": 0,
+        "nums2": [1],
+        "n": 1
+      },
+      "output": [1],
+      "reason": "Only nums2 has elements; nums1 is empty except space."
+    },
+    {
+      "input": {
+        "nums1": [1],
+        "m": 1,
+        "nums2": [],
+        "n": 0
+      },
+      "output": [1],
+      "reason": "nums2 is empty; nums1 unchanged."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": {
+        "nums1": [1, 2, 3, 0, 0, 0],
+        "m": 3,
+        "nums2": [2, 5, 6],
+        "n": 3
+      },
+      "expected_output": [1, 2, 2, 3, 5, 6]
+    },
+    {
+      "id": "tc2",
+      "input": {
+        "nums1": [4, 0, 0, 0],
+        "m": 1,
+        "nums2": [1, 2, 3],
+        "n": 3
+      },
+      "expected_output": [1, 2, 3, 4]
+    }
+  ],
+  "notes": {
+    "in_place_merge": "Using a reverse merge approach ensures we don't overwrite values in nums1 before comparing them.",
+    "avoid_extra_space": "This problem emphasizes doing the merge in-place without using extra memory."
+  },
+  "hints": [
+    "Can you take advantage of the extra space at the end of nums1?",
+    "Think about merging from the end to avoid shifting elements.",
+    "How can you use pointers to avoid extra space?"
+  ],
+  "follow_up": [
+    "What if nums1 and nums2 are linked lists instead of arrays?",
+    "Can you do this with even less pointer movement?",
+    "How would you parallelize this merge operation?"
+  ],
+  "tags": ["Array", "In-Place Algorithms", "Two Pointers", "Merge Sort"]
+}

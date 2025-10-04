@@ -1,0 +1,124 @@
+import React, { useState, useContext, useEffect } from 'react'
+import {
+  ShortText,
+  Notifications,
+  PowerSettingsNew,
+} from '@mui/icons-material'
+import {
+  Avatar,
+  Badge,
+  Divider,
+  IconButton,
+} from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { logOutUser } from '../../../redux/reducers/UserThunks'
+import Cookies from 'js-cookie'
+import { DARK_STRONG } from '../utils/colors'
+import { Link } from 'react-router-dom'
+import { LOGO } from '../../../lib/config'
+import { ThemeContext } from '../../../context/ThemeProvider'
+import NotificationsDrawer from './NotificationDrawer'
+
+const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
+  const { toggleTheme, theme } = useContext(ThemeContext)
+  const pendingInvites = useSelector((s) => s.auth.user?.pendingInvites || [])
+  const dispatch = useDispatch()
+  const [notificationOpen, setNotificationOpen] = useState(false)
+  const [badgeCount, setBadgeCount] = useState(0)
+
+  useEffect(() => {
+    // automatically update badge count when pendingInvites changes
+    setBadgeCount(pendingInvites.length)
+  }, [pendingInvites])
+
+  const handleLogout = () => {
+    try {
+      dispatch(logOutUser(Cookies.get('token')))
+    } catch (error) {
+      console.log(error, 'logout')
+    }
+  }
+
+  const handleOpenNotifications = () => {
+    setNotificationOpen(true)
+    // optional: clear badge count once opened
+    setBadgeCount(0)
+  }
+
+  return (
+    <>
+      <header className='relative h-[59px]'>
+        <nav
+          className={`fixed shadow-sm bg-white dark:bg-support dark:text-gray-50 bg-blend-difference text-gray-600 h-[59px] items-center pr-5 pl-2 flex justify-between z-40 w-full top-0 dark:bg-[${DARK_STRONG}]`}
+        >
+          <div className='lg:hidden'>
+            <ShortText onClick={() => setMenuOpen(!menuOpen)} />
+          </div>
+
+          <div className='flex md:ml-[100px] gap-1 items-center'>
+            <Link to='/'>
+              <img src={LOGO} className='h-10' alt='Logo' />
+            </Link>
+          </div>
+
+          <div className='flex items-center gap-3'>
+            {user ? (
+              <>
+                {/* Notifications */}
+                <IconButton
+                  aria-label='notifications'
+                  onClick={handleOpenNotifications}
+                >
+                  <Badge
+                    badgeContent={badgeCount}
+                    color='error'
+                    overlap='circular'
+                  >
+                    <Notifications />
+                  </Badge>
+                </IconButton>
+
+                {/* Logout */}
+                <IconButton onClick={handleLogout}>
+                  <PowerSettingsNew />
+                </IconButton>
+              </>
+            ) : (
+              <div className='flex items-center space-x-4'>
+                <Link
+                  to='/login'
+                  className='text-sm font-medium hover:underline'
+                >
+                  Login
+                </Link>
+                <Divider
+                  orientation='vertical'
+                  flexItem
+                  sx={{ bgcolor: 'grey.500' }}
+                />
+                <Link
+                  to={'/register'}
+                  className='text-sm font-medium hover:underline'
+                >
+                  Signup
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
+      </header>
+
+      {/* Notification Drawer */}
+      <NotificationsDrawer
+      // userId={user}
+
+            userId={user?._id}
+        notificationOpen={notificationOpen}
+        setNotificationOpen={setNotificationOpen}
+        pendingInvites={pendingInvites}
+      />
+    </>
+  )
+})
+
+export default Header

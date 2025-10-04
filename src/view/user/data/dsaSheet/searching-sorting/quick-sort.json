@@ -1,0 +1,118 @@
+{
+  "title": "Quick Sort",
+  "description": "Sort an array using the Quick Sort algorithm based on the Divide and Conquer approach with the last element as pivot.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["Sorting", "Divide and Conquer", "Recursion", "Quick Sort"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Naive Partition with Temporary Arrays",
+      "description": "Uses temporary left and right arrays to partition the input around the pivot, then recursively sorts both parts.",
+      "steps": [
+        "Choose the last element as the pivot.",
+        "Traverse the subarray and push elements <= pivot into left[], others into right[].",
+        "Concatenate left[], pivot, and right[] to form a new partitioned array.",
+        "Recursively apply quickSort to the left and right subarrays.",
+        "Copy the result back to the original array."
+      ],
+      "time_complexity": "O(n log n) average, O(n^2) worst case",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.ArrayList;\n\nclass Solution {\n    static class PartitionResult {\n        ArrayList<Integer> array;\n        int pivotIndex;\n\n        PartitionResult(ArrayList<Integer> array, int pivotIndex) {\n            this.array = array;\n            this.pivotIndex = pivotIndex;\n        }\n    }\n\n    static PartitionResult partition(int arr[], int low, int high) {\n        ArrayList<Integer> left = new ArrayList<>();\n        ArrayList<Integer> right = new ArrayList<>();\n        int pivot = arr[high];\n\n        for (int i = low; i < high; i++) {\n            if (arr[i] <= pivot) left.add(arr[i]);\n            else right.add(arr[i]);\n        }\n\n        left.add(pivot);\n        ArrayList<Integer> partitioned = new ArrayList<>(left);\n        partitioned.addAll(right);\n\n        int pivotIndex = low + left.size() - 1;\n        return new PartitionResult(partitioned, pivotIndex);\n    }\n\n    static void quickSort(int arr[], int low, int high) {\n        if (low >= high) return;\n\n        PartitionResult result = partition(arr, low, high);\n        ArrayList<Integer> partitioned = result.array;\n        int pivotIndex = result.pivotIndex;\n\n        for (int i = low; i <= high; i++) {\n            arr[i] = partitioned.get(i - low);\n        }\n\n        quickSort(arr, low, pivotIndex - 1);\n        quickSort(arr, pivotIndex + 1, high);\n    }\n}",
+        "cpp": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    vector<int> partition(vector<int>& arr, int low, int high, int& pivotIndex) {\n        vector<int> left, right;\n        int pivot = arr[high];\n        for (int i = low; i < high; i++) {\n            if (arr[i] <= pivot) left.push_back(arr[i]);\n            else right.push_back(arr[i]);\n        }\n        left.push_back(pivot);\n        vector<int> partitioned = left;\n        partitioned.insert(partitioned.end(), right.begin(), right.end());\n        pivotIndex = low + left.size() - 1;\n        return partitioned;\n    }\n\n    void quickSort(vector<int>& arr, int low, int high) {\n        if (low >= high) return;\n        int pivotIndex;\n        vector<int> partitioned = partition(arr, low, high, pivotIndex);\n        for (int i = low; i <= high; i++) arr[i] = partitioned[i - low];\n        quickSort(arr, low, pivotIndex - 1);\n        quickSort(arr, pivotIndex + 1, high);\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Lomuto Partition (In-Place)",
+      "description": "Performs in-place partitioning by moving all elements <= pivot to the left of a boundary index.",
+      "steps": [
+        "Choose the last element as the pivot.",
+        "Initialize a boundary pointer i = low - 1.",
+        "Iterate through the array from low to high - 1:",
+        "If arr[j] <= pivot, increment i and swap arr[i] and arr[j].",
+        "After loop, place pivot in its correct position by swapping arr[i+1] and arr[high].",
+        "Return pivot index (i + 1).",
+        "Recursively apply quickSort to the left and right subarrays."
+      ],
+      "time_complexity": "O(n log n) average, O(n^2) worst case",
+      "space_complexity": "O(log n)",
+      "code": {
+        "java": "class Solution {\n    static int partition(int arr[], int low, int high) {\n        int pivot = arr[high];\n        int i = low - 1;\n        for (int j = low; j < high; j++) {\n            if (arr[j] <= pivot) {\n                i++;\n                int temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n            }\n        }\n        int temp = arr[i + 1];\n        arr[i + 1] = arr[high];\n        arr[high] = temp;\n        return i + 1;\n    }\n\n    static void quickSort(int arr[], int low, int high) {\n        if (low < high) {\n            int pivotIndex = partition(arr, low, high);\n            quickSort(arr, low, pivotIndex - 1);\n            quickSort(arr, pivotIndex + 1, high);\n        }\n    }\n}",
+        "cpp": "#include <vector>\nusing namespace std;\n\nclass Solution {\npublic:\n    int partition(vector<int>& arr, int low, int high) {\n        int pivot = arr[high];\n        int i = low - 1;\n        for (int j = low; j < high; j++) {\n            if (arr[j] <= pivot) {\n                i++;\n                swap(arr[i], arr[j]);\n            }\n        }\n        swap(arr[i + 1], arr[high]);\n        return i + 1;\n    }\n\n    void quickSort(vector<int>& arr, int low, int high) {\n        if (low < high) {\n            int pivotIndex = partition(arr, low, high);\n            quickSort(arr, low, pivotIndex - 1);\n            quickSort(arr, pivotIndex + 1, high);\n        }\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": [8, 5, 2, 9, 1],
+      "output": [1, 2, 5, 8, 9],
+      "explanation": "Array is partitioned and recursively sorted using the pivot."
+    },
+    {
+      "input": [10, 3, 7, 4, 12, 5],
+      "output": [3, 4, 5, 7, 10, 12],
+      "explanation": "Recursive calls partition and sort left and right of each pivot."
+    }
+  ],
+  "constraints": {
+    "1 <= n <= 10^5": true,
+    "-10^9 <= arr[i] <= 10^9": true
+  },
+  "edge_cases": [
+    {
+      "input": [],
+      "output": [],
+      "reason": "Empty array returns empty."
+    },
+    {
+      "input": [1],
+      "output": [1],
+      "reason": "Single element array is already sorted."
+    },
+    {
+      "input": [5, 5, 5, 5],
+      "output": [5, 5, 5, 5],
+      "reason": "All elements equal."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": [4, 1, 3, 9, 7],
+      "expected_output": [1, 3, 4, 7, 9]
+    },
+    {
+      "id": "tc2",
+      "input": [20, 10, 30, 50, 40],
+      "expected_output": [10, 20, 30, 40, 50]
+    }
+  ],
+  "notes": {
+    "worst_case_behavior": "Occurs when pivot is the smallest/largest and recursion is unbalanced.",
+    "inplace_advantage": "Optimal approach reduces space complexity due to in-place swaps."
+  },
+  "hints": [
+    "Use the last element as pivot for both approaches.",
+    "Try visualizing how partition works step-by-step.",
+    "Use recursion wisely to handle base cases and termination."
+  ],
+  "follow_up": [
+    "How would you modify this to handle duplicate pivot values efficiently?",
+    "Can you implement Quick Sort iteratively using a stack?",
+    "What if the array contains objects or strings?"
+  ],
+  "tags": [
+    "Sorting",
+    "Divide and Conquer",
+    "In-Place Algorithm",
+    "Recursion",
+    "DSA Sheet"
+  ]
+}

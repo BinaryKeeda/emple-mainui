@@ -1,0 +1,118 @@
+{
+  "title": "Merge Sort",
+  "description": "Sort the given array using the Merge Sort algorithm. Merge Sort is a classic divide-and-conquer algorithm that divides the array into halves, recursively sorts them, and merges them into a single sorted array.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["Sorting", "Divide and Conquer", "Recursion", "Array"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Recursive Merge Sort",
+      "description": "Recursively divide the array into halves, sort each half, and merge them using a temporary array.",
+      "steps": [
+        "Base Case: If l >= r, return (the subarray is already sorted).",
+        "Divide: Find the midpoint mid = l + (r - l) / 2.",
+        "Recursively sort the left half from l to mid.",
+        "Recursively sort the right half from mid+1 to r.",
+        "Merge the sorted halves using a temporary array.",
+        "Copy the merged result back to the original array."
+      ],
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "class Solution {\n    void merge(int arr[], int l, int mid, int r) {\n        int[] temp = new int[r - l + 1];\n        int i = l, j = mid + 1, k = 0;\n        while (i <= mid && j <= r) {\n            if (arr[i] <= arr[j]) {\n                temp[k++] = arr[i++];\n            } else {\n                temp[k++] = arr[j++];\n            }\n        }\n        while (i <= mid) temp[k++] = arr[i++];\n        while (j <= r) temp[k++] = arr[j++];\n        for (int p = 0; p < k; p++) arr[l + p] = temp[p];\n    }\n    void mergeSort(int arr[], int l, int r) {\n        if (l >= r) return;\n        int mid = l + (r - l) / 2;\n        mergeSort(arr, l, mid);\n        mergeSort(arr, mid + 1, r);\n        merge(arr, l, mid, r);\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    void merge(vector<int>& arr, int l, int mid, int r) {\n        vector<int> temp(r - l + 1);\n        int i = l, j = mid + 1, k = 0;\n        while (i <= mid && j <= r) {\n            if (arr[i] <= arr[j]) temp[k++] = arr[i++];\n            else temp[k++] = arr[j++];\n        }\n        while (i <= mid) temp[k++] = arr[i++];\n        while (j <= r) temp[k++] = arr[j++];\n        for (int p = 0; p < k; p++) arr[l + p] = temp[p];\n    }\n    void mergeSort(vector<int>& arr, int l, int r) {\n        if (l >= r) return;\n        int mid = l + (r - l) / 2;\n        mergeSort(arr, l, mid);\n        mergeSort(arr, mid + 1, r);\n        merge(arr, l, mid, r);\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Iterative Bottom-Up Merge Sort",
+      "description": "Sort the array using iterative merge passes starting from size 1 and doubling each time until the whole array is merged.",
+      "steps": [
+        "Initialize subarray size = 1.",
+        "Loop while size < n: for each pair of subarrays of the current size, merge them.",
+        "Calculate left, mid, right indices for merging.",
+        "Merge each pair using a temporary array.",
+        "After each pass, double the subarray size."
+      ],
+      "time_complexity": "O(n log n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "class Solution {\n    void merge(int arr[], int l, int mid, int r) {\n        int[] temp = new int[r - l + 1];\n        int i = l, j = mid + 1, k = 0;\n        while (i <= mid && j <= r) {\n            if (arr[i] <= arr[j]) temp[k++] = arr[i++];\n            else temp[k++] = arr[j++];\n        }\n        while (i <= mid) temp[k++] = arr[i++];\n        while (j <= r) temp[k++] = arr[j++];\n        for (int p = 0; p < k; p++) arr[l + p] = temp[p];\n    }\n    void mergeSort(int arr[], int l, int r) {\n        int n = arr.length;\n        for (int size = 1; size < n; size *= 2) {\n            for (int left = 0; left < n; left += 2 * size) {\n                int mid = Math.min(left + size - 1, n - 1);\n                int right = Math.min(left + 2 * size - 1, n - 1);\n                merge(arr, left, mid, right);\n            }\n        }\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    void merge(vector<int>& arr, int l, int mid, int r) {\n        vector<int> temp(r - l + 1);\n        int i = l, j = mid + 1, k = 0;\n        while (i <= mid && j <= r) {\n            if (arr[i] <= arr[j]) temp[k++] = arr[i++];\n            else temp[k++] = arr[j++];\n        }\n        while (i <= mid) temp[k++] = arr[i++];\n        while (j <= r) temp[k++] = arr[j++];\n        for (int p = 0; p < k; p++) arr[l + p] = temp[p];\n    }\n    void mergeSort(vector<int>& arr, int l, int r) {\n        int n = arr.size();\n        for (int size = 1; size < n; size *= 2) {\n            for (int left = 0; left < n; left += 2 * size) {\n                int mid = min(left + size - 1, n - 1);\n                int right = min(left + 2 * size - 1, n - 1);\n                merge(arr, left, mid, right);\n            }\n        }\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": [38, 27, 43, 3, 9, 82, 10],
+      "output": [3, 9, 10, 27, 38, 43, 82],
+      "explanation": "Split and recursively sort [38,27,43,3] → [3,27,38,43], [9,82,10] → [9,10,82]; merge to get final result."
+    },
+    {
+      "input": [5, 1, 4, 2, 8],
+      "output": [1, 2, 4, 5, 8],
+      "explanation": "Iteratively merge size=1 → [1,5], [2,4], [8]; size=2 → [1,2,4,5], then [1,2,4,5,8]."
+    }
+  ],
+  "constraints": {
+    "1 <= n <= 100000": true,
+    "1 <= arr[i] <= 1000000000": true
+  },
+  "edge_cases": [
+    {
+      "input": [],
+      "output": [],
+      "reason": "Empty array is already sorted."
+    },
+    {
+      "input": [1],
+      "output": [1],
+      "reason": "Single element array is already sorted."
+    },
+    {
+      "input": [2, 1],
+      "output": [1, 2],
+      "reason": "Minimal unsorted case."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": [3, 1, 2],
+      "expected_output": [1, 2, 3]
+    },
+    {
+      "id": "tc2",
+      "input": [10, 9, 8, 7],
+      "expected_output": [7, 8, 9, 10]
+    }
+  ],
+  "notes": {
+    "divide_conquer": "Merge Sort repeatedly divides the array into halves and merges sorted parts.",
+    "stable_sort": "Merge Sort is a stable sorting algorithm—equal elements retain original order.",
+    "non_in_place": "Recursive merge sort uses extra space; iterative may optimize but also uses temp arrays."
+  },
+  "hints": [
+    "Think recursively: divide into halves, sort, then merge.",
+    "For iterative, simulate levels of recursion with loop and subarray size doubling.",
+    "Use a helper `merge()` function to simplify logic."
+  ],
+  "follow_up": [
+    "Can you do in-place merge without extra space?",
+    "How does Merge Sort perform on linked lists vs arrays?",
+    "Can you optimize Merge Sort for small subarrays using Insertion Sort?"
+  ],
+  "tags": [
+    "Sorting",
+    "Divide and Conquer",
+    "Merge Sort",
+    "Recursion",
+    "Iteration"
+  ]
+}

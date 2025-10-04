@@ -1,0 +1,23 @@
+[
+  {
+    "question": "What is the capital of France?",
+    "marks": 1,
+    "negative": 0.25,
+    "topic": "Geography",
+    "category": "MCQ",
+    "options": [
+      { "text": "Berlin", "isCorrect": false },
+      { "text": "Paris", "isCorrect": true },
+      { "text": "Madrid", "isCorrect": false },
+      { "text": "Rome", "isCorrect": false }
+    ]
+  },
+  {
+    "question": "List three types of inheritance in C++.",
+    "marks": 2,
+    "negative": 0,
+    "topic": "OOP",
+    "category": "Text",
+    "answer": "Single, Multiple, and Hierarchical inheritance"
+  }
+]

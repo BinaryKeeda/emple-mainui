@@ -1,0 +1,119 @@
+{
+  "title": "Implement strstr Function",
+  "description": "Find the starting index of the first occurrence of a substring (needle) in a given main string (haystack). Return -1 if not found.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["String", "Pattern Matching", "KMP Algorithm", "Brute Force"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Naive String Matching",
+      "description": "Check every possible starting position in the main string and compare the substring character-by-character.",
+      "steps": [
+        "Return 0 if the pattern is empty (trivial match).",
+        "Return -1 if pattern length is greater than text length.",
+        "Iterate over haystack from 0 to m - n, where m and n are lengths of haystack and needle respectively.",
+        "For each position i, compare characters of needle with haystack starting at i.",
+        "If all characters match, return the index i.",
+        "If no match is found after the loop, return -1."
+      ],
+      "time_complexity": "O(m * n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public int strStr(String haystack, String needle) {\n        int m = haystack.length();\n        int n = needle.length();\n        if (n == 0) return 0;\n        if (m < n) return -1;\n        for (int i = 0; i <= m - n; i++) {\n            int j;\n            for (j = 0; j < n; j++) {\n                if (haystack.charAt(i + j) != needle.charAt(j)) break;\n            }\n            if (j == n) return i;\n        }\n        return -1;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    int strStr(string haystack, string needle) {\n        int m = haystack.size();\n        int n = needle.size();\n        if (n == 0) return 0;\n        if (m < n) return -1;\n        for (int i = 0; i <= m - n; i++) {\n            int j;\n            for (j = 0; j < n; j++) {\n                if (haystack[i + j] != needle[j]) break;\n            }\n            if (j == n) return i;\n        }\n        return -1;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Knuth-Morris-Pratt (KMP) Algorithm",
+      "description": "Use LPS (Longest Prefix Suffix) array to efficiently search for pattern in text by avoiding redundant comparisons.",
+      "steps": [
+        "Return 0 if the pattern is empty.",
+        "Return -1 if pattern length is greater than text length.",
+        "Preprocess the pattern to create the LPS array.",
+        "Initialize two pointers i (haystack) and j (needle).",
+        "If characters match, increment both i and j.",
+        "If j reaches end of needle, match is found at i - j.",
+        "If mismatch and j > 0, update j = lps[j - 1]; else increment i.",
+        "If no match found, return -1."
+      ],
+      "time_complexity": "O(m + n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "class Solution {\n    public int strStr(String haystack, String needle) {\n        int m = haystack.length();\n        int n = needle.length();\n        if (n == 0) return 0;\n        if (m < n) return -1;\n        int[] lps = computeLPS(needle);\n        int i = 0, j = 0;\n        while (i < m) {\n            if (haystack.charAt(i) == needle.charAt(j)) {\n                i++; j++;\n                if (j == n) return i - j;\n            } else {\n                if (j != 0) j = lps[j - 1];\n                else i++;\n            }\n        }\n        return -1;\n    }\n    private int[] computeLPS(String needle) {\n        int n = needle.length();\n        int[] lps = new int[n];\n        int len = 0, i = 1;\n        while (i < n) {\n            if (needle.charAt(i) == needle.charAt(len)) {\n                lps[i++] = ++len;\n            } else {\n                if (len != 0) len = lps[len - 1];\n                else lps[i++] = 0;\n            }\n        }\n        return lps;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    int strStr(string haystack, string needle) {\n        int m = haystack.size();\n        int n = needle.size();\n        if (n == 0) return 0;\n        if (m < n) return -1;\n        vector<int> lps = computeLPS(needle);\n        int i = 0, j = 0;\n        while (i < m) {\n            if (haystack[i] == needle[j]) {\n                i++; j++;\n                if (j == n) return i - j;\n            } else {\n                if (j != 0) j = lps[j - 1];\n                else i++;\n            }\n        }\n        return -1;\n    }\nprivate:\n    vector<int> computeLPS(string needle) {\n        int n = needle.size();\n        vector<int> lps(n, 0);\n        int len = 0, i = 1;\n        while (i < n) {\n            if (needle[i] == needle[len]) {\n                lps[i++] = ++len;\n            } else {\n                if (len != 0) len = lps[len - 1];\n                else lps[i++] = 0;\n            }\n        }\n        return lps;\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": ["findthefind", "find"],
+      "output": 0,
+      "explanation": "The substring 'find' first appears at index 0."
+    },
+    {
+      "input": ["programming", "gram"],
+      "output": 3,
+      "explanation": "The substring 'gram' starts at index 3 in 'programming'."
+    }
+  ],
+  "constraints": {
+    "1 <= text.length <= 10^4": true,
+    "0 <= pattern.length <= 10^4": true
+  },
+  "edge_cases": [
+    {
+      "input": ["abc", ""],
+      "output": 0,
+      "reason": "Empty pattern is found at the start."
+    },
+    {
+      "input": ["abc", "abcd"],
+      "output": -1,
+      "reason": "Pattern is longer than text."
+    },
+    {
+      "input": ["aaaaab", "aab"],
+      "output": 3,
+      "reason": "Match found after repeated characters and mismatch."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": ["hello", "ll"],
+      "expected_output": 2
+    },
+    {
+      "id": "tc2",
+      "input": ["mississippi", "issip"],
+      "expected_output": 4
+    },
+    {
+      "id": "tc3",
+      "input": ["aaaaa", "bba"],
+      "expected_output": -1
+    }
+  ],
+  "notes": {
+    "lps_array": "LPS array stores for each prefix of the pattern the length of the longest proper prefix which is also a suffix.",
+    "kmp_efficiency": "KMP ensures no character in text is scanned more than once, improving efficiency over brute-force."
+  },
+  "hints": [
+    "Try all starting positions in haystack for a brute force approach.",
+    "To improve, skip unnecessary checks using pattern information.",
+    "Think about how prefix and suffix patterns help avoid re-checking characters."
+  ],
+  "follow_up": [
+    "Can you implement a strstr-like function using regular expressions?",
+    "What if you had to find all occurrences, not just the first?",
+    "How would you adapt this for large-scale string processing (e.g., in bioinformatics)?"
+  ],
+  "tags": ["String", "Pattern Matching", "Brute Force", "KMP", "LPS Array"]
+}

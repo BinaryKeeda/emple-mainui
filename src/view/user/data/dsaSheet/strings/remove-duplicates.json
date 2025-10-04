@@ -1,0 +1,114 @@
+{
+  "title": "Remove Duplicate Letters",
+  "description": "Given a string str, remove duplicate letters so that each letter appears exactly once. Among all possible results, return the one that comes first in alphabetical order. str consists of lowercase letters only.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": [
+      "Greedy",
+      "Stack",
+      "String",
+      "Backtracking",
+      "Lexicographical Order"
+    ],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Permutation Generation + Filtering",
+      "description": "Generate all permutations of unique characters and filter valid ones that maintain the character order in the original string. Return the lexicographically smallest valid permutation.",
+      "steps": [
+        "Extract all unique characters from the string.",
+        "Generate all possible permutations of these characters.",
+        "Filter permutations that preserve character order from the original string.",
+        "Sort the valid permutations lexicographically.",
+        "Return the first one as the result."
+      ],
+      "time_complexity": "O(n!)",
+      "space_complexity": "O(n!)",
+      "code": {
+        "java": "import java.util.*;\nclass Solution {\n    public String removeDuplicateLetters(String s) {\n        Set<Character> unique = new HashSet<>();\n        for (char c : s.toCharArray()) unique.add(c);\n        List<String> permutations = new ArrayList<>();\n        generatePermutations(\"\", new ArrayList<>(unique), permutations);\n        List<String> valid = new ArrayList<>();\n        for (String perm : permutations) {\n            if (isValid(perm, s)) valid.add(perm);\n        }\n        Collections.sort(valid);\n        return valid.isEmpty() ? \"\" : valid.get(0);\n    }\n    private void generatePermutations(String current, List<Character> chars, List<String> result) {\n        if (chars.isEmpty()) {\n            result.add(current);\n            return;\n        }\n        for (int i = 0; i < chars.size(); i++) {\n            char c = chars.get(i);\n            List<Character> remaining = new ArrayList<>(chars);\n            remaining.remove(i);\n            generatePermutations(current + c, remaining, result);\n        }\n    }\n    private boolean isValid(String perm, String s) {\n        int index = 0;\n        for (char c : perm.toCharArray()) {\n            index = s.indexOf(c, index);\n            if (index == -1) return false;\n            index++;\n        }\n        return true;\n    }\n}",
+        "cpp": "#include <vector>\n#include <string>\n#include <unordered_set>\n#include <algorithm>\nusing namespace std;\nclass Solution {\npublic:\n    string removeDuplicateLetters(string s) {\n        unordered_set<char> unique(s.begin(), s.end());\n        vector<char> chars(unique.begin(), unique.end());\n        sort(chars.begin(), chars.end());\n        vector<string> permutations;\n        generatePermutations(\"\", chars, permutations);\n        vector<string> valid;\n        for (const string& perm : permutations) {\n            if (isValid(perm, s)) valid.push_back(perm);\n        }\n        sort(valid.begin(), valid.end());\n        return valid.empty() ? \"\" : valid[0];\n    }\nprivate:\n    void generatePermutations(string current, vector<char> chars, vector<string>& result) {\n        if (chars.empty()) {\n            result.push_back(current);\n            return;\n        }\n        for (size_t i = 0; i < chars.size(); i++) {\n            char c = chars[i];\n            vector<char> remaining = chars;\n            remaining.erase(remaining.begin() + i);\n            generatePermutations(current + c, remaining, result);\n        }\n    }\n    bool isValid(const string& perm, const string& s) {\n        size_t index = 0;\n        for (char c : perm) {\n            index = s.find(c, index);\n            if (index == string::npos) return false;\n            index++;\n        }\n        return true;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal (Stack + Greedy)",
+      "algorithm": "Greedy with Stack and Frequency Counting",
+      "description": "Use a stack to build the result string while ensuring lexicographical order and avoiding duplicates. Track frequency and use a visited set to ensure uniqueness.",
+      "steps": [
+        "Count frequencies of each character in the string.",
+        "Initialize an empty stack and a visited set.",
+        "For each character in the string:",
+        " - Decrease its count.",
+        " - Skip it if already in the stack.",
+        " - While it is smaller than the top of the stack and the top character appears later, pop the top character.",
+        " - Push the current character to the stack and mark it as visited.",
+        "Build and return the result string from the stack."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "import java.util.*;\nclass Solution {\n    public String removeDuplicateLetters(String s) {\n        int[] count = new int[26];\n        boolean[] inStack = new boolean[26];\n        Deque<Character> stack = new ArrayDeque<>();\n        for (char c : s.toCharArray()) count[c - 'a']++;\n        for (char c : s.toCharArray()) {\n            count[c - 'a']--;\n            if (inStack[c - 'a']) continue;\n            while (!stack.isEmpty() && c < stack.peek() && count[stack.peek() - 'a'] > 0) {\n                inStack[stack.pop() - 'a'] = false;\n            }\n            stack.push(c);\n            inStack[c - 'a'] = true;\n        }\n        StringBuilder sb = new StringBuilder();\n        while (!stack.isEmpty()) sb.append(stack.removeLast());\n        return sb.toString();\n    }\n}",
+        "cpp": "#include <vector>\n#include <string>\n#include <unordered_map>\n#include <unordered_set>\n#include <deque>\nusing namespace std;\nclass Solution {\npublic:\n    string removeDuplicateLetters(string s) {\n        unordered_map<char, int> count;\n        unordered_set<char> inStack;\n        deque<char> stack;\n        for (char c : s) count[c]++;\n        for (char c : s) {\n            count[c]--;\n            if (inStack.count(c)) continue;\n            while (!stack.empty() && c < stack.back() && count[stack.back()] > 0) {\n                inStack.erase(stack.back());\n                stack.pop_back();\n            }\n            stack.push_back(c);\n            inStack.insert(c);\n        }\n        return string(stack.begin(), stack.end());\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": "demigoddessship",
+      "output": "deghimops",
+      "explanation": "Only one occurrence of each character in alphabetical order from the original string."
+    },
+    {
+      "input": "cbacdcbc",
+      "output": "acdb",
+      "explanation": "Smallest lexicographical sequence with all letters from input exactly once."
+    }
+  ],
+  "constraints": {
+    "1 <= str.length <= 10000": true,
+    "str contains only lowercase English letters": true
+  },
+  "edge_cases": [
+    {
+      "input": "a",
+      "output": "a",
+      "reason": "Single character, no duplicates to remove"
+    },
+    {
+      "input": "zzzz",
+      "output": "z",
+      "reason": "All duplicates, return only one occurrence"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": "abcd",
+      "expected_output": "abcd"
+    },
+    {
+      "id": "tc2",
+      "input": "bbcaac",
+      "expected_output": "bac"
+    }
+  ],
+  "notes": {
+    "lexicographical_order": "Lexicographical order means dictionary order; the solution must be the smallest possible alphabetically.",
+    "stack_mechanism": "Stack ensures greedy removal of characters while maintaining result order."
+  },
+  "hints": [
+    "Try to use a stack and track the last occurrence of each character.",
+    "Can you remove characters from the result if a better option is available later?",
+    "Keep track of characters already included in the result."
+  ],
+  "follow_up": [
+    "How would you modify this if uppercase and lowercase letters are considered different?",
+    "What if the string allows for deleting at most k duplicates?",
+    "How can this be extended for removing duplicate words from a sentence?"
+  ],
+  "tags": ["String", "Greedy", "Stack", "Lexicographical Order", "Backtracking"]
+}

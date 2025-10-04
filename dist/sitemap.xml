@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://binarykeeda.com/</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/register</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/login</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/user/binarykeeda-roadmap-sheet</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/user/binarykeeda-210-sheet</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/user/binarykeeda-dsa-sheet</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>https://binarykeeda.com/privacy-policy</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.50</priority>
+  </url>
+  <url>
+    <loc>https://binarykeeda.com/terms-of-service</loc>
+    <lastmod>2025-06-26</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+</urlset>

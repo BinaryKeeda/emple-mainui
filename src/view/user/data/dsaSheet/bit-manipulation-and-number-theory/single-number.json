@@ -1,0 +1,117 @@
+{
+  "title": "Single Number",
+  "description": "Given a non-empty array of integers arr, where every element appears exactly twice except for one element that appears only once, find that unique element. Your solution must have linear runtime complexity (O(n)) and use only constant extra space (O(1)).",
+  "metadata": {
+    "difficulty": "Easy",
+    "tags": ["Bit Manipulation", "Hash Map", "Array", "XOR"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Frequency Count using HashMap",
+      "description": "Count occurrences of each element using a hash map, then return the one with a count of 1.",
+      "steps": [
+        "Initialize an empty hash map.",
+        "Traverse the array and update the frequency count for each number.",
+        "Traverse the map entries to find the element with count = 1.",
+        "Return that element."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.HashMap;\n\nclass Solution {\n    public int singleNumber(int[] nums) {\n        HashMap<Integer, Integer> freq = new HashMap<>();\n        for (int num : nums) {\n            freq.put(num, freq.getOrDefault(num, 0) + 1);\n        }\n        for (int num : freq.keySet()) {\n            if (freq.get(num) == 1) return num;\n        }\n        return -1; // should never reach here per problem statement\n    }\n}",
+        "cpp": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\npublic:\n    int singleNumber(vector<int>& nums) {\n        unordered_map<int, int> freq;\n        for (int num : nums) freq[num]++;\n        for (auto& pair : freq) {\n            if (pair.second == 1) return pair.first;\n        }\n        return -1;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Bitwise XOR",
+      "description": "Use XOR property where a^a = 0 and a^0 = a to cancel out pairs, leaving the unique number.",
+      "steps": [
+        "Initialize result = 0.",
+        "Traverse each element of the array.",
+        "Update result = result XOR current element.",
+        "Return the final value of result."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public int singleNumber(int[] nums) {\n        int result = 0;\n        for (int num : nums) result ^= num;\n        return result;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    int singleNumber(vector<int>& nums) {\n        int result = 0;\n        for (int num : nums) result ^= num;\n        return result;\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": [3, 3, 7],
+      "output": 7,
+      "explanation": "The number 3 appears twice and cancels out, leaving 7."
+    },
+    {
+      "input": [8, 5, 6, 5, 6],
+      "output": 8,
+      "explanation": "The numbers 5 and 6 appear twice, only 8 appears once."
+    },
+    {
+      "input": [10],
+      "output": 10,
+      "explanation": "Only one number in the array, so it's unique."
+    }
+  ],
+  "constraints": {
+    "1 <= arr.length <= 100000": true,
+    "Every element appears exactly twice except one": true
+  },
+  "edge_cases": [
+    {
+      "input": [1],
+      "output": 1,
+      "reason": "Single element case, it's the unique one."
+    },
+    {
+      "input": [1000000, 1, 1000000],
+      "output": 1,
+      "reason": "Large duplicate number and one small unique."
+    },
+    {
+      "input": [0, 0, -1],
+      "output": -1,
+      "reason": "Zero cancels itself, negative number remains."
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": [2, 2, 4],
+      "expected_output": 4
+    },
+    {
+      "id": "tc2",
+      "input": [99, 1, 1, 99, 88],
+      "expected_output": 88
+    }
+  ],
+  "notes": {
+    "xor_logic": "The XOR operator cancels out equal numbers, making it perfect for this problem with exactly one unique element.",
+    "space_warning": "The hash map method is easier but violates the space constraint."
+  },
+  "hints": [
+    "Think about the XOR operation and its properties.",
+    "Can you solve this in one pass without using extra memory?"
+  ],
+  "follow_up": [
+    "What if the input has three occurrences instead of two?",
+    "Can this approach be extended to find two unique numbers among duplicates?"
+  ],
+  "tags": [
+    "Array",
+    "Bit Manipulation",
+    "XOR",
+    "Constant Space",
+    "Optimized Algorithm"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "title": "Count Primes Using Sieve of Eratosthenes",
+  "description": "Given an integer num, return the number of prime numbers strictly less than num. Use brute force or the Sieve of Eratosthenes for optimization.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["Prime", "Number Theory", "Sieve", "Math"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Check each number for primality",
+      "description": "Check all numbers from 2 to n-1 for primality by testing if divisible by any smaller number (up to √i).",
+      "steps": [
+        "Initialize count to 0.",
+        "Iterate from i = 2 to n - 1.",
+        "For each i, check if it is prime by testing divisibility from 2 to √i.",
+        "If it is prime, increment the count.",
+        "Return the final count."
+      ],
+      "time_complexity": "O(n √n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "public class Solution {\n    public int countPrimes(int n) {\n        if (n <= 2) return 0;\n        int count = 0;\n        for (int i = 2; i < n; i++) {\n            if (isPrime(i)) {\n                count++;\n            }\n        }\n        return count;\n    }\n\n    private boolean isPrime(int num) {\n        if (num <= 1) return false;\n        for (int i = 2; i * i <= num; i++) {\n            if (num % i == 0) return false;\n        }\n        return true;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    bool isPrime(int num) {\n        if (num <= 1) return false;\n        for (int i = 2; i * i <= num; ++i) {\n            if (num % i == 0) return false;\n        }\n        return true;\n    }\n\n    int countPrimes(int n) {\n        if (n <= 2) return 0;\n        int count = 0;\n        for (int i = 2; i < n; ++i) {\n            if (isPrime(i)) ++count;\n        }\n        return count;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Sieve of Eratosthenes",
+      "description": "Efficiently find all primes less than n by marking multiples of each prime as non-prime.",
+      "steps": [
+        "Create a boolean array isPrime of size n and initialize all entries as true.",
+        "Mark isPrime[0] and isPrime[1] as false (0 and 1 are not prime).",
+        "Iterate p from 2 to √n.",
+        "If isPrime[p] is true, mark all multiples of p (from p*p to n) as false.",
+        "Count the number of true values in the array (i.e., primes).",
+        "Return the count."
+      ],
+      "time_complexity": "O(n log log n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.Arrays;\npublic class Solution {\n    public int countPrimes(int n) {\n        if (n <= 2) return 0;\n        boolean[] isPrime = new boolean[n];\n        Arrays.fill(isPrime, true);\n        isPrime[0] = isPrime[1] = false;\n\n        for (int p = 2; p * p < n; p++) {\n            if (isPrime[p]) {\n                for (int multiple = p * p; multiple < n; multiple += p) {\n                    isPrime[multiple] = false;\n                }\n            }\n        }\n\n        int count = 0;\n        for (boolean prime : isPrime) {\n            if (prime) count++;\n        }\n        return count;\n    }\n}",
+        "cpp": "#include <vector>\n#include <algorithm>\nclass Solution {\npublic:\n    int countPrimes(int n) {\n        if (n <= 2) return 0;\n        std::vector<bool> isPrime(n, true);\n        isPrime[0] = isPrime[1] = false;\n\n        for (int p = 2; p * p < n; ++p) {\n            if (isPrime[p]) {\n                for (int multiple = p * p; multiple < n; multiple += p) {\n                    isPrime[multiple] = false;\n                }\n            }\n        }\n\n        return std::count(isPrime.begin(), isPrime.end(), true);\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": 11,
+      "output": 4,
+      "explanation": "Primes strictly less than 11 are: 2, 3, 5, 7"
+    },
+    {
+      "input": 20,
+      "output": 8,
+      "explanation": "Primes strictly less than 20 are: 2, 3, 5, 7, 11, 13, 17, 19"
+    }
+  ],
+  "constraints": {
+    "0 <= n <= 5000000": true
+  },
+  "edge_cases": [
+    {
+      "input": 0,
+      "output": 0,
+      "reason": "No numbers to check for primality"
+    },
+    {
+      "input": 2,
+      "output": 0,
+      "reason": "No primes strictly less than 2"
+    },
+    {
+      "input": 3,
+      "output": 1,
+      "reason": "Only 2 is a prime less than 3"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": 10,
+      "expected_output": 4
+    },
+    {
+      "id": "tc2",
+      "input": 100,
+      "expected_output": 25
+    }
+  ],
+  "notes": {
+    "sieve_principle": "If a number p is prime, mark all multiples of p as not prime starting from p*p.",
+    "optimization": "Start crossing out from p*p, not 2*p, as smaller multiples have already been marked."
+  },
+  "hints": [
+    "Try marking only from p*p to reduce redundant work.",
+    "Boolean arrays are fast for marking non-primes.",
+    "Only check up to √n for base primes."
+  ],
+  "follow_up": [
+    "How would you adapt this for very large values using segmented sieve?",
+    "Can this be optimized for memory using bitwise storage?",
+    "What if you wanted to return all primes instead of just count?"
+  ],
+  "tags": ["Prime", "Sieve", "Math", "Array", "Boolean Array"]
+}

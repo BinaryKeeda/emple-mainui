@@ -1,0 +1,78 @@
+[
+  {
+    "topicName": "Bit Manipulation and Number Theory",
+    "problems": [
+      {
+        "title": "GCD of Array",
+        "description": "Given an array ‘arr’, return the greatest common divisor (GCD) of the smallest and largest elements in the array.",
+        "algorithm": [
+          "Initialize two variables: min = arr[0], max = arr[0]",
+          "Traverse the array to find the actual minimum and maximum:\n- For each element num in arr:\n  - If num < min, update min = num\n  - If num > max, update max = num",
+          "Apply Euclidean Algorithm:\n- While min != 0:\n  - temp = min\n  - min = max % min\n  - max = temp\n- When the loop ends, max holds the result.",
+          "Return the value of max as the result."
+        ],
+        "analysis": {
+          "best_case": {
+            "scenarios": [
+              "The array contains only two elements.",
+              "The smallest number divides the largest exactly (e.g., min = 4, max = 12 → GCD = 4).",
+              "Both numbers are equal (min = max → GCD = min = max)."
+            ],
+            "example": {
+              "array": [6, 12],
+              "min": 6,
+              "max": 12
+            },
+            "time_complexity": {
+              "find_min_max": "O(n)",
+              "find_gcd": "O(1), as only one iteration is needed."
+            }
+          },
+          "worst_case": {
+            "scenarios": [
+              "The array is large (n is large), and min and max are two large coprimenumbers (numbers that do not have a common divisor except 1, e.g., 1000003 and 1000033).",
+              "Coprime numbers mean the GCD loop takes the maximum number of steps (close to log(min)) (this is proven mathematically)."
+            ],
+            "example": {
+              "array": [1000003, 5, 7, 1000033],
+              "min": 5,
+              "max": 1000033
+            },
+            "time_complexity": {
+              "find_min_max": "O(n)",
+              "gcd": "O(log(min)) (proven mathematically)"
+            }
+          }
+        },
+        "time_complexity_comparison": [
+          {
+            "step": "Find Min & Max",
+            "Description": "Traverse array to find smallest and largest element",
+            "best_case": "O(n)",
+            "worst_case": "O(n)"
+          },
+          {
+            "step": "Compute GCD",
+            "Description": "Euclidean Algorithm on min & max",
+            "best_case": "O(1)",
+            "worst_case": "O(log(min))"
+          },
+          {
+            "step": "Total",
+            "Description": "Combined cost of steps",
+            "best_case": "O(n)",
+            "worst_case": "O(n + log(min))"
+          }
+        ],
+        "notes": [
+          "n is the number of elements in the array.",
+          "In practice, even the worst case is very efficient due to the fast convergence of the Euclidean Algorithm.",
+          "The O(log(min)) part is negligible when n is large but matters when you are analysing GCD performance between large prime numbers.",
+          "Space Complexity: O(1) — uses only a constant amount of additional memory."
+        ],
+        "java_code": "import java.util.*;\npublic class GCDOfArray {\n    public static int computeGCD(int a, int b) {\n        while (b != 0) {\n            int temp = b;\n            b = a % b;\n            a = temp;\n        }\n        return a;\n    }\n    public static int findGCD(int[] arr) {\n        if (arr == null || arr.length < 2) {\n            throw new IllegalArgumentException(\"Array must contain at least two elements.\");\n        }\n        int min = arr[0];\n        int max = arr[0];\n        for (int num : arr) {\n            if (num < min) min = num;\n            if (num > max) max = num;\n        }\n        return computeGCD(min, max);\n    }\n    public static void main(String[] args) {\n        int[] arr = {6, 12, 8, 24, 18};\n        int gcd = findGCD(arr);\n        System.out.println(\"GCD of smallest and largest elements: \" + gcd);\n    }\n}",
+        "cpp_code": "#include <iostream>\n#include <vector>\n#include <stdexcept>\nusing namespace std;\nint computeGCD(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\nint findGCD(const vector<int>& arr) {\n    if (arr.size() < 2) {\n        throw invalid_argument(\"Array must contain at least two elements.\");\n    }\n    int minVal = arr[0];\n    int maxVal = arr[0];\n    for (int num : arr) {\n        if (num < minVal) minVal = num;\n        if (num > maxVal) maxVal = num;\n    }\n    return computeGCD(minVal, maxVal);\n}\nint main() {\n    vector<int> arr = {6, 12, 8, 24, 18};\n    try {\n        int gcd = findGCD(arr);\n        cout << \"GCD of smallest and largest elements: \" << gcd << endl;\n    } catch (const exception& e) {\n        cerr << \"Error: \" << e.what() << endl;\n    }\n    return 0;\n}"
+      }
+    ]
+  }
+]

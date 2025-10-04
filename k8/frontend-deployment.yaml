@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-main
+  template:
+    metadata:
+      labels:
+        app: frontend-main
+    spec:
+      containers:
+        - name: frontend-main
+          image: 831926599082.dkr.ecr.ap-south-1.amazonaws.com/binarykeeda-main-frontend
+          ports:
+            - containerPort: 5173
+          envFrom:
+            - secretRef:
+                name: binarykeeda-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-main
+spec:
+  selector:
+    app: frontend-main
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 5173
+  type: ClusterIP

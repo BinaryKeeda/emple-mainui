@@ -1,0 +1,102 @@
+[
+  {
+    "Question": "Which is the largest continent in the world?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Africa",
+    "option2": "Asia",
+    "option3": "Europe",
+    "option4": "North America",
+    "correctOption": 2
+  },
+  {
+    "Question": "Who wrote the national anthem of India?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Bankim Chandra Chatterjee",
+    "option2": "Sarojini Naidu",
+    "option3": "Rabindranath Tagore",
+    "option4": "Subhash Chandra Bose",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which is the longest river in the world?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Amazon",
+    "option2": "Yangtze",
+    "option3": "Nile",
+    "option4": "Mississippi",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which planet is known as the Red Planet?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Earth",
+    "option2": "Venus",
+    "option3": "Mars",
+    "option4": "Jupiter",
+    "correctOption": 3
+  },
+  {
+    "Question": "What is the capital of Australia?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Sydney",
+    "option2": "Melbourne",
+    "option3": "Canberra",
+    "option4": "Perth",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which country is known as the Land of the Rising Sun?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "China",
+    "option2": "Thailand",
+    "option3": "India",
+    "option4": "Japan",
+    "correctOption": 4
+  },
+  {
+    "Question": "Who was the first President of the United States?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Abraham Lincoln",
+    "option2": "George Washington",
+    "option3": "Thomas Jefferson",
+    "option4": "John Adams",
+    "correctOption": 2
+  },
+  {
+    "Question": "Which is the smallest bone in the human body?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Femur",
+    "option2": "Stapes",
+    "option3": "Ulna",
+    "option4": "Tibia",
+    "correctOption": 2
+  },
+  {
+    "Question": "What is the currency of Japan?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Yuan",
+    "option2": "Won",
+    "option3": "Yen",
+    "option4": "Ringgit",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which ocean is the largest by area?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Atlantic Ocean",
+    "option2": "Indian Ocean",
+    "option3": "Arctic Ocean",
+    "option4": "Pacific Ocean",
+    "correctOption": 4
+  }
+]

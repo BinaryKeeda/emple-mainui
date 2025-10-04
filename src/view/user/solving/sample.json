@@ -1,0 +1,74 @@
+[
+  {
+    "_id": "1232",
+    "title": "Find Pair Indices",
+    "description": "Given an array of integers and a target sum, return the indices of the two numbers that add up to the target.",
+    "difficulty": "Easy",
+    "tags": [
+      "Array",
+      "HashMap",
+      "Two-Sum"
+    ],
+    "explanation": "Use a hash map to store visited numbers and their indices, then check if the complement exists.",
+    "constraints": [
+      "2 <= array length <= 10^5",
+      "-10^9 <= array[i] <= 10^9"
+    ],
+    "sampleTestCases": [
+      {
+        "input": "1 3 2 5 4\n9",
+        "output": "2 4",
+        "explanation": "Indices 2 and 4 (2 + 5 = 9)."
+      }
+    ],
+    "testCases": [
+      {
+        "input": "10 15 20 25 30\n45",
+        "output": "1 3"
+      },
+      {
+        "input": "2 7 11 15\n9",
+        "output": "0 1"
+      }
+    ],
+    "functionSignatures": [
+      {
+        "language": "java",
+        "languageId": 62,
+        "signature": "public static int[] findPairIndices(int[] arr, int target){\n\n// write your code here \n\n}",
+        "mainFunction": "import java.util.*;\npublic class Main { public static void main(String[] args) { Scanner scanner = new Scanner(System.in); String[] input = scanner.nextLine().split(\" \"); int[] arr = Arrays.stream(input).mapToInt(Integer::parseInt).toArray(); int target = scanner.nextInt(); int[] result = findPairIndices(arr, target); System.out.println(result[0] + \" \" + result[1]); } }",
+        "cpuLimit": 1000
+      },
+      {
+        "language": "c",
+        "languageId":50,
+        "signature": "int* findPairIndices(int arr[], int n, int target)",
+        "mainFunction": "#include <stdio.h>\n#include <stdlib.h>\nint main() { int arr[100000], n = 0, target; while (scanf(\"%d\", &arr[n]) == 1) n++; target = arr[n - 1]; n--; int* result = findPairIndices(arr, n, target); printf(\"%d %d\\n\", result[0], result[1]); return 0; }",
+        "cpuLimit": 1000
+      },
+      {
+        "language": "cpp",
+        "languageId":52,
+        "signature": "std::pair<int, int> findPairIndices(std::vector<int>& arr, int target)",
+        "mainFunction": "#include <iostream>\n#include <vector>\nusing namespace std;\nint main() { vector<int> arr; int num, target; while (cin >> num) { arr.push_back(num); if (cin.peek() == '\\n') break; } cin >> target; pair<int, int> result = findPairIndices(arr, target); cout << result.first << \" \" << result.second << endl; return 0; }",
+        "cpuLimit": 1000
+      },
+      {
+        "language": "python",
+        "languageId":71,
+        "signature": "def find_pair_indices(arr: list[int], target: int) -> tuple[int, int]:",
+        "mainFunction": "import sys\n\ndef main():\n    arr = list(map(int, sys.stdin.readline().strip().split()))\n    target = int(sys.stdin.readline().strip())\n    result = find_pair_indices(arr, target)\n    print(result[0], result[1])\n\nif __name__ == \"__main__\":\n    main()",
+        "cpuLimit": 1000
+      }
+    ]
+  },
+  {
+    "_id":"11",
+    "title": "Find the Maximum Sum of a Subarray of Size 3",
+    "difficulty":"Hard"
+  },{
+    "_id":"12",
+    "difficulty":"Medium",
+    "title": "Find the Maximum Sum of a Subarray of Size 3"
+  }
+]

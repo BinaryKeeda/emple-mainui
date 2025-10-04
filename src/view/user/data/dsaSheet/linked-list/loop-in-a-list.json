@@ -1,0 +1,116 @@
+{
+  "title": "Loop in a List",
+  "description": "Given the head of a singly linked list, determine whether it contains a cycle. A cycle occurs when a node's next pointer points back to any previously visited node, forming an infinite loop.",
+  "metadata": {
+    "difficulty": "Medium",
+    "tags": ["Linked List", "Cycle Detection", "Floyd’s Algorithm", "Hashing"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Hash Set Tracking",
+      "description": "Traverse the linked list and store each visited node in a hash set. If a node is visited again, a cycle is detected.",
+      "steps": [
+        "Initialize an empty hash set.",
+        "Start traversing the list from the head.",
+        "For each node, check if it's already in the set.",
+        "If yes, return true (cycle exists).",
+        "If no, add it to the set and continue.",
+        "If the traversal reaches null, return false (no cycle)."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(n)",
+      "code": {
+        "java": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    public boolean hasCycle(ListNode head) {\n        Set<ListNode> visited = new HashSet<>();\n        ListNode current = head;\n        while (current != null) {\n            if (visited.contains(current)) {\n                return true;\n            }\n            visited.add(current);\n            current = current.next;\n        }\n        return false;\n    }\n}",
+        "cpp": "#include <unordered_set>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool hasCycle(ListNode *head) {\n        unordered_set<ListNode*> visited;\n        ListNode *current = head;\n        while (current != nullptr) {\n            if (visited.find(current) != visited.end()) {\n                return true;\n            }\n            visited.insert(current);\n            current = current->next;\n        }\n        return false;\n    }\n}"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Floyd’s Tortoise and Hare",
+      "description": "Use two pointers: a slow one moving one step and a fast one moving two steps. If they ever meet, there is a cycle.",
+      "steps": [
+        "Check if the list is empty or has only one node (return false).",
+        "Initialize two pointers, slow and fast.",
+        "Move slow by one node and fast by two nodes in each iteration.",
+        "If at any point slow equals fast, return true (cycle exists).",
+        "If fast or fast.next becomes null, return false (no cycle)."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "public class Solution {\n    public boolean hasCycle(ListNode head) {\n        if (head == null || head.next == null) {\n            return false;\n        }\n        ListNode slow = head;\n        ListNode fast = head.next;\n        while (fast != null && fast.next != null) {\n            if (slow == fast) {\n                return true;\n            }\n            slow = slow.next;\n            fast = fast.next.next;\n        }\n        return false;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    bool hasCycle(ListNode *head) {\n        if (head == nullptr || head->next == nullptr) {\n            return false;\n        }\n        ListNode *slow = head;\n        ListNode *fast = head->next;\n        while (fast != nullptr && fast->next != nullptr) {\n            if (slow == fast) {\n                return true;\n            }\n            slow = slow->next;\n            fast = fast->next->next;\n        }\n        return false;\n    }\n}"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": "[5, 8, 2, 9] with 9 → 8",
+      "output": true,
+      "explanation": "There is a cycle: 9 points back to 8"
+    },
+    {
+      "input": "[10, 20] with 20 → 10",
+      "output": true,
+      "explanation": "20 points back to 10, forming a loop"
+    },
+    {
+      "input": "[100]",
+      "output": false,
+      "explanation": "Single node with no cycle"
+    }
+  ],
+  "constraints": {
+    "0 <= Number of nodes <= 10^4": true,
+    "Node values can be arbitrary": true
+  },
+  "edge_cases": [
+    {
+      "input": "[]",
+      "output": false,
+      "reason": "Empty list has no cycle"
+    },
+    {
+      "input": "[1]",
+      "output": false,
+      "reason": "Single node, no cycle"
+    },
+    {
+      "input": "[1, 2, 3, 4] with 4 → 2",
+      "output": true,
+      "reason": "Cycle starting at 2"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": "[1, 2, 3, 4] with 4 → 1",
+      "expected_output": true
+    },
+    {
+      "id": "tc2",
+      "input": "[1, 2, 3, 4, 5]",
+      "expected_output": false
+    }
+  ],
+  "notes": {
+    "floyds_cycle_detection": "Also called the Tortoise and Hare algorithm. Works without extra space.",
+    "hash_set_method": "Simpler to implement but requires additional memory proportional to the number of nodes."
+  },
+  "hints": [
+    "Try keeping track of nodes you've already seen.",
+    "What happens if you use two pointers moving at different speeds?",
+    "What’s the memory difference between the two approaches?"
+  ],
+  "follow_up": [
+    "Can you detect the starting node of the cycle?",
+    "Can you remove the cycle from the list?",
+    "How would you detect a cycle in a doubly linked list?"
+  ],
+  "tags": ["Linked List", "Cycle Detection", "Two Pointers", "Hash Set"]
+}

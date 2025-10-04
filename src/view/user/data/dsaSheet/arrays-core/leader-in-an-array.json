@@ -1,0 +1,118 @@
+{
+  "title": "Leader in an Array",
+  "description": "Given an array nums, modify it by replacing each element with the largest element to its right. The last element should be replaced with -1. Return the modified array.",
+  "metadata": {
+    "difficulty": "Easy",
+    "tags": ["Array", "Greedy", "Traversal", "Optimized Loop"],
+    "author": "Vaibhav Chauhan",
+    "created_at": "2025-07-09",
+    "updated_at": "2025-07-09",
+    "source": "BinaryKeeda DSA Sheet"
+  },
+  "approaches": [
+    {
+      "category": "Brute Force",
+      "algorithm": "Nested Loops",
+      "description": "Iterate through each element and find the maximum among the elements to its right. Replace the current element with this maximum.",
+      "steps": [
+        "Iterate through each element in the array except the last.",
+        "For each element at index i, scan elements from i+1 to the end.",
+        "Find the maximum among these elements.",
+        "Replace arr[i] with this maximum value.",
+        "Set the last element to -1."
+      ],
+      "time_complexity": "O(n^2)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public int[] replaceElements(int[] arr) {\n        int n = arr.length;\n        for (int i = 0; i < n - 1; i++) {\n            int maxRight = arr[i + 1];\n            for (int j = i + 2; j < n; j++) {\n                if (arr[j] > maxRight) {\n                    maxRight = arr[j];\n                }\n            }\n            arr[i] = maxRight;\n        }\n        arr[n - 1] = -1;\n        return arr;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    vector<int> replaceElements(vector<int>& arr) {\n        int n = arr.size();\n        for (int i = 0; i < n - 1; i++) {\n            int maxRight = arr[i + 1];\n            for (int j = i + 2; j < n; j++) {\n                if (arr[j] > maxRight) {\n                    maxRight = arr[j];\n                }\n            }\n            arr[i] = maxRight;\n        }\n        arr[n - 1] = -1;\n        return arr;\n    }\n};"
+      }
+    },
+    {
+      "category": "Optimal",
+      "algorithm": "Reverse Traversal with Tracking",
+      "description": "Traverse the array from right to left, keeping track of the maximum seen so far, and replacing each element with this maximum.",
+      "steps": [
+        "Initialize maxSoFar as -1 (since last element becomes -1).",
+        "Traverse array from the last element to the first.",
+        "Temporarily store the current value.",
+        "Replace current element with maxSoFar.",
+        "Update maxSoFar to be the max of itself and the original value."
+      ],
+      "time_complexity": "O(n)",
+      "space_complexity": "O(1)",
+      "code": {
+        "java": "class Solution {\n    public int[] replaceElements(int[] arr) {\n        int n = arr.length;\n        int maxSoFar = -1;\n        for (int i = n - 1; i >= 0; i--) {\n            int current = arr[i];\n            arr[i] = maxSoFar;\n            maxSoFar = Math.max(maxSoFar, current);\n        }\n        return arr;\n    }\n}",
+        "cpp": "class Solution {\npublic:\n    vector<int> replaceElements(vector<int>& arr) {\n        int n = arr.size();\n        int maxSoFar = -1;\n        for (int i = n - 1; i >= 0; i--) {\n            int current = arr[i];\n            arr[i] = maxSoFar;\n            maxSoFar = max(maxSoFar, current);\n        }\n        return arr;\n    }\n};"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "input": [12, 15, 8, 9, 10, 3],
+      "output": [15, 10, 10, 10, 3, -1],
+      "explanation": "Each element is replaced with the largest element to its right; last is -1."
+    },
+    {
+      "input": [100],
+      "output": [-1],
+      "explanation": "Only one element → becomes -1."
+    },
+    {
+      "input": [5, 4, 3, 2, 1],
+      "output": [4, 3, 2, 1, -1],
+      "explanation": "Array is in descending order → each element is replaced with its next."
+    }
+  ],
+  "constraints": {
+    "1 <= n <= 100000": true,
+    "-10^9 <= arr[i] <= 10^9": true
+  },
+  "edge_cases": [
+    {
+      "input": [],
+      "output": [],
+      "reason": "Empty array should remain empty"
+    },
+    {
+      "input": [0, 0, 0],
+      "output": [0, 0, -1],
+      "reason": "All elements are the same"
+    },
+    {
+      "input": [-1, -2, -3],
+      "output": [-2, -3, -1],
+      "reason": "Handles negative numbers correctly"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "tc1",
+      "input": [10, 5, 2],
+      "expected_output": [5, 2, -1]
+    },
+    {
+      "id": "tc2",
+      "input": [1, 2, 3, 4, 5],
+      "expected_output": [5, 5, 5, 5, -1]
+    },
+    {
+      "id": "tc3",
+      "input": [9],
+      "expected_output": [-1]
+    }
+  ],
+  "notes": {
+    "reverse_traversal": "By traversing from the end, we avoid repeatedly scanning the remaining array and reduce time to linear.",
+    "in_place_update": "Both approaches modify the input array directly, ensuring O(1) space."
+  },
+  "hints": [
+    "Can you solve it without using extra space?",
+    "Think of how the maximum element to the right can be tracked while iterating from the end."
+  ],
+  "follow_up": [
+    "How would the solution change if you had to return a new array instead of modifying in-place?",
+    "What if the array is being streamed and elements are being added dynamically?"
+  ],
+  "tags": ["Array", "Greedy", "Traversal", "Optimization", "In-place"]
+}
