@@ -32,7 +32,7 @@ const { data } = useGroupData({ userId: user?._id });
       icon: <DashboardOutlined sx={{ fontSize: 25 }} />,
       label: 'Dashboard',
       path: '/user',
-      type: 'public'
+      type: 'private'
     },
     {
       icon: <BookOutlined sx={{ fontSize: 25 }} />,
@@ -55,7 +55,7 @@ const { data } = useGroupData({ userId: user?._id });
 
   return (
     <>
-      <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] h-screen w-[90px] z-50 left-0 top-0'>
+      <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] h-screen w-[90px] z-[999] left-0 top-0'>
         <ul className='flex items-center gap-3 mt-3 flex-col'>
           <span className='mb-4'>
             <Avatar src={user?.avatar} />

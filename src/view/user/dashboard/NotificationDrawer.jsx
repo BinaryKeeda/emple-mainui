@@ -6,24 +6,22 @@ import useInviteData from "../hooks/useInviteData";
 export default function NotificationsDrawer({
   notificationOpen,
   setNotificationOpen,
-  pendingInvites,
-  userId,   // 👈 pass logged-in userId
-  refreshInvites, // 👈 callback to reload invites after action
+  userId, 
+  refreshInvites, 
 }) {
   const { data } = useInviteData({ userId });
 
-  // Accept / Reject handler
   const handleInviteResponse = async (inviteId, action, sectionId) => {
     try {
       await axios.post(
         BASE_URL + "/api/data/invites/respond",
-        { inviteId, accept: action === "accept" , section: sectionId }, // backend expects accept: true/false
+        { inviteId, accept: action === "accept" , section: sectionId }, 
         { withCredentials: true }
       );
 
       // 🔄 Refresh UI after response
-      if (refreshInvites) refreshInvites();
-      window.location.reload();
+      // if (refreshInvites) refreshInvites();
+      // window.location.reload();
     } catch (err) {
       console.error("Error responding to invite:", err);
     }

@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { GOOGLE_CLIENT_ID } from './lib/config'
+import { BASE_URL, GOOGLE_CLIENT_ID } from './lib/config'
 import { getUser } from './redux/reducers/UserThunks'
 import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
@@ -190,7 +190,6 @@ const App = () => {
                       element={<UserCoding />}
                     />
                     <Route path='user/resume' element={<ResumeATS />} />
-                    <Route path='user' element={<UserDashboard />} />
                     <Route
                       path='user/resources'
                       element={<UserResources />}
@@ -235,6 +234,8 @@ const App = () => {
                       </RoleBasedRoutes>
                     }
                   >
+                    <Route index element={<UserDashboard />} />
+
                     <Route path='group/:id' element={<UserAssociatedGroup />} />
                     <Route path='roadmaps' element={<UserRoadmaps />} />
                     <Route path='profile' element={<UserProfile />} />
@@ -308,7 +309,7 @@ const App = () => {
                       element={<AdminEditQuestionBank />}
                     />
                     <Route path='mail/:testId' element={<AdminMailTest />} />
-                    <Route path='groups' element={<AdminGroupsManage/>} />
+                    <Route path='groups' element={<AdminGroupsManage />} />
                     <Route path='sections' element={<></>} />
                   </Route>
                   {/* ============================================================= */}
@@ -317,13 +318,13 @@ const App = () => {
                   <Route
                     path='/campus-admin'
                     element={
-                      <ExternalRedirect url='https://admin.binarykeeda.com' />
+                      <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />
                     }
                   />
                   <Route
                     path='/campus-superadmin'
                     element={
-                      <ExternalRedirect url='https://admin.binarykeeda.com' />
+                      <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />
                     }
                   />
 

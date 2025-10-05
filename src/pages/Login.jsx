@@ -243,9 +243,9 @@ export default function Login ({ redirect = '/dashboard' }) {
   }
 
   const handleForgotPassword = () => setForgetPass(true)
-  useEffect(() => {
-    window.location.href = "https://login.binarykeeda.com"
-  } , []);
+  // useEffect(() => {
+  //   window.location.href = "https://login.binarykeeda.com"
+  // } , []);
   return (
     <main className='flex w-full h-screen justify-center items-center'>
       <div className='flex bg-white  w-[380px] flex-col h-max items-center justify-center'>

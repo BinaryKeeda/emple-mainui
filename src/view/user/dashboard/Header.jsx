@@ -21,15 +21,10 @@ import NotificationsDrawer from './NotificationDrawer'
 
 const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const { toggleTheme, theme } = useContext(ThemeContext)
-  const pendingInvites = useSelector((s) => s.auth.user?.pendingInvites || [])
   const dispatch = useDispatch()
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [badgeCount, setBadgeCount] = useState(0)
 
-  useEffect(() => {
-    // automatically update badge count when pendingInvites changes
-    setBadgeCount(pendingInvites.length)
-  }, [pendingInvites])
 
   const handleLogout = () => {
     try {
@@ -111,11 +106,9 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
       {/* Notification Drawer */}
       <NotificationsDrawer
       // userId={user}
-
-            userId={user?._id}
+        userId={user?._id}
         notificationOpen={notificationOpen}
         setNotificationOpen={setNotificationOpen}
-        pendingInvites={pendingInvites}
       />
     </>
   )

@@ -1,5 +1,5 @@
 // LoginModalContext.jsx
-import React, { createContext, useContext, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Modal, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { BASE_URL, MESSAGE_QUEUE_URL } from '../lib/config'
+import zIndex from '@mui/material/styles/zIndex'
 
 const LoginModalContext = createContext()
 export const useLoginModal = () => useContext(LoginModalContext)
@@ -27,7 +28,7 @@ export const LoginModalProvider = ({ children }) => {
   return (
     <LoginModalContext.Provider value={{ openLogin, closeLogin }}>
       {children}
-      <LoginModal open={open} onClose={closeLogin} redirect={redirectUrl} />
+      <LoginModal  open={open} onClose={closeLogin} redirect={redirectUrl} />
     </LoginModalContext.Provider>
   )
 }
@@ -45,7 +46,7 @@ const LoginModal = ({ open, onClose, redirect }) => {
   const [error, setError] = useState()
   const navigate = useNavigate()
   const handleCaptchaChange = token => setCaptchaToken(token)
-
+  useEffect(() => {}  , []);
   const handleLogin = async e => {
     e.preventDefault()
     setError(null)
@@ -108,7 +109,7 @@ const LoginModal = ({ open, onClose, redirect }) => {
   return (
     <AnimatePresence>
       {open && (
-        <Modal open={open} onClose={onClose} closeAfterTransition>
+        <Modal sx={{zIndex:998}} open={open} onClose={onClose} closeAfterTransition>
           <motion.main
             className='flex w-full h-screen justify-center items-center bg-black/40'
             variants={backdropVariants}
