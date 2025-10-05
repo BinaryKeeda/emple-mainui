@@ -381,7 +381,7 @@ export default function Header() {
                     </Link>
                   ) : (
                     <Link
-                      to={`${BASE_URL.includes("binarykeeda.com") ? "https://login.binarykeeda.com" : "http:localhost:5174"}`}
+                      to={`${BASE_URL.includes("binarykeeda.com") ? "https://login.binarykeeda.com" : "http://localhost:5174"}`}
                       className="px-6 py-2.5 text-gray-700 hover:text-gray-900 font-medium rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 hover:bg-gray-50"
                     >
                       Login
