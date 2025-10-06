@@ -1,14 +1,11 @@
 import { Drawer, Divider } from "@mui/material";
 import axios from "axios";
-import { BASE_URL } from "../../../lib/config";
-import useInviteData from "../hooks/useInviteData";
 
 export default function NotificationsDrawer({
   notificationOpen,
   setNotificationOpen,
   userId,   
 }) {
-  const { data } = useInviteData({ userId });
 
   // Accept / Reject handler
   const handleInviteResponse = async (inviteId, action) => {
