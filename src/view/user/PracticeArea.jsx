@@ -111,7 +111,7 @@ function PracticePage() {
           </div>
         }
       >
-        <section className='grid gap-6 p-5 sm:grid-cols-2 lg:grid-cols-3'>
+        <section className={`grid gap-6 p-5 sm:grid-cols-2 ${selectedTab ? 'lg:flex' : 'lg:grid-cols-3'}`}>
           {/* Landing Cards */}
           {!selectedTab &&
             LANDING_CARDS.map((card, idx) => (
@@ -137,14 +137,14 @@ function PracticePage() {
           {/* Selected Tab Cards */}
           {selectedTab &&
             cards.map((card, idx) => (
-              <div
+              <Link to={card.link}
                 key={idx}
-                className='flex flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
+                className='flex pt-4 pb-2 mx-auto px-2 w-[320px] flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
               >
                 <img
                   src={card.image}
                   alt={card.head}
-                  className='h-[200px] w-full object-contain'
+                  className='h-[100px] w-full object-contain'
                 />
 
                 <div className='my-2 mt-4 flex justify-center'>
@@ -165,7 +165,7 @@ function PracticePage() {
                     {card.description}
                   </p>
 
-                  <div className='mb-4 flex flex-wrap gap-2'>
+                  {/* <div className='mb-4 flex flex-wrap gap-2'>
                     {card.points.map((pt, i) => (
                       <Chip
                         key={i}
@@ -179,25 +179,25 @@ function PracticePage() {
                         }}
                       />
                     ))}
-                  </div>
+                  </div> */}
 
                   {card.link ? (
                     <Link to={card.link}>
-                        <Button
-                                            size='small'
-                                            variant='contained'
-                                            sx={{
-                                              fontSize: 8,
-                                              px: 4,
-                                              py: 1,
-                                              // background: 'linear-gradient(90deg, #1e293b, #3b4252)',
-                                              // '&:hover': {
-                                              //   background: 'linear-gradient(90deg, #3b4252, #1e293b)'
-                                              // }
-                                            }}
-                                          >
-                        Start Solving
-                      </Button>
+                      {/* <Button
+                        size='small'
+                        variant='contained'
+                        sx={{
+                          fontSize: 8,
+                          px: 4,
+                          py: 1,
+                          // background: 'linear-gradient(90deg, #1e293b, #3b4252)',
+                          // '&:hover': {
+                          //   background: 'linear-gradient(90deg, #3b4252, #1e293b)'
+                          // }
+                        }}
+                      >
+                        Explore
+                      </Button> */}
                     </Link>
                   ) : (
                     <Button
@@ -214,7 +214,7 @@ function PracticePage() {
                     </Button>
                   )}
                 </div>
-              </div>
+              </Link>
             ))}
         </section>
       </Suspense>

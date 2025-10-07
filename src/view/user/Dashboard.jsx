@@ -41,7 +41,7 @@ function Home () {
             />
           </div>
 
-          <div className='flex-1 min-h-[300px] overflow-y-auto'>
+          <div className='flex-1 md:min-h-[300px] overflow-y-auto'>
             <QuizSubmissions />
           </div>
         </div>

@@ -2,8 +2,21 @@ import axios from 'axios'
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { BASE_URL, LOGO, MESSAGE_QUEUE_URL } from '../../lib/config'
-import { Box, Button, Modal, Typography, TextField } from '@mui/material'
+import {
+  BASE_URL,
+  LOGO,
+  MESSAGE_QUEUE_URL
+} from '../../lib/config'
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  TextField,
+  Drawer,
+  IconButton
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 import Loader from '../../layout/Loader'
 
 const Solution = () => {
@@ -21,6 +34,7 @@ const Solution = () => {
   const [loading, setLoading] = useState(false)
   const [redirectModal, setRedirectModal] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const answersRef = useRef(answers)
   answersRef.current = answers
@@ -216,6 +230,61 @@ const Solution = () => {
     }
   }
 
+  const SidebarContent = () => (
+    <div className='flex flex-col gap-10 p-4'>
+      <div>
+        <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
+        <div className='grid grid-cols-6 gap-2 lg:grid-cols-5'>
+          {quiz.questions.map((q, idx) => (
+            <button
+              key={q._id}
+              className={`${getButtonStyle(
+                q._id
+              )} rounded-full h-[40px] w-[40px]`}
+              onClick={() => {
+                setCurrentIndex(idx)
+                setSidebarOpen(false)
+              }}
+            >
+              {idx + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className='flex flex-col gap-6'>
+        <div className='mt-6 text-sm space-y-2'>
+          <div className='flex items-center gap-2'>
+            <span className='w-4 h-4 bg-blue-700 inline-block rounded-sm'></span>{' '}
+            Current
+          </div>
+          <div className='flex items-center gap-2'>
+            <span className='w-4 h-4 bg-green-100 border border-green-400 inline-block rounded-sm'></span>{' '}
+            Attempted
+          </div>
+          <div className='flex items-center gap-2'>
+            <span className='w-4 h-4 bg-orange-100 border border-orange-400 inline-block rounded-sm'></span>{' '}
+            Seen
+          </div>
+          <div className='flex items-center gap-2'>
+            <span className='w-4 h-4 bg-blue-100 border border-blue-400 inline-block rounded-sm'></span>{' '}
+            Unseen
+          </div>
+        </div>
+
+        <Button
+          fullWidth
+          onClick={() => setShowConfirmModal(true)}
+          variant='contained'
+          color='primary'
+          className='mt-6'
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
+  )
+
   if (!quiz)
     return (
       <div className='h-screen flex justify-center items-center'>
@@ -225,20 +294,40 @@ const Solution = () => {
 
   return (
     <>
+      {/* Header */}
       <header className='relative top-0 left-0 w-full p-4 shadow-sm bg-white z-20 flex justify-between items-center h-[60px]'>
-        <img src={LOGO} className='h-10' alt='Logo' />
+        <div className='flex items-center gap-3'>
+          {/* Sidebar toggle button for small screens */}
+          <IconButton
+            onClick={() => setSidebarOpen(true)}
+            className='lg:hidden'
+            aria-label='open sidebar'
+          >
+            <MenuIcon />
+          </IconButton>
+          <img src={LOGO} className='h-10' alt='Logo' />
+        </div>
+
         <span>
           {String(Math.floor(timeLeft / 60000)).padStart(2, '0')}m :{' '}
           {String(Math.floor((timeLeft % 60000) / 1000)).padStart(2, '0')}s
         </span>
       </header>
 
+      {/* Main content */}
       <main className='flex bg-white flex-col lg:flex-row h-[calc(100vh-60px)] pt-[0px]'>
+        {/* Question Section */}
         <section className='flex-1 p-5 flex flex-col justify-between'>
           <div className='border p-8 rounded-sm shadow-sm'>
             <div className='flex justify-between'>
               <p className='mb-6 text-base'>
-                Q{currentIndex + 1}. <span style={{whiteSpace:"pre-line"}} dangerouslySetInnerHTML={{__html:currentQuestion?.question}}></span>
+                Q{currentIndex + 1}.{' '}
+                <span
+                  style={{ whiteSpace: 'pre-line' }}
+                  dangerouslySetInnerHTML={{
+                    __html: currentQuestion?.question
+                  }}
+                ></span>
               </p>
               <div className='flex items-center gap-2'>
                 <span className='bg-green-100 border-green-400 border p-1 w-[40px] text-xs'>
@@ -266,11 +355,10 @@ const Solution = () => {
                   return (
                     <label
                       key={idx}
-                      className={`flex items-center p-3 border rounded-md cursor-pointer transition ${
-                        isChecked
-                          ? 'border-blue-600 bg-blue-50'
-                          : 'border-gray-300'
-                      }`}
+                      className={`flex items-center p-3 border rounded-md cursor-pointer transition ${isChecked
+                        ? 'border-blue-600 bg-blue-50'
+                        : 'border-gray-300'
+                        }`}
                     >
                       <input
                         type={isMSQ(currentQuestion) ? 'checkbox' : 'radio'}
@@ -322,73 +410,43 @@ const Solution = () => {
             >
               Previous
             </button>
-            <button
-              onClick={() =>
-                setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
-              }
-              disabled={currentIndex === questionSet.length - 1}
-              className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
-            >
-              Next
-            </button>
+
+            {currentIndex === questionSet.length - 1 ?
+              <button onClick={() => setShowConfirmModal(true)} className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'>
+                Submit
+              </button> : <button
+                onClick={() =>
+                  setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
+                }
+                disabled={currentIndex === questionSet.length - 1}
+                className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
+              >
+                Next
+              </button>}
           </div>
         </section>
 
-        <section className='lg:w-1/4 p-6 border-t flex flex-col gap-10 lg:border-t-0 lg:border-l border-gray-200'>
-          <div>
-            <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
-            <div className='grid grid-cols-6 gap-2 lg:grid-cols-5'>
-              {quiz.questions.map((q, idx) => (
-                <button
-                  key={q._id}
-                  className={`${getButtonStyle(
-                    q._id
-                  )} rounded-full h-[40px] w-[40px]`}
-                  onClick={() => setCurrentIndex(idx)}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className='flex flex-col gap-6'>
-            <div className='mt-6 text-sm space-y-2'>
-              <div className='flex items-center gap-2'>
-                <span className='w-4 h-4 bg-blue-700 inline-block rounded-sm'></span>{' '}
-                Current
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='w-4 h-4 bg-green-100 border border-green-400 inline-block rounded-sm'></span>{' '}
-                Attempted
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='w-4 h-4 bg-orange-100 border border-orange-400 inline-block rounded-sm'></span>{' '}
-                Seen
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='w-4 h-4 bg-blue-100 border border-blue-400 inline-block rounded-sm'></span>{' '}
-                Unseen
-              </div>
-            </div>
-
-            <Button
-              fullWidth
-              onClick={() => setShowConfirmModal(true)}
-              variant='contained'
-              color='primary'
-              className='mt-6'
-            >
-              Submit
-            </Button>
-          </div>
+        {/* Sidebar for large screens */}
+        <section className='hidden lg:flex lg:w-1/4 border-l border-gray-200'>
+          <SidebarContent />
         </section>
+
+        {/* Drawer Sidebar for small screens */}
+        <Drawer
+          anchor='left'
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        >
+          <Box sx={{ width: 300, p: 2 }}>
+            <SidebarContent />
+          </Box>
+        </Drawer>
       </main>
 
       {/* Redirect modal */}
       <Modal open={redirectModal}>
         <div
-          className='relative top-[50%] left-[50%] p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white shadow-lg'
+          className='relative top-[50%] md:left-[50%] p-6 w-2/5  rounded-lg bg-white shadow-lg'
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           {loading ? (

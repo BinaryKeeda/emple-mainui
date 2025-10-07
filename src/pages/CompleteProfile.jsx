@@ -564,13 +564,13 @@ export default function CompleteProfile () {
         </>
       )}
 
-      <main className='bg-white gap-3 flex justify-center items-center h-screen'>
-        <img className='absolute top-2 left-2 h-10' src={LOGO} alt="" />
+      <main className='bg-white gap-3 xs:p-5  flex justify-center items-center h-screen'>
+        <img className='absolute min-w top-2 left-2 h-10' src={LOGO} alt="" />
           <form className='flex-col flex gap-4 ' onSubmit={handleSubmit}>
             <div className='flex gap-3 w-full'>
               <div className='flex flex-1 gap-4 justify-center flex-col'>
-                <h1 className='text-3xl text-[#111827] text-center font-[Lato]'>
-                  Complete Your Profile
+                <h1 className='text-3xl lg:mb-0 mb-42 text-[#111827] text-center font-[Lato]'>
+                  Profile Details
                 </h1>
                 <TextField
                   size='small'

@@ -45,10 +45,10 @@ export default function QuizDisplay({ sectionId, isGroup = false }) {
     if (page < totalPages) setPage(page + 1);
   };
 
-  return (
-    <div className="">
+return (
+    <div className="p-5">
 
-      <div className='relative flex flex-col w-full overflow-x-auto dark:text-white bg-white shadow-md rounded-lg'>
+      <div className='relative px-5 md:px-4 flex flex-col w-full overflow-x-auto dark:text-white bg-white shadow-md rounded-lg'>
         <table className='w-full text-left table-auto min-w-max'>
           <thead>
             <tr className='bg-support'>
