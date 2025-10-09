@@ -1,0 +1,1 @@
+import{j as t}from"./index-DuMHTSdw.js";import{Q as s}from"./QuizTestList-Bo3aWF8D.js";import"./useQuery-BvtePg6D.js";import"./Delete-K8MPmJq9.js";const e=()=>t.jsx(s,{type:"test"});export{e as default};

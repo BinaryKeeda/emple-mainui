@@ -46,12 +46,11 @@ function Home () {
           </div>
         </div>
 
-        {/* Right Column */}
         <div className='flex flex-col gap-3 w-full lg:w-1/3'>
-          <div className='flex-1 min-h-[250px]'>
+          <div className='flex-1 md:min-h-[250px]'>
             <Leaderboard user={user} userUniversity={user.university} />
           </div>
-          <div className='flex-1 min-h-[350px] overflow-y-auto'>
+          <div className='flex-1 lg:min-h-[350px] overflow-y-auto'>
             <TestSubmissions />
           </div>
         </div>
