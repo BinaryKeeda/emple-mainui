@@ -136,6 +136,8 @@ export default function Addquiz ({ setModalClose }) {
                 <MenuItem value='Aptitude'>Aptitude</MenuItem>
                 <MenuItem value='Core'>Core</MenuItem>
                 <MenuItem value='Miscellaneous'>Miscellaneous</MenuItem>
+                <MenuItem value='Gate'>Gate</MenuItem>
+                <MenuItem value='Map'>Map</MenuItem>
               </Select>
             </FormControl>
 

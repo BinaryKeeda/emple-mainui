@@ -50,8 +50,11 @@ const SubmissionList = ({ currCategory }) => {
         </div>
       ) : data[currentPage]?.length != 0 ? (
         <>
-          <SectionHeader title={'Test Submissions'} />
-          <div className='flex flex-col shadow-xl w-full  overflow-scroll custom-scrollbar'>
+          <div className="p-2">
+
+            <SectionHeader title={'Test Submissions'} />
+          </div>
+          <div className='flex mt-2 flex-col shadow-xl w-full  overflow-scroll custom-scrollbar'>
             {/* <p className='w-full  px-4 text-left  bg-[#111827] from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent font-bold text-xl'></p> */}
             <div className='relative  flex flex-col w-full  overflow-scroll custom-scrollbar    bg-primary shadow-md rounded-lg bg-clip-border '>
               <table className='w-full overflow-x-scroll text-left  shadow-lg table-auto min-w-max'>

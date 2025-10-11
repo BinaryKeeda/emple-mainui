@@ -96,6 +96,7 @@ import { BASE_URL } from '../../../lib/config'
 import { useNavigate } from 'react-router-dom'
 import { red } from '@mui/material/colors'
 import { useSnackbar } from 'notistack'
+import { useSelector } from 'react-redux'
 const defaultForm = {
   name: '',
   description: '',
@@ -119,6 +120,7 @@ export default function CreateTestModal ({
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
   }
+  const {user} = useSelector(s => s.auth);
 
   const handleSubmit = async () => {
     if (!form.name || !form.duration || !form.visibility || !form.category) {
@@ -132,7 +134,7 @@ export default function CreateTestModal ({
       setLoading(true)
       const res = await axios.post(
         `${BASE_URL}/api/admin/tests/add`,
-        { ...form, duration: Number(form.duration) },
+        { ...form, duration: Number(form.duration), creator : user._id },
         { withCredentials: true }
       )
 

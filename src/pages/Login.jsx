@@ -246,36 +246,38 @@ export default function Login ({ redirect = '/dashboard' }) {
   useEffect(() => {
     window.location.href = "https://login.binarykeeda.com"
   } , []);
-  return (
-    <main className='flex w-full h-screen justify-center items-center'>
-      <div className='flex bg-white  w-[380px] flex-col h-max items-center justify-center'>
-        {forgetPass ? (
-          <ForgotPasswordForm
-            email={email}
-            setEmail={setEmail}
-            handleResetLink={handelResetLink}
-            setForgetPass={setForgetPass}
-            message={message}
-            error={error}
-          />
-        ) : (
-          <LoginForm
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
-            handleLogin={handleLogin}
-            handleForgotPassword={handleForgotPassword}
-            message={message}
-            error={error}
-            captchaRef={captchaRef}
-            handleCaptchaChange={handleCaptchaChange}
-            navigate={navigate}
-          />
-        )}
-      </div>
-    </main>
-  )
+  // return (
+  //   <main className='flex w-full h-screen justify-center items-center'>
+  //     <div className='flex bg-white  w-[380px] flex-col h-max items-center justify-center'>
+  //       {forgetPass ? (
+  //         <ForgotPasswordForm
+  //           email={email}
+  //           setEmail={setEmail}
+  //           handleResetLink={handelResetLink}
+  //           setForgetPass={setForgetPass}
+  //           message={message}
+  //           error={error}
+  //         />
+  //       ) : (
+  //         <LoginForm
+  //           email={email}
+  //           setEmail={setEmail}
+  //           password={password}
+  //           setPassword={setPassword}
+  //           showPassword={showPassword}
+  //           setShowPassword={setShowPassword}
+  //           handleLogin={handleLogin}
+  //           handleForgotPassword={handleForgotPassword}
+  //           message={message}
+  //           error={error}
+  //           captchaRef={captchaRef}
+  //           handleCaptchaChange={handleCaptchaChange}
+  //           navigate={navigate}
+  //         />
+  //       )}
+  //     </div>
+  //   </main>
+  // )
+
+  return <></>
 }

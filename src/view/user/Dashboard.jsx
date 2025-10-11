@@ -41,15 +41,15 @@ function Home () {
             />
           </div>
 
-          <div className='flex-1 md:min-h-[300px] overflow-y-auto'>
+          <div className=' overflow-y-auto'>
             <QuizSubmissions />
           </div>
         </div>
 
         <div className='flex flex-col gap-3 w-full lg:w-1/3'>
-          <div className='flex-1 md:min-h-[250px]'>
+          {/* <div className='flex-1 '> */}
             <Leaderboard user={user} userUniversity={user.university} />
-          </div>
+          {/* </div> */}
           <div className='flex-1 lg:min-h-[350px] overflow-y-auto'>
             <TestSubmissions />
           </div>

@@ -27,9 +27,9 @@ function Leaderboard () {
   }
 
   return (
-    <div className='w-full md:w-[410px] bg-white rounded-xl shadow flex flex-col'>
+    <div className='w-full  bg-white rounded-xl shadow flex flex-col'>
       {/* Header */}
-      <div className='m-4 pl-2'>
+      <div className='m-4  pl-2'>
           <SectionHeader title={'Leaderboards'} />
 
         {/* Tabs */}

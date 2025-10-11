@@ -446,7 +446,7 @@ const Solution = () => {
       {/* Redirect modal */}
       <Modal open={redirectModal}>
         <div
-          className='relative top-[50%] md:left-[50%] p-6 w-2/5  rounded-lg bg-white shadow-lg'
+          className='relative top-[50%] left-[50%] p-6 w-2/5 min-w-[80%] md:min-w-[40%]    rounded-lg bg-white shadow-lg'
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           {loading ? (
@@ -476,7 +476,7 @@ const Solution = () => {
       {/* Confirm submit modal */}
       <Modal open={showConfirmModal} onClose={() => setShowConfirmModal(false)}>
         <div
-          className='relative top-[50%] left-[50%] p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white shadow-lg'
+          className='relative top-[50%] left-[50%] p-6 w-2/5 min-w-[80%] md:min-w-[40%]  rounded-lg bg-white shadow-lg'
           style={{ transform: 'translate(-50%, -50%)' }}
         >
           <div className='flex shrink-0 items-center pb-4 text-xl font-medium text-slate-800'>

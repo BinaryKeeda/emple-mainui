@@ -8,7 +8,7 @@ import Loader from '../../../layout/Loader'
 
 export default function TestInstructions () {
   const { test, testResponse, setHasAgreed ,setStartedAt } = useTest()
-  const { showSnackbar } = useSnackbar()
+  // const { showSnackbar } = useSnackbar()
   const sections = test?.sections || []
   const [submitting,setIsSubmitting] = useState(false);
   const handleStartTest = async () => {
@@ -25,12 +25,12 @@ export default function TestInstructions () {
       )
       setHasAgreed(true);
       setStartedAt(res.data.startedAt);
-      showSnackbar('Test Started', 'success');
+      // showSnackbar('Test Started', 'success');
 
       setHasAgreed(true)
     } catch (e) {
       console.log(e)
-      showSnackbar('Error Starting Test', 'error')
+      // showSnackbar('Error Starting Test', 'error')
     } finally {
         setIsSubmitting(false)
     }

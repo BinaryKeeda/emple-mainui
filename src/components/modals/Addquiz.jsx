@@ -121,6 +121,8 @@ export default function Addquiz({ setModalClose, isHidden }) {
                 <MenuItem value="Aptitude">Aptitude</MenuItem>
                 <MenuItem value="Core">Core</MenuItem>
                 <MenuItem value="Miscellaneous">Miscellaneous</MenuItem>
+                <MenuItem value="Gate">Gate</MenuItem>
+                <MenuItem value="Map">Map</MenuItem>
               </Select>
             </FormControl>
             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>

@@ -41,7 +41,26 @@ const QUIZ_CARDS = [
     link: '/user/practice/Miscellaneous',
     image:
       'https://res.cloudinary.com/drzyrq7d5/image/upload/v1757593501/miscellaneous_dmmthp.png'
-  }
+  },
+  {
+    head: 'Maps',
+    description:
+      'Explore puzzles, GK, and tricky challenges to test your intellect.',
+    points: ['Puzzles', 'General Knowledge', 'Fun Challenges'],
+    link: '/user/practice/Maping',
+    image:
+      'https://res.cloudinary.com/drzyrq7d5/image/upload/v1757593501/miscellaneous_dmmthp.png'
+  },
+  {
+    head: 'Gate',
+    description:
+      'Explore puzzles, GK, and tricky challenges to test your intellect.',
+    points: ['Puzzles', 'General Knowledge', 'Fun Challenges'],
+    link: '/user/practice/Gate',
+    image:
+      'https://res.cloudinary.com/drzyrq7d5/image/upload/v1757593501/miscellaneous_dmmthp.png'
+  },
+
 ]
 
 // Test Series Cards
@@ -111,8 +130,14 @@ function PracticePage() {
           </div>
         }
       >
-        <section className={`grid gap-6 p-5 sm:grid-cols-2 ${selectedTab ? 'lg:flex' : 'lg:grid-cols-3'}`}>
-          {/* Landing Cards */}
+        <section
+          className={`grid gap-6 p-5 
+                    grid-cols-1
+                    sm:grid-cols-2
+                    md:grid-cols-3
+                    lg:${!selectedTab ? 'grid-cols-2' : 'grid-cols-4'}
+                    xl:${!selectedTab ? 'grid-cols-3' : 'grid-cols-5'}
+                  `}>
           {!selectedTab &&
             LANDING_CARDS.map((card, idx) => (
               <div
@@ -134,7 +159,6 @@ function PracticePage() {
               </div>
             ))}
 
-          {/* Selected Tab Cards */}
           {selectedTab &&
             cards.map((card, idx) => (
               <Link to={card.link}
@@ -145,7 +169,7 @@ function PracticePage() {
                   src={card.image}
                   alt={card.head}
                   className='h-[100px] w-full object-contain'
-                />
+                /> 
 
                 <div className='my-2 mt-4 flex justify-center'>
                   <hr className='w-[90%] border-t-[1.5px] border-gray-300 dark:border-gray-400' />

@@ -93,7 +93,7 @@ export default function SignUpForm () {
 
   return (
     <>
-      {loading && (
+      {/* {loading && (
         <div className='fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center'>
           <div className='relative rounded-2xl h-[100px] w-[330px] shadow-lg flex items-center justify-center space-x-4'>
             <Loader />
@@ -224,7 +224,7 @@ export default function SignUpForm () {
             </p>
           </form>
         </div>
-      </main>
+      </main> */}
     </>
   )
 }
