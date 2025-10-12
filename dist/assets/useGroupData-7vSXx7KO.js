@@ -1,0 +1,1 @@
+import{u as a}from"./useQuery-BoYP5h9i.js";import{u as e,G as r}from"./api-C0dE17cz.js";const n=async t=>(await e.get(r.GET_USER_GROUP+t)).data,o=async t=>(await e.get(r.GET_USER_SECTION+t)).data,y=({userId:t})=>a({queryKey:["groupData",t],queryFn:()=>n(t)}),i=({userId:t})=>a({queryKey:["sectionData",t],queryFn:()=>o(t)});export{i as a,y as u};
