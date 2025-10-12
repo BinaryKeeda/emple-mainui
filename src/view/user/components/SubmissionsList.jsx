@@ -49,7 +49,7 @@ const SubmissionList = ({ currCategory }) => {
         </div>
       ) : data[currentPage]?.length != 0 ? (
         <>
-          <p className='w-full  p-3 text-left bg-[#111827] bg-clip-text text-transparent font-bold text-xl'></p>
+          <p className='w-full  px-3 text-left bg-[#111827] bg-clip-text text-transparent font-bold text-xl'></p>
           <SectionHeader title={'Quiz Submissions'} />
 
           <div className='relative mt-2 flex flex-col w-full  overflow-scroll custom-scrollbar   bg-primary shadow-md rounded-lg bg-clip-border'>

@@ -7,8 +7,10 @@ import {
 import {
   Avatar,
   Badge,
+  Box,
   Divider,
   IconButton,
+  Typography,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOutUser } from '../../../redux/reducers/UserThunks'
@@ -18,6 +20,8 @@ import { Link } from 'react-router-dom'
 import { LOGO } from '../../../lib/config'
 import { ThemeContext } from '../../../context/ThemeProvider'
 import NotificationsDrawer from './NotificationDrawer'
+import { Cart16Filled, Cart20Regular, Cart24Regular } from '@fluentui/react-icons'
+import { useSnackbar } from 'notistack'
 
 const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const { toggleTheme, theme } = useContext(ThemeContext)
@@ -40,6 +44,8 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
     setBadgeCount(0)
   }
 
+  const { enqueueSnackbar } = useSnackbar()
+    ;
   return (
     <>
       <header className='relative h-[59px]'>
@@ -59,6 +65,33 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
           <div className='flex items-center gap-3'>
             {user ? (
               <>
+                <Box
+                  onClick={() => {
+                     enqueueSnackbar('Coming soon', { variant: 'warning' })
+                  }}
+                  sx={{
+                    display: "flex",
+                    cursor: "pointer",
+                    alignItems: "center",
+                    gap: 1.5, // space between items
+                    padding: "6px 12px",
+                    border: "1px solid #e1e1e1",
+                    borderRadius: "8px",
+                    backgroundColor: "#f9f9f9",
+                    width: "fit-content", // shrink to content
+                    boxShadow: "0px 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "14px", color: "#555" }}>Credits</Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontSize: "14px", fontWeight: 600, color: "#111" }}
+                  >
+                    85.00
+                  </Typography>
+                  <Cart20Regular />
+                </Box>
+
                 {/* Notifications */}
                 <IconButton
                   aria-label='notifications'
@@ -105,7 +138,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
 
       {/* Notification Drawer */}
       <NotificationsDrawer
-      // userId={user}
+        // userId={user}
         userId={user?._id}
         notificationOpen={notificationOpen}
         setNotificationOpen={setNotificationOpen}

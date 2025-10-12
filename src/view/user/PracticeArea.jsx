@@ -131,10 +131,11 @@ function PracticePage() {
         }
       >
         <section
-          className={`grid gap-6 p-5 
+          className={` gap-6 p-5 
                     grid-cols-1
                     sm:grid-cols-2
                     md:grid-cols-3
+                    ${!selectedTab ? 'flex': 'grid'}
                     lg:${!selectedTab ? 'grid-cols-2' : 'grid-cols-4'}
                     xl:${!selectedTab ? 'grid-cols-3' : 'grid-cols-5'}
                   `}>
@@ -142,7 +143,7 @@ function PracticePage() {
             LANDING_CARDS.map((card, idx) => (
               <div
                 key={idx}
-                className='flex items-center px-5 cursor-pointer flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
+                className='flex items-center px-5 w-full max-w-[400px] cursor-pointer flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
                 onClick={() => handleSelectTab(card.type)}
               >
                 <img
@@ -163,7 +164,7 @@ function PracticePage() {
             cards.map((card, idx) => (
               <Link to={card.link}
                 key={idx}
-                className='flex pt-4 pb-2 mx-auto px-2 w-[320px] flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
+                className='flex pt-4 pb-2 px-2 max-w-[400px] flex-col overflow-hidden rounded-[22px] border border-gray-100 bg-primary shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl dark:border-gray-700 dark:shadow-black/40'
               >
                 <img
                   src={card.image}

@@ -134,7 +134,7 @@ const TestProvider = ({ children, userId, testSlug }) => {
         currSection,
         curr,
         test,
-        testResponse,
+      testResponse,
         loading,
         startedAt,
         setStartedAt,
