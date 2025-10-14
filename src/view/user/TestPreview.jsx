@@ -6,6 +6,7 @@ import { IconButton } from '@mui/material'
 import { ArrowBackIos, ArrowForward, ArrowForwardIos } from '@mui/icons-material'
 
 /** ==== Compute Full Test + Section Analysis ==== */
+/** ==== Compute Full Test + Section Analysis ==== */
 const computeAnalysis = (response, testId) => {
   let totalMarks = 0
   let obtainedMarks = 0
@@ -14,6 +15,8 @@ const computeAnalysis = (response, testId) => {
 
   response.forEach(section => {
     const meta = testId.sections.find(s => s._id === section.sectionId)
+    const questions = meta?.questionSet || []
+
     let sectionTotal = 0
     let sectionObtained = 0
     let sectionNegative = 0
@@ -21,46 +24,46 @@ const computeAnalysis = (response, testId) => {
     let wrongCount = 0
     let skippedCount = 0
 
-    /** === QUIZ === */
+    /** === QUIZ SECTION === */
     if (section.sectionType === 'Quiz') {
-      const questions = meta?.questionSet || []
+      // Flatten user's answers into a single map: { qid: markedAnswer }
+      const userAnswers = Object.assign({}, ...section.quizAnswers)
 
-      section.quizAnswers?.forEach(answerObj => {
-        Object.entries(answerObj).forEach(([qid, markedAnswer]) => {
-          const question = questions.find(q => q._id === qid)
-          if (!question) return
+      questions.forEach(q => {
+        const markedAnswer = userAnswers[q._id] || null
+        sectionTotal += q.marks
+        totalMarks += q.marks
 
-          sectionTotal += question.marks
-          totalMarks += question.marks
+        if (!markedAnswer) {
+          skippedCount++
+          return
+        }
 
-          let isCorrect = false
-          if (question.category === 'Text') {
-            isCorrect =
-              question.answer?.trim().toLowerCase() ===
-              markedAnswer?.trim().toLowerCase()
-          } else {
-            const correctOption = question.options.find(o => o.isCorrect)
-            isCorrect = correctOption?.text === markedAnswer
+        let isCorrect = false
+        if (q.category === 'Text') {
+          isCorrect =
+            q.answer?.trim().toLowerCase() ===
+            markedAnswer?.trim().toLowerCase()
+        } else {
+          const correctOption = q.options.find(o => o.isCorrect)
+          isCorrect = correctOption?.text === markedAnswer
+        }
+
+        if (isCorrect) {
+          sectionObtained += q.marks
+          obtainedMarks += q.marks
+          correctCount++
+        } else {
+          wrongCount++
+          if (q.negative) {
+            sectionNegative += q.negative
+            negativeMarks += q.negative
           }
-
-          if (isCorrect) {
-            sectionObtained += question.marks
-            obtainedMarks += question.marks
-            correctCount++
-          } else if (markedAnswer) {
-            wrongCount++
-            if (question.negative) {
-              sectionNegative += question.negative
-              negativeMarks += question.negative
-            }
-          } else {
-            skippedCount++
-          }
-        })
+        }
       })
     }
 
-    /** === CODING === */
+    /** === CODING SECTION === */
     if (section.sectionType === 'Coding') {
       section.codingAnswers?.forEach(ansBlock => {
         const qid = Object.keys(ansBlock)[0]
@@ -84,7 +87,7 @@ const computeAnalysis = (response, testId) => {
       negativeMarks: sectionNegative,
       correctCount,
       wrongCount,
-      skippedCount
+      skippedCount,
     })
   })
 
@@ -152,11 +155,10 @@ const TestSeriesPreview = () => {
               Full Test Analysis
             </h3>
             <span
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border ${
-                analysis.verdict === 'Pass'
+              className={`px-4 py-1.5 rounded-full text-sm font-medium border ${analysis.verdict === 'Pass'
                   ? 'bg-green-50 text-green-700 border-green-200'
                   : 'bg-red-50 text-red-700 border-red-200'
-              }`}
+                }`}
             >
               {analysis.verdict}
             </span>
@@ -237,7 +239,7 @@ const TestSeriesPreview = () => {
         </div>
       )}
 
-      <div className='flex text-xs justify-center'> 
+      <div className='flex text-xs justify-center'>
         <p>Switch Sections</p>
       </div>
 
@@ -247,7 +249,7 @@ const TestSeriesPreview = () => {
           onClick={() => setCurrentSectionIndex(i => i - 1)}
           className='px-4 py-2 bg-gray-500 text-white rounded disabled:bg-gray-300'
         >
-          <ArrowBackIos/>
+          <ArrowBackIos />
         </IconButton>
         <span>
           {currentSectionIndex + 1} / {response.length}
@@ -257,7 +259,7 @@ const TestSeriesPreview = () => {
           onClick={() => setCurrentSectionIndex(i => i + 1)}
           className='px-4 py-2 bg-gray-500 text-white rounded disabled:bg-gray-300'
         >
-          <ArrowForwardIos/>
+          <ArrowForwardIos />
         </IconButton>
       </div>
       {/* ==== Current Section Questions ==== */}
@@ -296,8 +298,8 @@ const TestSeriesPreview = () => {
                             ? 'text-green-600 font-semibold'
                             : opt.text === userAnswer &&
                               opt.text !== correctAnswer
-                            ? 'text-red-600 font-semibold'
-                            : ''
+                              ? 'text-red-600 font-semibold'
+                              : ''
                         }
                       >
                         {String.fromCharCode(65 + i)}. {opt.text}

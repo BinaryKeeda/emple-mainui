@@ -26,7 +26,7 @@ const TestQuizInterface = ({ timeLeft }) => {
   const currentQuestion = currSection.questionSet[currentIndex]
   const isMSQ = question =>
     question?.options?.filter(opt => opt.isCorrect).length > 1
-
+ 
   const handleOptionChange = (question, selectedOption) => {
     const qId = question._id
     if (isMSQ(question)) {
@@ -68,14 +68,19 @@ const TestQuizInterface = ({ timeLeft }) => {
   }, [currentIndex, currentQuestion])
 
   useEffect(() => {
-    const cached = sessionStorage.getItem(`solution-${slug}`)
+    const cached = sessionStorage.getItem(`solution-${slug}-${currSection?._id}`)
+    console.log(cached)
     if (cached) {
       const parsed = JSON.parse(cached)
       setAnswers(parsed.answers || {})
       setVisitedQuestions(new Set(parsed.visited || []))
       setCurrentIndex(parsed.currentIndex || 0)
+    }else {
+      setVisitedQuestions(new Set([]));
+      setAnswers({});
+      setCurrentIndex(0);
     }
-  }, [])
+  }, [currSection])
   useEffect(() => {
     if (timeLeft <= 0) {
       submitHandler(true)
@@ -85,7 +90,7 @@ const TestQuizInterface = ({ timeLeft }) => {
   useEffect(() => {
     if (loading) return
     sessionStorage.setItem(
-      `solution-${slug}`,
+      `solution-${slug}-${currSection?._id}`,
       JSON.stringify({
         answers,
         visited: Array.from(visitedQuestions),
@@ -109,7 +114,7 @@ const TestQuizInterface = ({ timeLeft }) => {
           autoSubmit
         }
       )
-      sessionStorage.removeItem(`solution-${slug}`)
+      sessionStorage.removeItem(`solution-${slug}-${currSection?._id}`)
       console.log('Chl rha hai')
       setCurr(prev => prev + 1)
       console.log(res.data)
@@ -166,11 +171,10 @@ const TestQuizInterface = ({ timeLeft }) => {
                   return (
                     <label
                       key={idx}
-                      className={`flex items-center p-3 border rounded-md cursor-pointer transition ${
-                        isChecked
+                      className={`flex items-center p-3 border rounded-md cursor-pointer transition ${isChecked
                           ? 'border-blue-600 bg-blue-50'
                           : 'border-gray-300'
-                      }`}
+                        }`}
                     >
                       <input
                         type={isMSQ(currentQuestion) ? 'checkbox' : 'radio'}
