@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 // ✅ Fetch groups
 const fetchGroups = async (query) => {
   const res = await axios.get(
-    `${BASE_URL}/api/admin/groups?search=${query}`,
+    `${BASE_URL}/api/admin/groups?search=${query}&withOwner=true`,
     { withCredentials: true }
   )
   return res.data.groups

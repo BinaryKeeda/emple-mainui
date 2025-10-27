@@ -65,12 +65,13 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
           <div className='flex items-center gap-3'>
             {user ? (
               <>
-                <Box
+                {/* <Box
                   onClick={() => {
                      enqueueSnackbar('Coming soon', { variant: 'warning' })
                   }}
                   sx={{
-                    display: "flex",
+
+                    display: {xs:"none" , lg:"flex"},
                     cursor: "pointer",
                     alignItems: "center",
                     gap: 1.5, // space between items
@@ -90,7 +91,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
                     85.00
                   </Typography>
                   <Cart20Regular />
-                </Box>
+                </Box> */}
 
                 {/* Notifications */}
                 <IconButton

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, Outlet } from 'react-router-dom'
 import Header from './dashboard/Header'
@@ -48,10 +48,13 @@ const UserDashboardLayout = ({ children }) => {
           <main
             className={`
            xs:p-1 bg-gray-100
-           md:pl-5 md:pl-[110px]
+            md:pl-[110px]
            md:pr-5 py-5  min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
           >
-            {children || <Outlet />}
+            {/* {(user && !user?.profileCompleted) ? <CompleteProfile /> */}
+              {/* : */}
+             { children || <Outlet />}
+            {/* } */}
           </main>
         </Suspense>
       </>

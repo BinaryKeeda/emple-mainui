@@ -23,7 +23,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
   //     sections: [{ _id: "68ce8cf02c704a4da7987871", name: "UPES 2026" }]
   //   }
   // ]
-const { data } = useGroupData({ userId: user?._id });
+  const { data } = useGroupData({ userId: user?._id });
 
   const [showAside, setShowAside] = useState(false)
 
@@ -99,8 +99,10 @@ const { data } = useGroupData({ userId: user?._id });
               </motion.div>
             )
           })}
-          {data?.data?.map((group) => {
-            const isActive = location.pathname === `/user/group/${group.group._id}`
+
+
+          {data && data?.data?.map((group) => {
+            const isActive = location.pathname === `/user/group/${group?.group?._id}`
 
             return (
               <motion.div
@@ -126,11 +128,11 @@ const { data } = useGroupData({ userId: user?._id });
                 </AnimatePresence>
 
                 <Link
-                  to={`/user/group/${group.group._id}`}
+                  to={`/user/group/${group?.group?._id}`}
                   className={`relative flex flex-col items-center justify-center w-full text-white p-2 transition-all duration-300 z-10 ${isActive ? 'translate-x-5' : ''}`}
                 >
                   <IconButton color='inherit'>#</IconButton> {/* You can replace # with a group icon */}
-                  <span className='text-xs text-center'>{group.group.groupName}</span>
+                  <span className='text-xs text-center'>{group?.group?.groupName}</span>
                 </Link>
               </motion.div>
             )
@@ -180,7 +182,7 @@ const { data } = useGroupData({ userId: user?._id });
               {data?.data?.map((item) => (
                 <Link
                   key={item._id}
-                  to={`/group/${item.group._id}`} // link with group id
+                  to={`/group/${item?.group?._id}`} // link with group id
                   className="px-3 py-2 rounded-lg hover:bg-gray-200 text-gray-800 font-medium"
                 >
                   {item.group.groupName}

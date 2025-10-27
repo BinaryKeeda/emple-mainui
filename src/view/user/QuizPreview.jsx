@@ -26,6 +26,7 @@ const GET_SOLUTIONS = gql`
             question
             image
             marks
+            category
             negative
             options {
               text
@@ -125,8 +126,9 @@ export default function QuizPreview() {
               )}
 
               <ul className='space-y-2'>
-                {question.options.length > 0 ? (
-                  question.options.map((option, idx) => {
+                {/* {JSON.stringify(question.category)} */}
+                {question?.category != 'Text' ? (
+                  question?.options.map((option, idx) => {
                     const selected =
                       (isMultiple && userAnswer?.includes(option.text)) ||
                       (!isMultiple && userAnswer === option.text)

@@ -61,7 +61,7 @@ export default function Footer() {
           <p className="text-sm text-gray-700 mt-3">
             Reach us at{" "}
             <a href="mailto:support@binarykeeda.com" className="underline">
-              support@binarykeeda.com
+              contact@binarykeeda.com
             </a>
           </p>
         </div>

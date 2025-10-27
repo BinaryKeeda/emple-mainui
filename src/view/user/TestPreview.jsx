@@ -206,9 +206,9 @@ const TestSeriesPreview = () => {
 
       {/* ==== Section Analysis Table ==== */}
       {analysis && (
-        <div className='bg-white p-6 rounded-lg shadow mb-6'>
+        <div className='bg-white overflow-auto p-6 rounded-lg shadow mb-6'>
           <h3 className='text-xl font-semibold mb-4'>Section Analysis</h3>
-          <table className='w-full text-sm border'>
+          <table className='w-full overflow-x-auto max-w-screen text-sm border'>
             <thead className='bg-gray-100'>
               <tr>
                 <th className='border p-2'>Section</th>

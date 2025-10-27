@@ -35,13 +35,13 @@ export default function CreateTestModal ({ onClose }) {
     try {
       setLoading(true)
       const res = await axios.get(
-        `${BASE_URL}/api/admin/groups?search=${query}`,
+        `${BASE_URL}/api/admin/groups?search=${query}&withOwner=false`,
         {
           withCredentials: true
         }
       )
 
-      const campusGroups = res.data.groups.filter(g => g.isCampus)
+      const campusGroups = res.data.groups
       console.log('Fetched campus groups:', campusGroups)
 
       setGroups(campusGroups)
