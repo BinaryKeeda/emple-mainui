@@ -12,8 +12,8 @@ export default function AssociatedGroup() {
   const [searchParams, setSearchParams] = useSearchParams()
   const sectionId = searchParams.get("section")
   const tab = searchParams.get("tab")
-
-  const { data, error } = useSectionData({ userId })
+  
+  const { data, error } = useSectionData({ userId , id })
 
   if (error)
     return (

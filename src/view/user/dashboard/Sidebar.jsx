@@ -25,7 +25,6 @@ export default function Sidebar({ showMenu, setShowMenu }) {
   // ]
   const { data } = useGroupData({ userId: user?._id });
 
-  const [showAside, setShowAside] = useState(false)
 
   const NAV_ITEMS = [
     {

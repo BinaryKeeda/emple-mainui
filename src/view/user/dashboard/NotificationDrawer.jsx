@@ -21,7 +21,7 @@ export default function NotificationsDrawer({
 
       // 🔄 Refresh UI after response
       // if (refreshInvites) refreshInvites();
-      // window.location.reload();
+      window.location.reload();
     } catch (err) {
       console.error("Error responding to invite:", err);
     }

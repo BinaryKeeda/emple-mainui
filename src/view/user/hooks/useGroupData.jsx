@@ -6,8 +6,9 @@ const fetchGroupData = async (userId) => {
    return res.data;
 }
 
-const fetchSectionData = async (userId) => {
-   const res = await userApi.get(GROUP_ROUTES.GET_USER_SECTION+userId)
+const fetchSectionData = async (userId,id) => {
+   const res = await userApi.get(GROUP_ROUTES.GET_USER_SECTION+userId +"/" +id)
+   
    return res.data;
 } 
 const useGroupData = ({userId}) => {
@@ -17,10 +18,10 @@ const useGroupData = ({userId}) => {
     }) 
 }
 
-const useSectionData = ({userId}) => {
+const useSectionData = ({userId,id}) => {
     return useQuery({
-        queryKey : ['sectionData' , userId],
-        queryFn : () => fetchSectionData(userId)
+        queryKey : ['sectionData' , userId, id],
+        queryFn : () => fetchSectionData(userId , id)
     })
 }
 
