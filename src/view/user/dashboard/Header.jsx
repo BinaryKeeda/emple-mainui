@@ -22,12 +22,14 @@ import { ThemeContext } from '../../../context/ThemeProvider'
 import NotificationsDrawer from './NotificationDrawer'
 import { Cart16Filled, Cart20Regular, Cart24Regular } from '@fluentui/react-icons'
 import { useSnackbar } from 'notistack'
+import useInvitation from '../hooks/useInvitation'
 
 const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const { toggleTheme, theme } = useContext(ThemeContext)
   const dispatch = useDispatch()
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [badgeCount, setBadgeCount] = useState(0)
+  const { data } = useInvitation({ userId:user._id });
 
 
   const handleLogout = () => {
@@ -101,9 +103,12 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
                   <Badge
                     badgeContent={badgeCount}
                     color='error'
+                    sx={{position:"relative"}}
+                    
                     overlap='circular'
                   >
                     <Notifications />
+                    <span className='text-xs bg-red-500 text-white -right-2  h-4 rounded-full absolute w-4'>{JSON.stringify(data?.data.length) || 0}</span>
                   </Badge>
                 </IconButton>
 
@@ -140,6 +145,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
       {/* Notification Drawer */}
       <NotificationsDrawer
         // userId={user}
+        data={data}
         userId={user?._id}
         notificationOpen={notificationOpen}
         setNotificationOpen={setNotificationOpen}

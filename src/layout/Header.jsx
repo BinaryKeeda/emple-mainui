@@ -36,9 +36,9 @@ const resourcesConfig = [
 
 // Navigation links configuration
 const navigationLinks = [
-  { id: "about", label: "About Us", scrollTo: "about" },
-  { id: "features", label: "Why Us", scrollTo: "features" },
-  { id: "contact", label: "Contact Us", scrollTo: "contact" },
+  { id: "about", label: "About", scrollTo: "about" },
+  { id: "features", label: "Services", scrollTo: "features" },
+  { id: "contact", label: "Contact", scrollTo: "contact" },
 ];
 
 // Resources Dropdown Component

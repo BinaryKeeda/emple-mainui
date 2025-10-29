@@ -56,9 +56,9 @@ export default function TestDisplay ({ sectionId, isGroup = false}) {
           <thead>
             <tr className='bg-support'>
               <th className='p-4 border-b border-slate-200'>Title</th>
-              <th className='p-4 border-b border-slate-200'>Description</th>
+              {/* <th className='p-4 border-b border-slate-200'>Description</th> */}
               <th className='p-4 border-b border-slate-200'>Duration</th>
-              <th className='p-4 border-b border-slate-200'>Attempts</th>
+              {/* <th className='p-4 border-b border-slate-200'>Attempts</th> */}
               <th className='p-4 border-b border-slate-200'>Attempt</th>
             </tr>
           </thead>
@@ -66,13 +66,13 @@ export default function TestDisplay ({ sectionId, isGroup = false}) {
             {tests.map(test => (
               <tr key={test._id} className='bg-primary'>
                 <td className='p-4'>{test.name}</td>
-                <td className='p-4'>{test.description}</td>
+                {/* <td className='p-4'>{test.description}</td> */}
                 <td className='p-4'>{test.duration} min.</td>
+                {/* <td className='p-4'> */}
+                  {/* {test.attempts} / {test.maxAttempts || 1} */}
+                {/* </td> */}
                 <td className='p-4'>
-                  {test.attempts} / {test.maxAttempts || 1}
-                </td>
-                <td className='p-4'>
-                  {test.attempts === 0 ? (
+                  {test.locked  === false? (
                     <a
                       href={`/user/test/${test.slug}`}
                       className='text-xs bg-sky-600 hover:bg-sky-500 text-white py-1 px-3 rounded-full'

@@ -6,10 +6,10 @@ import useInvitation from "../hooks/useInvitation";
 export default function NotificationsDrawer({
   notificationOpen,
   setNotificationOpen,
+  data,
   userId, 
   refreshInvites, 
 }) {
-  const { data } = useInvitation({ userId });
 
   const handleInviteResponse = async (inviteId, action, sectionId) => {
     try {
