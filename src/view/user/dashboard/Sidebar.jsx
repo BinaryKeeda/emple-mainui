@@ -181,7 +181,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
               {data?.data?.map((item) => (
                 <Link
                   key={item._id}
-                  to={`/group/${item?.group?._id}`} // link with group id
+                  to={`/user/group/${item?.group?._id}`} // link with group id
                   className="px-3 py-2 rounded-lg hover:bg-gray-200 text-gray-800 font-medium"
                 >
                   {item.group.groupName}

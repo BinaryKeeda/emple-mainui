@@ -37,6 +37,7 @@ const Home = lazy(() => import('./pages/Home'))
 const NotFound = lazy(() => import('./utilities/NotFound'))
 const Terms = lazy(() => import('./pages/Terms'))
 const Policy = lazy(() => import('./pages/PrivacyPolicy'))
+const ExamAttempt = lazy(() => import('./view/test/Home'))
 const CLIENT_ID = GOOGLE_CLIENT_ID
 const App = () => {
   const dispatch = useDispatch()
@@ -222,6 +223,7 @@ const App = () => {
                   {/* ============================================================= */}
                   {/*                        User Public Routes Ends                */}
                   {/* ============================================================= */}
+                  <Route path='/user/exam/:id' element={<ExamAttempt />}/>
                   {/* ============================================================= */}
                   {/*                        User  Routes Starts                    */}
                   {/* ============================================================= */}
@@ -315,12 +317,7 @@ const App = () => {
                   {/* ============================================================= */}
                   {/*                        Admin Routes Ends                    */}
                   {/* ============================================================= */}
-                  <Route
-                    path='/campus-admin'
-                    element={
-                      <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />
-                    }
-                  />
+                  <Route  path='/campus-admin'  element={    <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />  } />
                   <Route
                     path='/campus-superadmin'
                     element={

@@ -29,8 +29,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const dispatch = useDispatch()
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [badgeCount, setBadgeCount] = useState(0)
-  const { data } = useInvitation({ userId:user._id });
-
+  const { data } = useInvitation( user ? {  userId:user._id } : {});
 
   const handleLogout = () => {
     try {

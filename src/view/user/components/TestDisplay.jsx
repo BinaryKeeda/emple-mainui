@@ -52,29 +52,21 @@ export default function TestDisplay ({ sectionId, isGroup = false}) {
     <div className=''>
 
       <div className='relative flex flex-col w-full overflow-x-auto dark:text-white bg-white shadow-md rounded-lg'>
-        <table className='w-full text-left table-auto min-w-max'>
+        <table className='w-full   min-w-max'>
           <thead>
             <tr className='bg-support'>
               <th className='p-4 border-b border-slate-200'>Title</th>
-              {/* <th className='p-4 border-b border-slate-200'>Description</th> */}
-              <th className='p-4 border-b border-slate-200'>Duration</th>
-              {/* <th className='p-4 border-b border-slate-200'>Attempts</th> */}
               <th className='p-4 border-b border-slate-200'>Attempt</th>
             </tr>
           </thead>
           <tbody>
             {tests.map(test => (
               <tr key={test._id} className='bg-primary'>
-                <td className='p-4'>{test.name}</td>
-                {/* <td className='p-4'>{test.description}</td> */}
-                <td className='p-4'>{test.duration} min.</td>
-                {/* <td className='p-4'> */}
-                  {/* {test.attempts} / {test.maxAttempts || 1} */}
-                {/* </td> */}
-                <td className='p-4'>
+                <td className='p-4 text-center '>{test.name}</td>
+                <td className='p-4 text-center'>
                   {test.locked  === false? (
                     <a
-                      href={`/user/test/${test.slug}`}
+                      href={`/user/exam/${test?._id}`}
                       className='text-xs bg-sky-600 hover:bg-sky-500 text-white py-1 px-3 rounded-full'
                     >
                       Attempt
