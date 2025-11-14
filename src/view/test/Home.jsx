@@ -3,7 +3,7 @@ import TestAttempt from './TestAttempt';
 
 export default function Home() {
   const { id: examId } = useParams();
-  return <div>
+  return <>
     <TestAttempt id={examId} />
-  </div>
+  </>
 }

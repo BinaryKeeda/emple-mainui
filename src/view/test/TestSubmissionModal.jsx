@@ -3,11 +3,13 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useTest } from './context/TestProvider'
 import { BASE_URL } from '../../lib/config'
-export default function TestSubmissionModal () {
+import { useNavigate } from 'react-router-dom'
+export default function TestSubmissionModal() {
   const [rating, setRating] = useState(null)
   const [comment, setComment] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const { submissionId } = useTest()
+  const navigate = useNavigate()
   // const dispatch = useDispatch()
   const handleSubmit = async () => {
     const feedback = {
@@ -20,9 +22,10 @@ export default function TestSubmissionModal () {
 
     setSubmitted(true)
 
-    // setTimeout(() => {
-    //   window.location.reload()
-    // }, 3000)
+    setTimeout(() => {
+      // window.location.reload()
+      navigate('/')
+    }, 3000)
 
     // Optional: Auto-logout or redirect
     // dispatch(logOutUser())
@@ -55,11 +58,10 @@ export default function TestSubmissionModal () {
                     <button
                       key={num}
                       onClick={() => setRating(num)}
-                      className={`w-10 h-10 rounded-full cursor-pointer border ${
-                        rating === num
-                          ? 'bg-green-500 text-white'
-                          : 'bg-white text-gray-600'
-                      }`}
+                      className={`w-10 h-10 rounded-full cursor-pointer border ${rating === num
+                        ? 'bg-green-500 text-white'
+                        : 'bg-white text-gray-600'
+                        }`}
                     >
                       {num}
                     </button>
