@@ -12,7 +12,7 @@ const getLanguageId = lang => {
   return map[lang] || 71
 }
 
-export const useCodeExecutor = ({ CODE_EXECUTION_API, headers , setSummary}) => {
+export const useCodeExecutor = ({ CODE_EXECUTION_API, headers ,setTokens, setSummary}) => {
   const runTests = useCallback(async ({ code, language, testCases, problemName ,setSummary , problemId }) => {
     const results = []
     let passedCount = 0, totalTime = 0, totalMemory = 0
@@ -41,6 +41,7 @@ export const useCodeExecutor = ({ CODE_EXECUTION_API, headers , setSummary}) => 
       } , {withCredentials:true});
       const data = res.data;
       const tokens  = data.tokens;
+      setTokens(tokens);
       const outputs = await fetchResultsInBatches({tokens,setSummary, CODE_EXECUTION_API, headers})
 
       outputs.forEach((output, index) => {

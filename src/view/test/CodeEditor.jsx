@@ -59,6 +59,7 @@ export default function CodeEditor ({
   const defaultLang = localStorage.getItem('default_language') || 'java';
 
   const [language, setLanguage] = useState(defaultLang)
+  const [tokens,setTokens] = useState([]);
   const [code, setCode] = useState('')
   const [showConfirmBox, setShowConfirmBox] = useState(false)
   const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'crimson_editor')
@@ -133,7 +134,8 @@ export default function CodeEditor ({
         [problem._id]: {
           ...prev[problem._id],
           code: code,
-          language: language
+          language: language ,
+          tokens: tokens
         }
       }
 
@@ -145,7 +147,7 @@ export default function CodeEditor ({
 
       return updated
     })
-  }, [code, language])
+  }, [code, language , tokens])
 
   const handleCodeChange = newCode => {
     setCode(newCode)
@@ -153,6 +155,7 @@ export default function CodeEditor ({
   }
 
   const { runTests } = useCodeExecutor({
+    setTokens,
     CODE_EXECUTION_API,
     headers
   })
@@ -172,7 +175,7 @@ export default function CodeEditor ({
         testCases: problem.testCases,
         problemName: problem.problemName,
         problemId: problem._id,
-        setSummary
+        setSummary, setTokens
       })
 
       if (isSubmit) {

@@ -26,7 +26,6 @@ export default function TestCodeInterface () {
     helpers,
     sections
   } = useTest()
-
   const [timeLeft, setTimeLeft] = useState(Number.MAX_SAFE_INTEGER)
   const [answers, setAnswers] = useState({})
   const [leftWidth, setLeftWidth] = useState(46)
@@ -43,7 +42,7 @@ export default function TestCodeInterface () {
     setProblems(section.problems)
   }, [])
   useEffect(() => {
-    const saved = localStorage.getItem(
+    const saved = sessionStorage.getItem(
       `${response[current].sectionId}sectionAnswers`
     )
     if (saved) {

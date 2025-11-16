@@ -29,7 +29,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const dispatch = useDispatch()
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [badgeCount, setBadgeCount] = useState(0)
-  const { data } = useInvitation( user ? {  userId:user._id } : {});
+  const { data } = useInvitation(user ? { userId: user._id } : {});
 
   const handleLogout = () => {
     try {
@@ -63,7 +63,36 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
             </Link>
           </div>
 
+
           <div className='flex items-center gap-3'>
+            <div className="flex gap-1 rounded-lg items-center">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="30" height="30">
+                <defs>
+                  <linearGradient id="lg" x1="0" x2="1">
+                    <stop offset="0" stop-color="#fff4d6" />
+                    <stop offset="1" stop-color="#ffd14d" />
+                  </linearGradient>
+                </defs>
+
+                <circle cx="64" cy="64" r="60" fill="#b88700" />
+                <circle cx="64" cy="64" r="52" fill="url(#lg)" />
+
+                <g transform="translate(64,57) scale(2.4)">
+                  <text x="0" y="10" text-anchor="middle" font-size="20" font-family="Inter, Arial"
+                    fill="#7a3f00" font-weight="900">
+                    BK
+                  </text>
+                </g>
+              </svg>
+              <div className='text-sm'>
+                <span>
+                  {user?.coins}
+                </span>
+              </div>
+            </div>
+
+
             {user ? (
               <>
                 {/* <Box
@@ -102,8 +131,8 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
                   <Badge
                     badgeContent={badgeCount}
                     color='error'
-                    sx={{position:"relative"}}
-                    
+                    sx={{ position: "relative" }}
+
                     overlap='circular'
                   >
                     <Notifications />
