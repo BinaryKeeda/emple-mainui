@@ -10,6 +10,7 @@ import {
   Box,
   Divider,
   IconButton,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +24,8 @@ import NotificationsDrawer from './NotificationDrawer'
 import { Cart16Filled, Cart20Regular, Cart24Regular } from '@fluentui/react-icons'
 import { useSnackbar } from 'notistack'
 import useInvitation from '../hooks/useInvitation'
+import { use } from 'react'
+import Coin from '../../../utilities/Coin'
 
 const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const { toggleTheme, theme } = useContext(ThemeContext)
@@ -65,33 +68,22 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
 
 
           <div className='flex items-center gap-3'>
-            <div className="flex gap-1 rounded-lg items-center">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="30" height="30">
-                <defs>
-                  <linearGradient id="lg" x1="0" x2="1">
-                    <stop offset="0" stop-color="#fff4d6" />
-                    <stop offset="1" stop-color="#ffd14d" />
-                  </linearGradient>
-                </defs>
+            {user?.coins &&
+              <div className="flex gap-1 rounded-lg items-center">
 
-                <circle cx="64" cy="64" r="60" fill="#b88700" />
-                <circle cx="64" cy="64" r="52" fill="url(#lg)" />
-
-                <g transform="translate(64,57) scale(2.4)">
-                  <text x="0" y="10" text-anchor="middle" font-size="20" font-family="Inter, Arial"
-                    fill="#7a3f00" font-weight="900">
-                    BK
-                  </text>
-                </g>
-              </svg>
-              <div className='text-sm'>
-                <span>
-                  {user?.coins}
-                </span>
+                <Coin />
+                <div className='text-sm'>
+                  <span>
+                    {user?.coins}
+                  </span>
+                </div>
               </div>
-            </div>
-
+            }
+            <Tooltip title="But More Coins" sx={{ cursor: "pointer" }}>
+              <Link to={"/user/coins-add"}>
+                <Cart20Regular style={{ cursor: "pointer" }} />
+              </Link>
+            </Tooltip>
 
             {user ? (
               <>
@@ -167,6 +159,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
               </div>
             )}
           </div>
+
         </nav>
       </header>
 

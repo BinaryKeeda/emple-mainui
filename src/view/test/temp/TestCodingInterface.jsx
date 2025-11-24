@@ -8,7 +8,7 @@ import { BASE_URL } from '../../../lib/config'
 import Loader from '../../../layout/Loader'
 import { Modal } from '@mui/material'
 
-export default function TestCodingInterface ({ timeLeft }) {
+export default function TestCodingInterface({ timeLeft }) {
   const {
     currSection,
     test,
@@ -149,10 +149,9 @@ export default function TestCodingInterface ({ timeLeft }) {
                 key={probId}
                 onClick={() => setActiveProblemIndex(index)}
                 className={`px-3 py-1 text-sm border rounded 
-                  ${
-                    isSolved
-                      ? 'opacity-50 cursor-not-allowed'
-                      : activeProblemIndex === index
+                  ${isSolved
+                    ? 'opacity-50 cursor-not-allowed'
+                    : activeProblemIndex === index
                       ? 'bg-blue-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-blue-100'
                   }
@@ -202,30 +201,37 @@ export default function TestCodingInterface ({ timeLeft }) {
   )
 }
 
-const ProblemDescription = ({ problem }) => {
-  return (
-    <div className='flex-[0.6] bg-white font-[Lato] h-[calc(100%-50px)] overflow-y-scroll relative min-w-[200px] custom-scrollbar'>
-      <div className='flex-[0.4] overflow-y-scroll h-full p-4 space-y-4 text-sm'>
-        <h2 className='text-xl font-semibold'>{problem?.title}</h2>
+const ProblemDescription = ({ problem }) => (
+  <div className='flex-[0.6] bg-white font-[Lato] h-[calc(100%-50px)] overflow-y-scroll relative min-w-[200px] custom-scrollbar'>
+    <div className='flex-[0.4] overflow-y-scroll h-full p-4 space-y-4 text-sm'>
+      <h2 className='text-xl font-semibold'>{problem?.title}</h2>
 
-        <div>
-          {/* <h2 className='text-lg font-semibold'>Description</h2> */}
-          <p className='text-gray-700 whitespace-pre-line'>
-            {problem?.description}
-          </p>
-        </div>
-
-        {problem?.constraints && (
+      <div>
+        {/* <h2 className='text-lg font-semibold'>Description</h2> */}
+       
+        {problem?.description && (
           <div>
-            <h2 className='text-lg font-semibold'>Constraints</h2>
-            <ul className='list-disc list-inside text-gray-600'>
-              {problem.constraints.map((constraint, i) => (
-                <li key={i}>{constraint}</li>
-              ))}
-            </ul>
+            <div data-color-mode="light" className="text-sm">
+              <MDEditor.Markdown
+                source={problem.description}
+                style={{ whiteSpace: "pre-wrap" }} />
+            </div>
           </div>
         )}
-{/* 
+
+      </div>
+
+      {problem?.constraints && (
+        <div>
+          <h2 className='text-lg font-semibold'>Constraints</h2>
+          <ul className='list-disc list-inside text-gray-600'>
+            {problem.constraints.map((constraint, i) => (
+              <li key={i}>{constraint}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {/*
         {problem?.topics && (
           <div>
             <h2 className='text-lg font-semibold'>Topics</h2>
@@ -242,41 +248,40 @@ const ProblemDescription = ({ problem }) => {
           </div>
         )} */}
 
-        {problem?.examples?.length > 0 && (
-          <div className='mt-4'>
-            <h3 className='text-lg font-semibold text-gray-800 mb-2'>
-              Sample testcases
-            </h3>
-            <div className='flex flex-col gap-4'>
-              {problem.examples.map((ex, idx) => (
-                <div key={idx} className='bg-gray-200 p-3 rounded-md'>
-                  <p className='text-sm'>
-                    <strong>Input:</strong>{' '} <br></br>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: ex.input.replace(/\n/g, '<br/>')
-                      }}
-                      className='bg-gray-100 px-1 py-0.5 rounded'
-                    />
+      {problem?.examples?.length > 0 && (
+        <div className='mt-4'>
+          <h3 className='text-lg font-semibold text-gray-800 mb-2'>
+            Sample testcases
+          </h3>
+          <div className='flex flex-col gap-4'>
+            {problem.examples.map((ex, idx) => (
+              <div key={idx} className='bg-gray-200 p-3 rounded-md'>
+                <p className='text-sm'>
+                  <strong>Input:</strong>{' '} <br></br>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: ex.input.replace(/\n/g, '<br/>')
+                    }}
+                    className='bg-gray-100 px-1 py-0.5 rounded' />
+                </p>
+                <p className='text-sm'>
+                  <strong>Output:</strong>{' '} <br />
+                  <p className='bg-gray-100 px-1 py-0.5 rounded'>
+                    {ex.output}
                   </p>
-                  <p className='text-sm'>
-                    <strong>Output:</strong>{' '} <br />
-                    <p className='bg-gray-100 px-1 py-0.5 rounded'>
-                      {ex.output}
-                    </p>
+                </p>
+                {ex.explanation && (
+                  <p className='text-sm text-gray-600'>
+                    <strong>Explanation:</strong> {ex.explanation}
                   </p>
-                  {ex.explanation && (
-                    <p className='text-sm text-gray-600'>
-                      <strong>Explanation:</strong> {ex.explanation}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* {problem?.hints && (
+      {/* {problem?.hints && (
           <div>
             <h2 className='text-lg font-semibold'>Hints</h2>
             <ul className='list-disc list-inside text-gray-600'>
@@ -287,26 +292,25 @@ const ProblemDescription = ({ problem }) => {
           </div>
         )} */}
 
-        {problem?.sampleTestCases && (
-          <div>
-            <h2 className='text-lg font-semibold'>Sample Test Cases</h2>
-            {problem.sampleTestCases.map((test, i) => (
-              <div key={i} className='mb-2 p-2 bg-gray-100 rounded'>
-                <p>
-                  <strong>Input:</strong>{' '}
-                  <div dangerouslySetInnerHTML={{ __html: test.input }}></div>
-                </p>
-                <p>
-                  <strong>Output:</strong> {test.output}
-                </p>
-                <p>
-                  <strong>Explanation:</strong> {test.explanation}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {problem?.sampleTestCases && (
+        <div>
+          <h2 className='text-lg font-semibold'>Sample Test Cases</h2>
+          {problem.sampleTestCases.map((test, i) => (
+            <div key={i} className='mb-2 p-2 bg-gray-100 rounded'>
+              <p>
+                <strong>Input:</strong>{' '}
+                <div dangerouslySetInnerHTML={{ __html: test.input }}></div>
+              </p>
+              <p>
+                <strong>Output:</strong> {test.output}
+              </p>
+              <p>
+                <strong>Explanation:</strong> {test.explanation}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-  )
-}
+  </div>
+)

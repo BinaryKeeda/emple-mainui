@@ -69,50 +69,50 @@ export default function FAQ() {
       </h2>
       <AccordionItem
         index={1}
-        title="What is Binary Keeda?"
+        title="What is BinaryKeeda?"
         isOpen={openIndex === 1}
         onToggle={toggleAccordion}
       >
-        Binary Keeda is an ed-tech platform designed to empower students and
+        BinaryKeeda is an ed-tech platform designed to empower students and
         aspiring professionals through project-based learning, mentorship, and
         real-world tech exposure.
       </AccordionItem>
 
       <AccordionItem
         index={2}
-        title="Why should I join Binary Keeda?"
+        title="Why should I join BinaryKeeda?"
         isOpen={openIndex === 2}
         onToggle={toggleAccordion}
       >
-        At Binary Keeda, you'll work on practical coding challenges, build
+        At BinaryKeeda, you'll work on practical coding challenges, build
         full-stack projects, participate in hackathons, and get guidance from
         industry mentors to prepare for SDE roles and beyond.
       </AccordionItem>
 
       <AccordionItem
         index={3}
-        title="What resources does Binary Keeda offer?"
+        title="What resources does BinaryKeeda offer?"
         isOpen={openIndex === 3}
         onToggle={toggleAccordion}
       >
-        Binary Keeda provides coding interfaces, curated problem sets, mock
+        BinaryKeeda provides coding interfaces, curated problem sets, mock
         interviews, resume reviews, and structured learning paths for
         technologies like MERN, DevOps, and Data Science.
       </AccordionItem>
       <AccordionItem
         index={4}
-        title="Who can join Binary Keeda?"
+        title="Who can join BinaryKeeda?"
         isOpen={openIndex === 4}
         onToggle={toggleAccordion}
       >
-        Binary Keeda is open to all learners — from BCA, B.Tech, MCA students to
+        BinaryKeeda is open to all learners — from BCA, B.Tech, MCA students to
         self-taught coders — anyone passionate about tech, development, and
         building impactful projects.
       </AccordionItem>
 
       <AccordionItem
         index={5}
-        title="Is Binary Keeda free?"
+        title="Is BinaryKeeda free?"
         isOpen={openIndex === 5}
         onToggle={toggleAccordion}
       >
@@ -123,11 +123,11 @@ export default function FAQ() {
 
       <AccordionItem
         index={6}
-        title="What makes Binary Keeda different?"
+        title="What makes BinaryKeeda different?"
         isOpen={openIndex === 6}
         onToggle={toggleAccordion}
       >
-        Unlike tutorial-based platforms, Binary Keeda focuses on real projects,
+        Unlike tutorial-based platforms, BinaryKeeda focuses on real projects,
         peer collaboration, and tech-driven problem-solving — helping you build
         your portfolio and confidence.
       </AccordionItem>

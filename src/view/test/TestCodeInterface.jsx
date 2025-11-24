@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { BASE_URL } from '../../lib/config'
 import CodeOutputWindow from './CodeOutputWindow'
 import CodeEditor from './CodeEditor'
-import { Modal } from '@mui/material'
+import { IconButton, Modal } from '@mui/material'
 import Loader from './components/Loader'
 import { useRef } from 'react'
 import axios from 'axios'
@@ -13,7 +13,9 @@ import { MoreHorizontal20Filled } from '@fluentui/react-icons'
 import Header from './components/Header'
 import TestProblemDescription from './TestProblemDescription'
 import { useTest } from './context/TestProvider'
-export default function TestCodeInterface () {
+import { runSingleTest } from './helpers/coderunner'
+import { Close, ShortText } from '@mui/icons-material'
+export default function TestCodeInterface() {
   const {
     section,
     loading,
@@ -37,6 +39,8 @@ export default function TestCodeInterface () {
   const containerRef = useRef(null)
   const isDragging = useRef(false)
   const [submitting, setSubmitting] = useState(false)
+
+
   useEffect(() => {
     console.log(section)
     setProblems(section.problems)
@@ -165,49 +169,60 @@ export default function TestCodeInterface () {
   //   return () => clearInterval(interval)
   // }, [data])
 
+  const [customTest, setCustomTest] = useState("");
+  const [customTestOpen, setCustomTestOpen] = useState(false);
+  const [customOutput, setCustomOutput] = useState("");
+  const runCustomCode = async () => {
+    const output = await runSingleTest({
+      language: activeProblem.language,
+      source_code: answers[activeProblem._id] || "",
+      input: customTest,
+      expectedOutput: ""
+    })
+    setCustomOutput(output);
+  }
+  useEffect(() => {
+    const syncServerTime = async () => {
+      try {
+        const reqMade = Date.now()
+        const res = await axios.get(`${BASE_URL}/api/test/campus/time`)
+        const resCame = Date.now()
+        let serverNow = res.data.serverTime
+        const roundTrip = resCame - reqMade // total latency
+        const latency = roundTrip / 2
 
-   useEffect(() => {
-      const syncServerTime = async () => {
-        try {
-          const reqMade = Date.now()
-          const res = await axios.get(`${BASE_URL}/api/test/campus/time`)
-          const resCame = Date.now()
-          let serverNow = res.data.serverTime
-          const roundTrip = resCame - reqMade // total latency
-          const latency = roundTrip / 2
-  
-          // Adjusted server time (from client's perspective)
-          serverNow = serverNow + latency
-  
-          const testStartTime = new Date(response[current]?.startedAt).getTime()
-          const alreadySpent = parseInt(response?.durationUnavailaible || 0)
-          const durationMs = parseInt(section.maxTime) * 60 * 1000
-  
-          const timeUsed = serverNow - testStartTime - alreadySpent
-          const remainingTime = durationMs - timeUsed
-  
-          setTimeLeft(Math.max(remainingTime, -999999))
-        } catch (e) {
-          console.error('Server time sync failed:', e)
-        }
+        // Adjusted server time (from client's perspective)
+        serverNow = serverNow + latency
+
+        const testStartTime = new Date(response[current]?.startedAt).getTime()
+        const alreadySpent = parseInt(response?.durationUnavailaible || 0)
+        const durationMs = parseInt(section.maxTime) * 60 * 1000
+
+        const timeUsed = serverNow - testStartTime - alreadySpent
+        const remainingTime = durationMs - timeUsed
+
+        setTimeLeft(Math.max(remainingTime, -999999))
+      } catch (e) {
+        console.error('Server time sync failed:', e)
       }
-  
-      if (response[current]) {
-        syncServerTime()
-  
-        const interval = setInterval(() => {
-          setTimeLeft(prev => {
-            if(prev - 1000 < 0) {
-              submitHandler();
-            }
-            return prev - 1000;
-          }) // countdown every second
-          
-        }, 1000)
-  
-        return () => clearInterval(interval)
-      }
-    }, [data])
+    }
+
+    if (response[current]) {
+      syncServerTime()
+
+      const interval = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev - 1000 < 0) {
+            submitHandler();
+          }
+          return prev - 1000;
+        }) // countdown every second
+
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [data])
   return (
     <>
       <Header timeLeft={timeLeft} />
@@ -246,6 +261,7 @@ export default function TestCodeInterface () {
             className='overflow-y-auto'
             style={{ height: `${100 - topHeight - 1}%` }}
           >
+
             <CodeOutputWindow testCases={activeProblem?.testCases} />
           </div>
         </div>
@@ -288,6 +304,16 @@ export default function TestCodeInterface () {
             problem={activeProblem}
             current={current}
           />
+
+          <IconButton onClick={() => setCustomTestOpen(true)}  sx={{
+            position:"absolute",
+            right:0,
+            top:"100px" ,
+            bgcolor:"#1976d2" ,
+            color:"white",
+          }}>
+            <ShortText sx={{color:"#fff"}}/>
+          </IconButton>
         </div>
 
         {/* Problem Tabs */}
@@ -296,11 +322,10 @@ export default function TestCodeInterface () {
         <button
           onClick={handlePrev}
           disabled={activeProblemIndex === 0}
-          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8  transition ${
-            activeProblemIndex === 0
-              ? 'opacity-50 cursor-not-allowed bg-white '
-              : 'hover:bg-gray-200'
-          }`}
+          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8  transition ${activeProblemIndex === 0
+            ? 'opacity-50 cursor-not-allowed bg-white '
+            : 'hover:bg-gray-200'
+            }`}
         >
           <IosArrowLtr24Filled style={{ height: '13px', width: '13px' }} />
           <span className='text-gray-900 text-xs'>Prev</span>
@@ -313,16 +338,51 @@ export default function TestCodeInterface () {
         <button
           onClick={handleNext}
           disabled={activeProblemIndex === problems.length - 1}
-          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8 transition ${
-            activeProblemIndex === problems.length - 1
-              ? 'opacity-50 cursor-not-allowed bg-white'
-              : 'hover:bg-gray-300'
-          }`}
+          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8 transition ${activeProblemIndex === problems.length - 1
+            ? 'opacity-50 cursor-not-allowed bg-white'
+            : 'hover:bg-gray-300'
+            }`}
         >
           <span className='text-gray-900 text-xs'>Next</span>
           <IosArrowRtl24Filled style={{ height: '13px', width: '13px' }} />
         </button>
       </section>
+
+      <section className={`bg-white ${customTestOpen ? "translate-x-0" : "translate-x-full"} shadow-xl border-l absolute z-[999] top-[60px] right-0 h-[calc(100vh-60px)] w-[400px] flex flex-col p-4`}>
+
+        {/* Close Button */}
+        <button
+          // onClick={onClose}
+          onClick={() => { setCustomTestOpen(false) }}
+          className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
+        >
+          <Close />
+        </button>
+
+        <h2 className="text-xl font-semibold mb-3">Custom Test Runner</h2>
+
+        <textarea
+          value={customTest}
+          onChange={(e) => setCustomTest(e.target.value)}
+          placeholder="Write your custom test here..."
+          className="flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+        />
+
+        <button
+          onClick={runCustomCode}
+          className="mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Run Test
+        </button>
+
+        <div className="mt-4 bg-gray-50 border rounded-lg p-3 text-sm h-[250px] overflow-auto">
+          <pre className="whitespace-pre-wrap">
+            {JSON.stringify(customOutput, null, 2)}
+          </pre>
+        </div>
+
+      </section>
+
     </>
   )
 }

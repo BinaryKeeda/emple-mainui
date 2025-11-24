@@ -10,13 +10,13 @@ const Redirect = () => {
   if (loading) return <Loader />;
 
   // 2. Check if we saved a redirect path earlier
-  const path = localStorage.getItem("redirect_req");
+  // const path = localStorage.getItem("redirect_req");
 
-  // 3. Redirect back to original path if it exists
-  if (path) {
-    localStorage.removeItem("redirect_req"); // clear it after use
-    return <Navigate to={path} />;
-  }
+  // // 3. Redirect back to original path if it exists
+  // if (path) {
+  //   localStorage.removeItem("redirect_req"); // clear it after use
+  //   return <Navigate to={path} />;
+  // }
 
   // 4. If no path stored, send to dashboard based on role
   if (user) return <Navigate to={`/${user.role}`} />;

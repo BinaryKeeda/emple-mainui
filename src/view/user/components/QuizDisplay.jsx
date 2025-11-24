@@ -51,7 +51,7 @@ return (
       <div className='relative px-5 md:px-4 flex flex-col w-full overflow-x-auto dark:text-white bg-white shadow-md rounded-lg'>
         <table className='w-full text-left table-auto min-w-max'>
           <thead>
-            <tr className='bg-support'>
+            <tr className='bg-white'>
               <th className='p-4 border-b border-slate-200'>Title</th>
               <th className='p-4 border-b border-slate-200'>Difficulty</th>
               <th className='p-4 border-b border-slate-200'>Category</th>

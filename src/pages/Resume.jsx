@@ -171,7 +171,7 @@ function ResumeATSPage () {
   return (
     <>
       <Helmet>
-        <title>Binary Keeda - Free ATS Resume</title>
+        <title>BinaryKeeda - Free ATS Resume</title>
       </Helmet>
       <main className='p-6'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>

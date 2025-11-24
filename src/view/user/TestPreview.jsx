@@ -246,7 +246,7 @@ const CodingSection = ({ section, sectionResponse }) => {
 
           <SectionCard title="Testcases">
             <pre className="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-auto text-sm">
-{sectionResponse?.codingAnswers[0][problem._id].testcases}
+{sectionResponse?.codingAnswers[0][problem._id].total}
             </pre>
           </SectionCard>
 

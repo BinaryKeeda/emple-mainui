@@ -37,7 +37,7 @@ export default function Signup () {
         <title>Reset Password | BinaryKeeda</title>
         <meta
           name='description'
-          content='Recover your Binary Keeda account password and regain access to your personalized coding dashboard.'
+          content='Recover your BinaryKeeda account password and regain access to your personalized coding dashboard.'
         />
         <meta name='robots' content='noindex, nofollow' />
         <link rel='canonical' href='https://binarykeeda.com/reset' />

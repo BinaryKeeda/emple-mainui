@@ -54,14 +54,14 @@ export default function TestDisplay ({ sectionId, isGroup = false}) {
       <div className='relative flex flex-col w-full overflow-x-auto dark:text-white bg-white shadow-md rounded-lg'>
         <table className='w-full   min-w-max'>
           <thead>
-            <tr className='bg-support'>
+            <tr className='bg-whitw'>
               <th className='p-4 border-b border-slate-200'>Title</th>
               <th className='p-4 border-b border-slate-200'>Attempt</th>
             </tr>
           </thead>
           <tbody>
             {tests.map(test => (
-              <tr key={test._id} className='bg-primary'>
+              <tr key={test._id} className='bg-white'>
                 <td className='p-4 text-center '>{test.name}</td>
                 <td className='p-4 text-center'>
                   {test.locked  === false? (

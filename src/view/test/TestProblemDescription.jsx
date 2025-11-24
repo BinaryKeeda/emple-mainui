@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor'
 import React from 'react'
 
 export default function TestProblemDescription({ problem }) {
@@ -6,11 +7,15 @@ export default function TestProblemDescription({ problem }) {
       <div className='flex-[0.4] overflow-y-scroll h-full p-4 space-y-4 text-sm'>
         <h2 className='text-xl font-semibold'>Problem Description</h2>
 
-        <div>
-          <p className='text-gray-700 whitespace-pre-line'>
-            {problem?.description}
-          </p>
-        </div>
+        <MDEditor.Markdown
+          source={problem?.description}
+          style={{
+            whiteSpace: "pre-wrap",
+            backgroundColor: "#ffffff",
+            color:"#000",
+            borderRadius: "6px"
+          }}
+        />
 
         {problem?.constraints && (
           <div>
@@ -22,7 +27,7 @@ export default function TestProblemDescription({ problem }) {
             </ul>
           </div>
         )}
-        {problem?.inputFormat && (
+        {/* {problem?.inputFormat && (
           <div>
             <strong>Input Format:</strong>
             <ul>
@@ -31,9 +36,9 @@ export default function TestProblemDescription({ problem }) {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
 
-        {problem?.outputFormat && (
+        {/* {problem?.outputFormat && (
           <div>
             <strong>Output Format:</strong>
             <ul>
@@ -42,7 +47,7 @@ export default function TestProblemDescription({ problem }) {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
 
         {/* 
         {problem?.topics && (
@@ -61,7 +66,7 @@ export default function TestProblemDescription({ problem }) {
           </div>
         )} */}
 
-        {problem?.examples?.length > 0 && (
+        {/* {problem?.examples?.length > 0 && (
           <div className='mt-4'>
             <h3 className='text-lg font-semibold text-gray-800 mb-2'>
               Sample testcases
@@ -97,7 +102,7 @@ export default function TestProblemDescription({ problem }) {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
         {/* {problem?.hints && (
           <div>
@@ -110,7 +115,7 @@ export default function TestProblemDescription({ problem }) {
           </div>
         )} */}
 
-        {problem?.sampleTestCases && (
+        {/* {problem?.sampleTestCases && (
           <div>
             <h2 className='text-lg font-semibold'>Sample Test Cases</h2>
             {problem.sampleTestCases.map((test, i) => (
@@ -128,7 +133,7 @@ export default function TestProblemDescription({ problem }) {
               </div>
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   )
