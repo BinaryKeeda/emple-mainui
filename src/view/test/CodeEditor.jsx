@@ -279,7 +279,7 @@ export default function CodeEditor ({
               className='flex items-center cursor-pointer rounded-md border border-gray-200 py-2 px-4 text-sm shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800'
               onClick={() => setShowConfirmBox(true)}
             >
-              Submit Section
+              Submit
             </button>
           )}
         </div>

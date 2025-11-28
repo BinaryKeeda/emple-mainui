@@ -426,7 +426,8 @@ import Loader from './components/Loader'
 import TestSubmissionModal from './TestSubmissionModal'
 import TestUserDetailsInterface from './TestUserDetailsInterface'
 import { useTest } from './context/TestProvider'
-
+import axios from 'axios';
+import { BASE_URL } from '../../lib/config'
 export default function TestAttemptPage () {
   const {
     hasAgreed,
@@ -437,7 +438,8 @@ export default function TestAttemptPage () {
     test,
     current,
     section,
-    userDetails
+    userDetails,
+    submissionId
   } = useTest()
   const [loader, setLoader] = useState(false)
   const [warningModal, setWarningModal] = useState({
@@ -447,14 +449,28 @@ export default function TestAttemptPage () {
     color: '',
     justCame: true
   })
+
+  const handleUFM = async () => {
+    try{
+      const res = await axios.put(`${BASE_URL}/api/exam/ufm-count`,  {
+        submissionId: submissionId
+      },{withCredentials:true});
+
+      console.log(res);
+    }catch(e) {
+      console.log(e);
+    }
+  }
   useEffect(() => {
     const onVisibilityChange = () => {
       if (document.visibilityState == 'hidden') {
+        handleUFM()
         handleVisibilityChange({ setWarningModal })
       }
     }
     const onFullScreenChange = () => {
       if (!document.fullscreenElement) {
+        handleUFM();
         handleFullScreenChange({ setWarningModal })
       }
     }
