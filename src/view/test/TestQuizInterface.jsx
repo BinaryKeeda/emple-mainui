@@ -227,10 +227,13 @@ const TestQuizInterface = ({ autoSubmit }) => {
           <div className='p-8 max-h-[calc(100vh - (61px + 55px))] flex-1 rounded-sm '>
             <div className='flex justify-between'>
               <p className='mb-6 text-base'>
-                Q{currentIndex + 1}. {currentQuestion?.question}
+                <pre>
+                  
+                  { "Q." + currentQuestion?.question}
+                  </pre>
               </p>
               {/* <div className='flex items-center gap-2'>
-                <span className='bg-green-100 border-green-400 border p-1 w-[40px] text-xs'>
+                <span className='bg-green-100` border-green-400 border p-1 w-[40px] text-xs'>
                   {' + '}
                   {currentQuestion.marks}
                 </span>

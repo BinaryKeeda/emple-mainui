@@ -1,1 +1,0 @@
-import{j as t}from"./index-Yqgfe9qv.js";import{Q as s}from"./QuizTestList-BbOJOUzj.js";import"./useQuery-kMKSPsia.js";import"./Delete-Cut1nx8G.js";const e=()=>t.jsx(s,{type:"questionbanks"});export{e as default};
