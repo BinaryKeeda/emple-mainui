@@ -13,7 +13,7 @@ export default function CodeOutputWindow({ runCustomCode, testCases = [] }) {
     isExecuting = false
   } = useOutputWindow()
 
-  const [view, setView] = useState('customtestcases') // 'testcases' | 'result'
+  const [view, setView] = useState('testcases') // 'testcases' | 'result'
   const prompts = [
     "My relationship status? Still debugging…",
     "I don’t commit in relationships, only in Git.",
@@ -29,7 +29,7 @@ export default function CodeOutputWindow({ runCustomCode, testCases = [] }) {
   const [loadingTest, setLoadingTest] = useState(prompts[0])
   useEffect(() => {
     if (isExecuting || results?.length > 0) setView('result')
-    else setView('customtestcases')
+    else setView('testcases')
   }, [results, isExecuting])
   const [customInput, setCustomInput] = useState("");
 

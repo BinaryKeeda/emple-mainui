@@ -42,7 +42,6 @@ export default function TestCodeInterface() {
 
 
   useEffect(() => {
-    console.log(section)
     setProblems(section.problems)
   }, [])
   useEffect(() => {
@@ -173,9 +172,10 @@ export default function TestCodeInterface() {
   const [customTestOpen, setCustomTestOpen] = useState(false);
   const [customOutput, setCustomOutput] = useState("");
   const runCustomCode = async () => {
+    console.log(answers[activeProblem._id])
     const output = await runSingleTest({
       language: activeProblem.language,
-      source_code: answers[activeProblem._id] || "",
+      source_code: answers[activeProblem._id]?.code || "",
       input: customTest,
       expectedOutput: ""
     })

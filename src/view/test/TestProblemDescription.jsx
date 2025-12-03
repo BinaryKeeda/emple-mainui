@@ -13,7 +13,10 @@ export default function TestProblemDescription({ problem }) {
             whiteSpace: "pre-wrap",
             backgroundColor: "#ffffff",
             color:"#000",
-            borderRadius: "6px"
+            borderRadius: "6px",
+            lineHeight:"1.4",
+            lineHeightStep:"1",
+            gap:"5px"
           }}
         />
 

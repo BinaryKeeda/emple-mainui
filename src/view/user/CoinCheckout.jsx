@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { PAYMENT_URL } from "../../lib/config";
+import { PAYMENT_KEY, PAYMENT_URL } from "../../lib/config";
 import { useSnackbar } from 'notistack'
 import GlobalBreadcrumbs from "../../utilities/Breadcrumb";
 import { getUser } from "../../redux/reducers/UserThunks";
@@ -59,7 +59,7 @@ export default function CoinCheckout() {
 
         // 2️⃣ Razorpay Checkout
         const options = {
-            key: import.meta.env.VITE_APP_RAZORPAY_KEY,
+            key: PAYMENT_KEY,
             amount: selectedPack.price * 100,
             currency: "INR",
             name: "BinaryKeeda Coins",

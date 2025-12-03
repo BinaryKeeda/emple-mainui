@@ -139,21 +139,41 @@ const QuizSection = ({ section, sectionResponse }) => {
   return (
     <div className="space-y-6">
       {section?.questions?.map((ques, idx) => {
+
         const userAnswer = sectionResponse?.quizAnswers?.[0]?.[ques?._id];
+        console.log(userAnswer)
 
         return (
           <div
             key={ques?._id}
             className="bg-gray-50 p-4 rounded-xl border border-gray-200"
           >
-            <h3 className="text-lg font-medium text-gray-900 mb-3">
+            <pre className="text-lg font-medium text-gray-900 mb-3">
               {`Q${idx + 1}. ${ques.question}`}
-            </h3>
+            </pre>
 
+            <div>
+              {ques.answer &&
+                <>
+                  <label className="text-xs" htmlFor="">Correct Answer</label>
+                  <pre className="bg-gray-50 px-4 py-3 rounded-lg border-2 border-gray-100">
+                    {ques.answer}
+                  </pre>
+                  <label className="text-xs" htmlFor="">Your Answer</label>
+                  <pre className={`bg-gray-50 px-4 py-3 rounded-lg border-[1px] ${ userAnswer !== ques?.answer ?  'border-red-500':'border-green-100' }`}>
+                    {userAnswer ?? "Not Attempted"}
+                  </pre>
+                </>
+              }
+            </div>
             <div className="flex flex-col gap-3">
+              
               {ques?.options?.map((op, opIndex) => {
                 const isCorrect = op?.isCorrect;
-                const isUserAnswer = userAnswer === op?.text;
+                const a = ["1", "2", "3"]
+                const str = "1"
+                a.includes(str);
+                const isUserAnswer =  ques?.category == 'MSQ' ?  userAnswer?.includes(op?.text)  : userAnswer === op?.text;
 
                 return (
                   <div
@@ -240,19 +260,19 @@ const CodingSection = ({ section, sectionResponse }) => {
 
           <SectionCard title="Your Submitted Code">
             <pre className="bg-black text-green-400 p-4 rounded-lg overflow-auto text-sm">
-{sectionResponse?.codingAnswers[0][problem._id].code}
+              {sectionResponse?.codingAnswers[0][problem._id].code}
             </pre>
           </SectionCard>
 
           <SectionCard title="Testcases">
             <pre className="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-auto text-sm">
-{sectionResponse?.codingAnswers[0][problem._id].total}
+              {sectionResponse?.codingAnswers[0][problem._id].total}
             </pre>
           </SectionCard>
 
           <SectionCard title="Passed">
             <pre className="bg-gray-800 text-white p-4 rounded-lg text-sm">
-{String(sectionResponse?.codingAnswers[0][problem._id].passed)}
+              {String(sectionResponse?.codingAnswers[0][problem._id].passed)}
             </pre>
           </SectionCard>
         </div>

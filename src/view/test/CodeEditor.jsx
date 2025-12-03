@@ -62,12 +62,11 @@ export default function CodeEditor ({
   const [tokens,setTokens] = useState([]);
   const [code, setCode] = useState('')
   const [showConfirmBox, setShowConfirmBox] = useState(false)
-  const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'crimson_editor')
+  const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'crimson_editor');
+  
   const editorThemes = [
-    // Dark themes
     'monokai',
     'tomorrow_night',
-    // Light themes
     'github',
     'chrome',
     'crimson_editor',
