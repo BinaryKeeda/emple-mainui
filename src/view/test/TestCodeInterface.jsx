@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { BASE_URL } from '../../lib/config'
 import CodeOutputWindow from './CodeOutputWindow'
 import CodeEditor from './CodeEditor'
-import { IconButton, Modal } from '@mui/material'
+import { Box, IconButton, Modal, Typography } from '@mui/material'
 import Loader from './components/Loader'
 import { useRef } from 'react'
 import axios from 'axios'
@@ -15,6 +15,8 @@ import TestProblemDescription from './TestProblemDescription'
 import { useTest } from './context/TestProvider'
 import { runSingleTest } from './helpers/coderunner'
 import { Close, ShortText } from '@mui/icons-material'
+import { setLoading } from '../../redux/slice/UserSlice'
+import { Button } from '@mui/material'
 export default function TestCodeInterface() {
   const {
     section,
@@ -39,6 +41,7 @@ export default function TestCodeInterface() {
   const containerRef = useRef(null)
   const isDragging = useRef(false)
   const [submitting, setSubmitting] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
 
   useEffect(() => {
@@ -63,6 +66,19 @@ export default function TestCodeInterface() {
   const submitHandler = async () => {
     try {
       setSubmitting(true)
+      let isAnswerable = true;
+      if(answers) {
+        Object.keys(answers).map((item) => {
+          if(answers[item].tokens.length == 0) {
+            isAnswerable = false;
+            setLoading(false);
+            setShowConfirmBox(false);
+            setShowModal(true);
+            return;
+          }
+        })
+      }
+      if(!isAnswerable) return;
       const res = await axios.post(
         `${BASE_URL}/api/exam/submit-section`,
         {
@@ -83,6 +99,8 @@ export default function TestCodeInterface() {
       setIsSubmitted(res.data.submitted)
     } catch (e) {
       console.log(e)
+    }finally{
+      setSubmitting(false)
     }
   }
 
@@ -171,6 +189,8 @@ export default function TestCodeInterface() {
   const [customTest, setCustomTest] = useState("");
   const [customTestOpen, setCustomTestOpen] = useState(false);
   const [customOutput, setCustomOutput] = useState("");
+  const [showConfirmBox, setShowConfirmBox] = useState(false)
+
   const runCustomCode = async () => {
     console.log(answers[activeProblem._id])
     const output = await runSingleTest({
@@ -294,6 +314,8 @@ export default function TestCodeInterface() {
           style={{ width: `${100 - leftWidth}%` }}
         >
           <CodeEditor
+            showConfirmBox={showConfirmBox}
+            setShowConfirmBox={setShowConfirmBox}
             submitting={submitting}
             hasMore={problems.length > activeProblemIndex + 1}
             timeLeft={timeLeft}
@@ -382,6 +404,34 @@ export default function TestCodeInterface() {
         </div>
 
       </section>
+
+      <Modal open={showModal} onClose={() => setShowModal(false)}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="h6" fontWeight={600}>
+            Pending Codes
+          </Typography>
+
+          <Typography sx={{ mt: 1 }}>
+            Please run all the codes before submitting
+          </Typography>
+
+          <Button sx={{ mt: 2 }} onClick={() => setShowModal(false)} variant="contained">
+            OK
+          </Button>
+        </Box>
+      </Modal>
 
     </>
   )

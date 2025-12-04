@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { TestProvider } from './context/TestProvider';
 import { OutputWindowProvider } from './context/TestOutputContext';
 import { Modal, Box, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
 export default function TestAttempt({ id }) {
   const { user } = useSelector(s => s.auth);
@@ -16,6 +17,62 @@ export default function TestAttempt({ id }) {
 
     setIsPC(!mobileRegex.test(navigator.userAgent));
   }, []);
+  const {enqueueSnackbar} = useSnackbar();
+
+  useEffect(() => {
+  // Clear clipboard initially
+  navigator.clipboard.writeText("").catch(() => {});
+
+  /** Disable Copy/Cut/Paste events **/
+  const disableClipboardEvents = (e) => {
+    e.preventDefault();
+
+    // Clear clipboard again (extra safety)
+    navigator.clipboard.writeText("").catch(() => {});
+
+    enqueueSnackbar("Copy / Paste is disabled!", {
+      variant: "warning",
+    });
+  };
+
+  /** Disable Ctrl+V, Ctrl+C, Ctrl+X (and Mac Cmd versions) **/
+  const disableShortcuts = (e) => {
+    const key = e.key.toLowerCase();
+
+    // Block CTRL/CMD shortcuts
+    if ((e.ctrlKey || e.metaKey) && ["v", "c", "x"].includes(key)) {
+      e.preventDefault();
+
+      // Clear clipboard to prevent paste fallback
+      if (key === "v") {
+        navigator.clipboard.writeText("").catch(() => {});
+      }
+
+      enqueueSnackbar("Copy / Paste is disabled!", {
+        variant: "warning",
+      });
+    }
+  };
+
+  // Attach listeners
+  document.addEventListener("copy", disableClipboardEvents);
+  document.addEventListener("paste", disableClipboardEvents);
+  document.addEventListener("cut", disableClipboardEvents);
+
+  window.addEventListener("keydown", disableShortcuts);
+
+  return () => {
+    document.removeEventListener("copy", disableClipboardEvents);
+    document.removeEventListener("paste", disableClipboardEvents);
+    document.removeEventListener("cut", disableClipboardEvents);
+
+    window.removeEventListener("keydown", disableShortcuts);
+  };
+}, []);
+
+
+
+
 
   // Popup styles
   const style = {

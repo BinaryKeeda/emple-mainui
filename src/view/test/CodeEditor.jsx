@@ -34,7 +34,10 @@ export default function CodeEditor ({
   setAnswers,
   problem,
   submitSection,
-  timeLeft
+  timeLeft,
+  showConfirmBox, 
+  setShowConfirmBox
+
 }) {
   if (!problem) return <>Select a problem</>
   const { user } = useSelector(s => s.auth)
@@ -61,7 +64,6 @@ export default function CodeEditor ({
   const [language, setLanguage] = useState(defaultLang)
   const [tokens,setTokens] = useState([]);
   const [code, setCode] = useState('')
-  const [showConfirmBox, setShowConfirmBox] = useState(false)
   const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'crimson_editor');
   
   const editorThemes = [
