@@ -8,11 +8,11 @@ export default function TestProblemDescription({ problem }) {
         <h2 className='text-xl font-semibold'>Problem Description</h2>
 
         <MDEditor.Markdown
+        
           source={problem?.description}
           style={{
+            padding:"10px",
             whiteSpace: "pre-wrap",
-            backgroundColor: "#ffffff",
-            color:"#000",
             borderRadius: "6px",
             lineHeight:"1.4",
             lineHeightStep:"1",

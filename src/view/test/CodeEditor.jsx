@@ -64,7 +64,7 @@ export default function CodeEditor ({
   const [language, setLanguage] = useState(defaultLang)
   const [tokens,setTokens] = useState([]);
   const [code, setCode] = useState('')
-  const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'crimson_editor');
+  const [theme, setTheme] = useState(localStorage.getItem('default_theme') || 'tomorrow_night');
   
   const editorThemes = [
     'monokai',
