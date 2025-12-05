@@ -1,38 +1,49 @@
 import React, { useState } from 'react'
 import { BASE_URL, LOGO } from '../../lib/config'
-import { Modal } from '@mui/material'
+import { Box, Modal, TextField } from '@mui/material'
 import Loader from './components/Loader'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import Header from './components/Header'
 import { useTest } from './context/TestProvider'
-
+import { useSnackbar } from 'notistack'
 export default function TestInstructions () {
   const [submitting, setIsSubmitting] = useState(false)
   const { data, helpers, setHasAgreed } = useTest()
   const navigate = useNavigate()
   const userId = useSelector(s => s.auth.user._id)
-  const testId = useSelector(s => s.auth.testId)
-  const { test } = useTest()
+  // const testId = useSelector(s => s.auth.testId)
+  const [passcode,setPasscode] = useState("");
+  const { test, testId } = useTest()
   const [checked, setChecked] = useState(false)
   // const totalTime = sections.reduce((acc, sec) => acc + (sec.maxTime || 0), 0)
-
+  const {enqueueSnackbar} = useSnackbar();
   const handleStartTest = async () => {
     setIsSubmitting(true)
+    // alert(test)
 
     try {
-      await axios.post(
+      const res = await axios.post(
         `${BASE_URL}/api/exam/start-test`,
         {
-          submissionId: data._id
+          submissionId: data._id,
+          testId:testId,
+          passcode:passcode
         },
         { withCredentials: true }
       )
-
-      setHasAgreed(true)
+      if(res.data?.success) {
+        setHasAgreed(true)
+      }else{
+        enqueueSnackbar(res.data?.message, {
+          variant: 'error',
+        });
+      }
     } catch (e) {
       console.log(e)
+    } finally {
+      setIsSubmitting(false);
     }
     // Simulate delay or replace with actual logic (e.g., mark agreed or post request)
   }
@@ -160,13 +171,17 @@ export default function TestInstructions () {
               violation may lead to test cancellation.
             </p>
           </div>
-
           {/* Start Test Button */}
-          <CustomButton
-            disabled={checked}
-            callback={handleStartTest}
-            label={'Start Test'}
-          />
+          <Box sx={{display:"flex", marginTop:"10px" ,justifyContent:"center" , alignItems:"center" , gap:"10px"}}>
+            <TextField size='small' label="Passcode" value={passcode} onChange={(e)=>setPasscode(e.target.value)} />
+
+            <CustomButton
+              disabled={checked}
+              callback={handleStartTest}
+              label={'Start Test'}
+            />
+          </Box>
+
         </section>
         {submitting && <Loader />}
       </main>
@@ -184,7 +199,7 @@ export const CustomButton = ({ disabled, label, callback }) => {
           !disabled
             ? 'cursor-not-allowed bg-slate-200 text-gray-600 '
             : 'hover:bg-orange-600 text-white cursor-pointer bg-orange-500 '
-        } mt-6 px-6  py-2  rounded-lg font-semibold transition-colors`}
+        } px-6  py-2  rounded-lg font-semibold transition-colors`}
         aria-label={label}
       >
         {label}

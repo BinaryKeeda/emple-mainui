@@ -1,1 +1,0 @@
-import{j as t}from"./index-BriX2T-R.js";import{Q as o}from"./QuizTestList-CZlGdIKp.js";import"./useQuery-BGQMN_CD.js";import"./Delete-xsLVRLZL.js";const p=()=>t.jsx(o,{type:"problems"});export{p as default};
