@@ -172,9 +172,10 @@ export default function TestInstructions () {
             </p>
           </div>
           {/* Start Test Button */}
-          {isProtected && 
             <Box sx={{display:"flex", marginTop:"10px" ,justifyContent:"center" , alignItems:"center" , gap:"10px"}}>
+          {isProtected && 
               <TextField size='small' label="Passcode" value={passcode} onChange={(e)=>setPasscode(e.target.value)} />
+          }
 
               <CustomButton
                 disabled={checked}
@@ -182,7 +183,6 @@ export default function TestInstructions () {
                 label={'Start Test'}
               />
             </Box>
-          }
 
 
         </section>
