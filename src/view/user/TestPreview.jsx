@@ -260,19 +260,19 @@ const CodingSection = ({ section, sectionResponse }) => {
 
           <SectionCard title="Your Submitted Code">
             <pre className="bg-black text-green-400 p-4 rounded-lg overflow-auto text-sm">
-              {sectionResponse?.codingAnswers[0][problem._id].code}
+              {sectionResponse?.codingAnswers[0][problem._id]?.code || ""}
             </pre>
           </SectionCard>
 
           <SectionCard title="Testcases">
             <pre className="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-auto text-sm">
-              {sectionResponse?.codingAnswers[0][problem._id].total}
+              {sectionResponse?.codingAnswers[0][problem._id]?.total ?? 0}
             </pre>
           </SectionCard>
 
           <SectionCard title="Passed">
             <pre className="bg-gray-800 text-white p-4 rounded-lg text-sm">
-              {String(sectionResponse?.codingAnswers[0][problem._id].passed)}
+              {String(sectionResponse?.codingAnswers[0][problem._id]?.passed) ?? 0}
             </pre>
           </SectionCard>
         </div>

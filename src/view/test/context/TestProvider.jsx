@@ -61,6 +61,7 @@ const TestProvider = ({ children, testId, userId }) => {
   const response = data.response;
   const userDetails = data.userDetails || []
   const columns = data.columns || []
+  const isProtected = data.isProtected || false
   // console.log(response)
   const helpers = {}
   return (
@@ -82,6 +83,7 @@ const TestProvider = ({ children, testId, userId }) => {
         section,
         response,
         current,
+        isProtected,
         helpers,
         userDetails,
         columns ,

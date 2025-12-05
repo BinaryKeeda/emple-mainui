@@ -17,6 +17,7 @@ import { runSingleTest } from './helpers/coderunner'
 import { Close, ShortText } from '@mui/icons-material'
 import { setLoading } from '../../redux/slice/UserSlice'
 import { Button } from '@mui/material'
+import { useOutputWindow } from './context/TestOutputContext'
 export default function TestCodeInterface() {
   const {
     section,
@@ -190,7 +191,9 @@ export default function TestCodeInterface() {
   const [customTestOpen, setCustomTestOpen] = useState(false);
   const [customOutput, setCustomOutput] = useState("");
   const [showConfirmBox, setShowConfirmBox] = useState(false)
-
+  const {
+      isExecuting = false
+    } = useOutputWindow()
   const runCustomCode = async () => {
     console.log(answers[activeProblem._id])
     const output = await runSingleTest({
@@ -342,8 +345,9 @@ export default function TestCodeInterface() {
       </section>
       <section className='h-[50px] bg-white pb-1 -pt-7  z-50 left-0 absolute flex justify-center items-center gap-4 bottom-0 w-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]'>
         <button
+       
           onClick={handlePrev}
-          disabled={activeProblemIndex === 0}
+          disabled={activeProblemIndex === 0||isExecuting}
           className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8  transition ${activeProblemIndex === 0
             ? 'opacity-50 cursor-not-allowed bg-white '
             : 'hover:bg-gray-200'
@@ -358,8 +362,9 @@ export default function TestCodeInterface() {
         </span>
 
         <button
+ 
           onClick={handleNext}
-          disabled={activeProblemIndex === problems.length - 1}
+          disabled={activeProblemIndex === problems.length - 1 || isExecuting}
           className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8 transition ${activeProblemIndex === problems.length - 1
             ? 'opacity-50 cursor-not-allowed bg-white'
             : 'hover:bg-gray-300'

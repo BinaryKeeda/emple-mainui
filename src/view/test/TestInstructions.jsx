@@ -10,7 +10,7 @@ import { useTest } from './context/TestProvider'
 import { useSnackbar } from 'notistack'
 export default function TestInstructions () {
   const [submitting, setIsSubmitting] = useState(false)
-  const { data, helpers, setHasAgreed } = useTest()
+  const { data, helpers, setHasAgreed , isProtected} = useTest()
   const navigate = useNavigate()
   const userId = useSelector(s => s.auth.user._id)
   // const testId = useSelector(s => s.auth.testId)
@@ -172,15 +172,18 @@ export default function TestInstructions () {
             </p>
           </div>
           {/* Start Test Button */}
-          <Box sx={{display:"flex", marginTop:"10px" ,justifyContent:"center" , alignItems:"center" , gap:"10px"}}>
-            <TextField size='small' label="Passcode" value={passcode} onChange={(e)=>setPasscode(e.target.value)} />
+          {isProtected && 
+            <Box sx={{display:"flex", marginTop:"10px" ,justifyContent:"center" , alignItems:"center" , gap:"10px"}}>
+              <TextField size='small' label="Passcode" value={passcode} onChange={(e)=>setPasscode(e.target.value)} />
 
-            <CustomButton
-              disabled={checked}
-              callback={handleStartTest}
-              label={'Start Test'}
-            />
-          </Box>
+              <CustomButton
+                disabled={checked}
+                callback={handleStartTest}
+                label={'Start Test'}
+              />
+            </Box>
+          }
+
 
         </section>
         {submitting && <Loader />}
