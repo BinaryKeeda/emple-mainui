@@ -439,7 +439,8 @@ export default function TestAttemptPage () {
     current,
     section,
     userDetails,
-    submissionId
+    submissionId,
+    setIsSubmitted
   } = useTest()
   const [loader, setLoader] = useState(false)
   const [warningModal, setWarningModal] = useState({
@@ -455,7 +456,7 @@ export default function TestAttemptPage () {
       const res = await axios.put(`${BASE_URL}/api/exam/ufm-count`,  {
         submissionId: submissionId
       },{withCredentials:true});
-
+      setIsSubmitted(res.data.isSubmitted);
       console.log(res);
     }catch(e) {
       console.log(e);
