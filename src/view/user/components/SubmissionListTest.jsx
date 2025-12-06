@@ -44,7 +44,7 @@ const SubmissionList = ({ currCategory }) => {
   }
   return (
     <>
-      {loading ? (
+      {/* {loading ? (
         <div>
           <Loader />
         </div>
@@ -55,7 +55,7 @@ const SubmissionList = ({ currCategory }) => {
             <SectionHeader title={'Test Submissions'} />
           </div>
           <div className='flex mt-2 flex-col shadow-xl w-full  overflow-hidden '>
-            {/* <p className='w-full  px-4 text-left  bg-[#111827] from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent font-bold text-xl'></p> */}
+         <p className='w-full  px-4 text-left  bg-[#111827] from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent font-bold text-xl'></p> 
             <div className='relative  flex flex-col w-full  overflow-hidden     bg-primary shadow-md rounded-lg bg-clip-border '>
               <table className='w-full overflow-x-scroll text-left  shadow-lg table-auto min-w-max'>
                 <thead>
@@ -108,17 +108,17 @@ const SubmissionList = ({ currCategory }) => {
           </div>
         </>
       ) : (
-        // <Link
-        //   to={'/user/test-series'}
-        //   className='flex py-10 gap-3 h-full justify-center items-center'
-        // >
-        //   <School color='primary' />{' '}
-        //   <a className='text-gray-600 text-sm' href=''>
-        //     Practice Now
-        //   </a>
-        // </Link>
+         <Link
+           to={'/user/test-series'}
+           className='flex py-10 gap-3 h-full justify-center items-center'
+         >
+           <School color='primary' />{' '}
+           <a className='text-gray-600 text-sm' href=''>
+             Practice Now
+           </a>
+         </Link>
         <></>
-      )}
+      )} */}
     </>
   )
 }
