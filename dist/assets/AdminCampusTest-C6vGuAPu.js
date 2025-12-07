@@ -1,1 +1,0 @@
-import{j as t}from"./index-Cnot-2ym.js";import{Q as s}from"./QuizTestList-DbMq_cDV.js";import"./useQuery-D254Y5GB.js";import"./Delete-CTN10v--.js";const r=()=>t.jsx(s,{type:"campustest"});export{r as default};

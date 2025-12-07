@@ -89,10 +89,15 @@ export default function TestCodeInterface() {
         })
       }
       if(!isAnswerable) return;
+      console.log(answers)
+      console.log(data?._id)
+      console.log(sectionId)
+      console.log(current)
+      console.log(autoSubmit)
       const res = await axios.post(
         `${BASE_URL}/api/exam/submit-section`,
         {
-          submissionId: data._id,
+          submissionId: data?._id,
           sectionId: sectionId,
           sectionType: 'coding',
           response: answers,
@@ -123,14 +128,13 @@ export default function TestCodeInterface() {
     }
 
     if (timeLeft !== Number.MAX_SAFE_INTEGER && timeLeft < 0) {
-      submitHandler()
+      submitHandler(true)
     }
   }, [timeLeft])
 
   useEffect(() => {
     if(ufmSubmit) {
-      console.log("hello")
-      submitHandler?.()
+      submitHandler?.(true)
       setIsSubmitted(true);
     }
   },[ufmSubmit]);
@@ -322,7 +326,7 @@ export default function TestCodeInterface() {
             hasMore={problems.length > activeProblemIndex + 1}
             timeLeft={timeLeft}
             response={response}
-            submitHandler={submitHandler}
+            submitHandler={() => {submitHandler(false)}}
             setAnswers={setAnswers}
             setSubmitting={setSubmitting}
             problem={activeProblem}
