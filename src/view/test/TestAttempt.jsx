@@ -10,7 +10,7 @@ export default function TestAttempt({ id }) {
   const { user } = useSelector(s => s.auth);
 
   const [isPC, setIsPC] = useState(true);
-
+  
   useEffect(() => {
     const mobileRegex =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;

@@ -15,10 +15,11 @@ const TestQuizInterface = ({ autoSubmit }) => {
     loading,
     current,
     response,
-    data
+    data,
+    sectionId,
+    ufmSubmit
   } = useTest()
 
-  const { slug } = useParams()
   const [questionSet, setQuestionSet] = useState(section.questions)
   const [answers, setAnswers] = useState({})
   const [visitedQuestions, setVisitedQuestions] = useState(new Set())
@@ -45,6 +46,7 @@ const TestQuizInterface = ({ autoSubmit }) => {
     }
   }, [])
   const handleOptionChange = (question, selectedOption) => {
+
     const qId = question._id
     if (isMSQ(question)) {
       setAnswers(prev => {
@@ -85,7 +87,7 @@ const TestQuizInterface = ({ autoSubmit }) => {
   }, [currentIndex, currentQuestion])
 
   useEffect(() => {
-    const cached = sessionStorage.getItem(`solution-${slug}`)
+    const cached = sessionStorage.getItem(`solution-${sectionId}`)
     if (cached) {
       const parsed = JSON.parse(cached)
       setAnswers(parsed.answers || {})
@@ -103,14 +105,14 @@ const TestQuizInterface = ({ autoSubmit }) => {
     }
 
     if (timeLeft !== Number.MAX_SAFE_INTEGER && timeLeft < 0) {
-      submitHandler()
+      submitHandler(true)
     }
   }, [timeLeft])
 
   useEffect(() => {
     if (loading) return
     sessionStorage.setItem(
-      `solution-${slug}`,
+      `solution-${sectionId}`,
       JSON.stringify({
         answers,
         visited: Array.from(visitedQuestions),
@@ -119,7 +121,9 @@ const TestQuizInterface = ({ autoSubmit }) => {
     )
   }, [answers, visitedQuestions, currentIndex])
 
-  const submitHandler = async () => {
+
+  const submitHandler = async (autoSubmit = false) => {
+
     try {
       setSubmitting(true)
       const res = await axios.post(
@@ -135,7 +139,7 @@ const TestQuizInterface = ({ autoSubmit }) => {
           withCredentials: true
         }
       )
-      sessionStorage.removeItem(`solution-${slug}`)
+      sessionStorage.removeItem(`solution-${sectionId}`)
       setCurrent(res.data?.nextSection)
       setIsSubmitted(res.data?.submitted)
     } catch (e) {
@@ -169,6 +173,12 @@ const TestQuizInterface = ({ autoSubmit }) => {
 
   //   return () => clearInterval(interval)
   // }, [data])
+    useEffect(() => {
+    if(ufmSubmit) {
+      submitHandler?.(true)
+      setIsSubmitted(true);
+    }
+  },[ufmSubmit]);
   useEffect(() => {
     const syncServerTime = async () => {
       try {
@@ -202,13 +212,13 @@ const TestQuizInterface = ({ autoSubmit }) => {
         setTimeLeft(prev => {
           if (prev <= 1000) {
             clearInterval(interval)
-            submitHandler?.() // trigger autoSubmit function
+            // submitHandler?.() // trigger autoSubmit function
           }
           return prev - 1000
         }, 1000)
       }, 1000)
 
-      return () => clearInterval(interval)
+      // return () => clearInterval(interval)
     }
   }, [data])
 

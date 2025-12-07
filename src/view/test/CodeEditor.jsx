@@ -83,6 +83,12 @@ export default function CodeEditor ({
       : problem?.functionSignature?.[0]?.language
 
     sessionStorage.setItem(getLangKey(), langToUse)
+    const tokens = sessionStorage.getItem(`problem-token-${problemId}`);
+    if(tokens) {
+      setTokens(JSON.parse(tokens));
+    }else {
+      setTokens([])
+    }
 
     const storedCode = sessionStorage.getItem(getKey(langToUse))
 
@@ -176,7 +182,7 @@ export default function CodeEditor ({
         testCases: problem.testCases,
         problemName: problem.problemName,
         problemId: problem._id,
-        setSummary, setTokens
+        setSummary, setTokens , problemId:problem?._id
       })
 
       if (isSubmit) {
@@ -284,6 +290,7 @@ export default function CodeEditor ({
             </button>
           )}
         </div>
+
       </div>
 
       <div className=''>

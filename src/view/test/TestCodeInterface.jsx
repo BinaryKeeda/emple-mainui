@@ -30,7 +30,13 @@ export default function TestCodeInterface() {
     data,
     helpers,
     sections
+    ,ufmSubmit
   } = useTest()
+   const {
+      isExecuting = false,
+      setResults
+      
+    } = useOutputWindow()
   const [timeLeft, setTimeLeft] = useState(Number.MAX_SAFE_INTEGER)
   const [answers, setAnswers] = useState({})
   const [leftWidth, setLeftWidth] = useState(46)
@@ -57,18 +63,20 @@ export default function TestCodeInterface() {
     }
   }, [])
   const handlePrev = () => {
-    setActiveProblemIndex(prev => Math.max(prev - 1, 0))
+    setActiveProblemIndex(prev => Math.max(prev - 1, 0));
+    setResults([])
   }
 
   const handleNext = () => {
     setActiveProblemIndex(prev => Math.min(prev + 1, problems.length - 1))
+    setResults([])
   }
 
-  const submitHandler = async () => {
+  const submitHandler = async (autoSubmit = false) => {
     try {
       setSubmitting(true)
       let isAnswerable = true;
-      if(answers) {
+      if(answers && autoSubmit) {
         Object.keys(answers).map((item) => {
           if(answers[item].tokens.length == 0) {
             isAnswerable = false;
@@ -104,6 +112,26 @@ export default function TestCodeInterface() {
       setSubmitting(false)
     }
   }
+  const hasMountedRef = useRef(false)
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+      return
+    }
+
+    if (timeLeft !== Number.MAX_SAFE_INTEGER && timeLeft < 0) {
+      submitHandler()
+    }
+  }, [timeLeft])
+
+  useEffect(() => {
+    if(ufmSubmit) {
+      console.log("hello")
+      submitHandler?.()
+      setIsSubmitted(true);
+    }
+  },[ufmSubmit]);
 
   const handleMouseMove = e => {
     if (!isDragging.current || !containerRef.current) return
@@ -158,42 +186,12 @@ export default function TestCodeInterface() {
     }
   }, [])
 
-  // useEffect(() => {
-  //   if (timeLeft != Number.MAX_SAFE_INTEGER && timeLeft < 0) {
-  //     submitHandler()
-  //   }
-  // }, [timeLeft])
-  // useEffect(() => {
-  //   if (!response[current]) return
-  //   const start = response[current]?.startedAt
-  //   const startTime = new Date(start).getTime()
-  //   // console.log(startTime)
-  //   const durationMs = parseInt(section.maxTime) * 60 * 1000 // test duration in ms
-  //   // console.log(durationMs)
-  //   const alreadySpent = parseInt(response?.durationUnavailaible) || 0 // in ms
-  //   // console.log(alreadySpent)
-
-  //   const interval = setInterval(() => {
-  //     const now = Date.now()
-  //     const timeUsed = now - startTime - alreadySpent
-  //     const remainingTime = durationMs - timeUsed
-  //     setTimeLeft(Math.max(remainingTime, -999999))
-  //     if (remainingTime < 0) {
-  //       submitHandler()
-  //     }
-  //     // console.log(remainingTime)
-  //   }, 1000)
-
-  //   return () => clearInterval(interval)
-  // }, [data])
 
   const [customTest, setCustomTest] = useState("");
   const [customTestOpen, setCustomTestOpen] = useState(false);
   const [customOutput, setCustomOutput] = useState("");
   const [showConfirmBox, setShowConfirmBox] = useState(false)
-  const {
-      isExecuting = false
-    } = useOutputWindow()
+ 
   const runCustomCode = async () => {
     console.log(answers[activeProblem._id])
     const output = await runSingleTest({
@@ -236,7 +234,7 @@ export default function TestCodeInterface() {
       const interval = setInterval(() => {
         setTimeLeft(prev => {
           if (prev - 1000 < 0) {
-            submitHandler();
+            // submitHandler();
           }
           return prev - 1000;
         }) // countdown every second
@@ -253,7 +251,6 @@ export default function TestCodeInterface() {
         ref={containerRef}
         className='h-[calc(100vh-(58px))] mt-[2px] w-full flex overflow-hidden'
       >
-        {/* Left Pane */}
         <div
           className='h-full flex flex-col bg-gray-50 overflow-hidden'
           style={{ width: `${leftWidth}%` }}
@@ -362,7 +359,6 @@ export default function TestCodeInterface() {
         </span>
 
         <button
- 
           onClick={handleNext}
           disabled={activeProblemIndex === problems.length - 1 || isExecuting}
           className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8 transition ${activeProblemIndex === problems.length - 1

@@ -440,7 +440,9 @@ export default function TestAttemptPage () {
     section,
     userDetails,
     submissionId,
-    setIsSubmitted
+    setIsSubmitted,
+    setUFMSubmit,
+    ufmSubmit
   } = useTest()
   const [loader, setLoader] = useState(false)
   const [warningModal, setWarningModal] = useState({
@@ -456,12 +458,13 @@ export default function TestAttemptPage () {
       const res = await axios.put(`${BASE_URL}/api/exam/ufm-count`,  {
         submissionId: submissionId
       },{withCredentials:true});
-      setIsSubmitted(res.data.isSubmitted);
+      setUFMSubmit(res.data.isSubmitted)
       console.log(res);
     }catch(e) {
       console.log(e);
     }
   }
+
   useEffect(() => {
     const onVisibilityChange = () => {
       if (document.visibilityState == 'hidden') {
@@ -483,6 +486,7 @@ export default function TestAttemptPage () {
       document.removeEventListener('fullscreenchange', onFullScreenChange)
     }
   }, [])
+  
   if (error) return <>Error</>
   if (loading) return <><Loader/></>
 

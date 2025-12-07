@@ -37,11 +37,14 @@ export const useCodeExecutor = ({ CODE_EXECUTION_API, headers ,setTokens, setSum
       const res = await axios.post(`${BASE_URL}/api/judge0/eval` , {
         code,
         language,
-      problemId
+        problemId
       } , {withCredentials:true});
       const data = res.data;
       const tokens  = data.tokens;
+      console.log("HEY")
       setTokens(tokens);
+      console.log(problemId);
+      sessionStorage.setItem(`problem-token-${problemId}`, JSON.stringify(tokens));
       const outputs = await fetchResultsInBatches({tokens,setSummary, CODE_EXECUTION_API, headers})
 
       outputs.forEach((output, index) => {

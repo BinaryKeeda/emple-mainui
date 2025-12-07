@@ -26,6 +26,7 @@ const TestProvider = ({ children, testId, userId }) => {
   const [hasAgreed, setHasAgreed] = useState()
   const [loader, setLoader] = useState(false)
   const [current, setCurrent] = useState(-1)
+  const [ufmSubmit , setUFMSubmit] = useState();
   const [isSubmitted, setIsSubmitted] = useState(false)
   useEffect(() => {
     const fetchData = async () => {
@@ -69,6 +70,9 @@ const TestProvider = ({ children, testId, userId }) => {
       value={{
         loader,
         hasAgreed,
+        sectionId:section?.sectionId,
+        setUFMSubmit,
+        ufmSubmit,
         setLoader,
         setHasAgreed,
         setData,
