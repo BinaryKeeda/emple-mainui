@@ -123,7 +123,6 @@ const TestQuizInterface = ({ autoSubmit }) => {
 
 
   const submitHandler = async (autoSubmit = false) => {
-
     try {
       setSubmitting(true)
       const res = await axios.post(
@@ -147,33 +146,8 @@ const TestQuizInterface = ({ autoSubmit }) => {
       console.log(e)
     }
   }
-  // useEffect(() => {
-  //   if (autoSubmit) {
-  //     submitHandler()
-  //   }
-  // }, [autoSubmit])
-  // useEffect(() => {
-  //   if (!response[current]) return
-  //   const start = response[current]?.startedAt
-  //   const startTime = new Date(start).getTime()
-  //   // console.log(startTime)
-  //   const durationMs = parseInt(section.maxTime) * 60 * 1000 // test duration in ms
-  //   // console.log(durationMs)
-  //   const alreadySpent = parseInt(response?.durationUnavailaible) || 0 // in ms
-  //   // console.log(alreadySpent)
-
-  //   const interval = setInterval(() => {
-  //     const now = Date.now()
-  //     const timeUsed = now - startTime - alreadySpent
-  //     const remainingTime = durationMs - timeUsed
-  //     setTimeLeft(Math.max(remainingTime, -999999))
-  //     if (remainingTime < 0) {
-  //       // submitHandler()
-  //     }
-  //   }, 1000)
-
-  //   return () => clearInterval(interval)
-  // }, [data])
+ 
+  
     useEffect(() => {
     if(ufmSubmit) {
       submitHandler?.(true)

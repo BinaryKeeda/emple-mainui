@@ -77,7 +77,7 @@ export default function TestCodeInterface() {
     try {
       setSubmitting(true)
       let isAnswerable = true;
-      if(answers && autoSubmit) {
+      if(answers && !autoSubmit) {
         Object.keys(answers).map((item) => {
           if(answers[item].tokens.length == 0) {
             isAnswerable = false;

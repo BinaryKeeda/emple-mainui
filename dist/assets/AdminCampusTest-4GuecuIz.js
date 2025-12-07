@@ -1,1 +1,0 @@
-import{j as t}from"./index-DdMezOeP.js";import{Q as s}from"./QuizTestList-CuosO-88.js";import"./useQuery-BSe9wap6.js";import"./Delete-Jpq4bw4t.js";const r=()=>t.jsx(s,{type:"campustest"});export{r as default};
