@@ -1,9 +1,9 @@
-export const BASE_URL =  true ? 'http://localhost:5001' : 'https://backend.binarykeeda.com';
+export const BASE_URL =  false ? 'http://localhost:5001' : 'https://backend.binarykeeda.com';
 export const GOOGLE_CLIENT_ID = "969367563916-sco9e8grkep5rf113sk0bkik1aert4fr.apps.googleusercontent.com";
 export const CODE_EXECUTION_API = "https://execution.api.binarykeeda.com" ||  "https://judge0.binarykeeda.com";
-export const MESSAGE_QUEUE_URL = true ? "http://localhost:3001" : "https://broker.binarykeeda.com";
-export const PAYMENT_KEY =  true ?  "rzp_test_RGIjVTm6peDV3h" : "rzp_live_Ri4zDpRTJwCTaV" 
-export const PAYMENT_URL =  true ?  "http://localhost:5007" : "https://payment.binarykeeda.com" 
+export const MESSAGE_QUEUE_URL = false ? "http://localhost:3001" : "https://broker.binarykeeda.com";
+export const PAYMENT_KEY =  false ?  "rzp_test_RGIjVTm6peDV3h" : "rzp_live_Ri4zDpRTJwCTaV" 
+export const PAYMENT_URL =  false ?  "http://localhost:5007" : "https://payment.binarykeeda.com" 
 // export const BASE_URL =  import.meta.env.VITE_API_BASE_URL;
 // export const GOOGLE_CLIENT_ID = "969367563916-sco9e8grkep5rf113sk0bkik1aert4fr.apps.googleusercontent.com";
 // export const CODE_EXECUTION_API = "https://execution.api.binarykeeda.com" ||  "https://judge0.binarykeeda.com";
