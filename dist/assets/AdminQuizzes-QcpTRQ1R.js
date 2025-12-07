@@ -1,0 +1,1 @@
+import{j as t}from"./index-Cnot-2ym.js";import{Q as i}from"./QuizTestList-DbMq_cDV.js";import"./useQuery-D254Y5GB.js";import"./Delete-CTN10v--.js";const p=()=>t.jsx(i,{type:"quiz"});export{p as default};

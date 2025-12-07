@@ -31,6 +31,7 @@ export default function TestCodeInterface() {
     helpers,
     sections
     ,ufmSubmit
+    ,sectionId
   } = useTest()
    const {
       isExecuting = false,
@@ -92,10 +93,11 @@ export default function TestCodeInterface() {
         `${BASE_URL}/api/exam/submit-section`,
         {
           submissionId: data._id,
-          sectionId: response[current].sectionId,
+          sectionId: sectionId,
           sectionType: 'coding',
           response: answers,
-          current
+          current,
+          autoSubmit
         },
         {
           withCredentials: true

@@ -133,7 +133,8 @@ const TestQuizInterface = ({ autoSubmit }) => {
           sectionId: response[current].sectionId,
           sectionType: 'quiz',
           response: answers,
-          current
+          current,
+          autoSubmit:autoSubmit
         },
         {
           withCredentials: true
