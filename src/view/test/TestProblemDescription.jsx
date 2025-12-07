@@ -2,6 +2,7 @@ import MDEditor from '@uiw/react-md-editor'
 import React from 'react'
 
 export default function TestProblemDescription({ problem }) {
+  if(!problem) return <>Select a problem</>
   return (
     <div className='flex-[0.6] bg-white  h-[calc(100%-0px)] overflow-y-scroll relative min-w-[200px] custom-scrollbar'>
       <div className='flex-[0.4] overflow-y-scroll h-full p-4 space-y-4 text-sm'>

@@ -214,8 +214,8 @@ const CodingSection = ({ section, sectionResponse }) => {
   return (
     <div className="space-y-10">
       {section?.problems?.map((problem) => (
-        <div key={problem._id} className="space-y-6">
-          <h1 className="text-2xl font-bold text-gray-800">{problem.title}</h1>
+        <div key={problem?._id} className="space-y-6">
+          <h1 className="text-2xl font-bold text-gray-800">{problem?.title}</h1>
 
           <SectionCard title="Description">
             <p className="text-gray-700 whitespace-pre-line">
