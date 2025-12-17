@@ -13,185 +13,195 @@ export default function CodeOutputWindow({ runCustomCode, testCases = [] }) {
     isExecuting = false
   } = useOutputWindow()
 
-  const [view, setView] = useState('testcases') // 'testcases' | 'result'
+  const [view, setView] = useState('testcases')
   const prompts = [
     "My relationship status? Still debugging…",
-    "I don’t commit in relationships, only in Git.",
+    "I don't commit in relationships, only in Git.",
     "She wanted attention. I wanted to fix warnings first.",
     "I optimize code, not feelings.",
     "Love is like Java — too many rules, too much syntax.",
     "Finding love is harder than passing all test cases on the first try.",
     "Relationship failed: NullPointerException.",
-    "I don’t do breakups, only break statements.",
+    "I don't do breakups, only break statements.",
     "ERROR: Feelings not defined.",
     "Love is temporary. Stack overflow is forever.",
-  ];
+  ]
   const [loadingTest, setLoadingTest] = useState(prompts[0])
+
   useEffect(() => {
     if (isExecuting || results?.length > 0) setView('result')
     else setView('testcases')
   }, [results, isExecuting])
-  const [customInput, setCustomInput] = useState("");
+
+  const [customInput, setCustomInput] = useState("")
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const random = Math.floor(Math.random() * prompts.length);
-      setLoadingTest(prompts[random]);
-    }, 4000);
+      const random = Math.floor(Math.random() * prompts.length)
+      setLoadingTest(prompts[random])
+    }, 4000)
 
-    return () => clearInterval(interval);
-  }, []);
-
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <div className='bottom-0 z-40  rounded-t-3xl relative transition-transform duration-300 ease-in-out'>
-      <div className='flex absolute p-2 items-center h-[45px] w-full  border border-slate-300 bg-white px-3 text-center text-sm transition-all shadow-sm text-slate-600'>
+    <div className='w-full h-full flex flex-col bg-white'>
+      {/* Tab Navigation */}
+      <div className='flex items-center h-12 border-b border-gray-200 bg-white px-4'>
         <button
           onClick={() => setView('testcases')}
-          className={`cursor-pointer flex items-center ${view == "testcases" ? 'text-white bg-slate-800' : 'hover:text-white hover:bg-slate-800'} rounded-md py-2 px-4 text-sm transition-all text-slate-600 `}
+          className={`px-3 py-2 text-sm font-medium transition-colors ${
+            view === 'testcases'
+              ? 'text-gray-900 border-b-2 border-blue-600 -mb-px'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
           Testcases
         </button>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          viewBox='0 0 24 24'
-          fill='currentColor'
-          className='w-4 h-4 mx-1.5'
-        >
-          <path
-            fillRule='evenodd'
-            d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-            clipRule='evenodd'
-          />
-        </svg>
-     
         {(isExecuting || results?.length > 0) && (
           <button
             onClick={() => setView('result')}
-            className='cursor-pointer  flex items-center rounded-md py-2 px-4 text-sm transition-all text-slate-600 hover:text-white hover:bg-slate-800'
+            className={`px-3 py-2 text-sm font-medium transition-colors ${
+              view === 'result'
+                ? 'text-gray-900 border-b-2 border-blue-600 -mb-px'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
           >
-            Output
+            Result
           </button>
         )}
       </div>
 
-
-
-      <div className='w-full h-[40px]' />
+      {/* Summary Bar */}
       {view === 'result' && summary && (
-        <div className='bg-white items-center rounded-lg shadow p-4  px-8 flex justify-between text-sm text-gray-700'>
-          <div>
-            <strong>{summary.passed}</strong> / {summary.total} Passed
-          </div>
-          <div className='flex flex-col' >
-            <div>
-              Time: <strong>{summary.avgTime}s</strong>
+        <div className='bg-gray-50 border-b border-gray-200 px-4 py-3'>
+          <div className='flex items-center justify-between text-sm'>
+            <div className='font-medium text-gray-900'>
+              <span className={summary.passed === summary.total ? 'text-green-600' : 'text-red-600'}>
+                {summary.passed}
+              </span>
+              <span className='text-gray-600'> / {summary.total} Passed</span>
             </div>
-            <div>
-              Memory: <strong>{summary.avgMemory} KB</strong>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {view === 'result' && (
-        <div className={`rounded-lg h-full w-full ${isExecuting ? 'flex pt-14' : ' '} justify-center items-center  px-7  pb-20`}>
-          {(isExecuting) ? (
-            // Loading Skeletons
-            <div className='p-3 flex gap-3 items-center bg-white rounded-lg '>
-              <p className='text-xs'>{loadingTest}</p>
-              <CircularProgress size={"14px"} />
-            </div>
-          ) : results?.length > 0 ? (
-            results.slice(0, 2).map((r, idx) => (
-              <div key={idx} className='flex flex-col gap-1'>
-                {/* Input */}
-                <div className='flex  mt-3 items-center bg-gray-100 w-fit py-1 px-3 rounded-sm text-md text-gray-700 gap-2'>
-                  <span
-                    className={`rounded-full h-2 w-2 ${r?.passed ? 'bg-green-600' : 'bg-red-400'
-                      }`}
-                  ></span>
-                  <label htmlFor=''>Case {idx + 1}</label>
-                </div>
-                <div>
-                  <label className='text-sm block mb-1'>Input:</label>
-                  <div className='bg-gray-100 rounded p-2 whitespace-pre-wrap'>
-                    {r?.input}
-                  </div>
-                </div>
-
-                {/* Expected Output */}
-                <div>
-                  <label className='text-sm block mb-1'>Expected Output:</label>
-                  <div className='bg-gray-100 rounded p-2 whitespace-pre-wrap'>
-                    {r?.expected}
-                  </div>
-                </div>
-
-                {/* Your Output */}
-                <div>
-                  <label className='text-sm block mb-1'>Your Output:</label>
-                  <div className='bg-gray-100 rounded p-2 whitespace-pre-wrap'>
-                    {r?.output}
-                  </div>
-                </div>
-
-                {/* Error (if any) */}
-                {!r?.passed && r?.error && (
-                  <div className='text-red-600 mt-2'>
-                    <strong>Error:</strong> {r?.error}
-                  </div>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className='text-gray-600 text-sm text-center mt-4'>
-              No output available.
-            </div>
-          )}
-        </div>
-      )}
-
-      {view === 'testcases' && testCases.length > 0 && (
-        <div className='rounded-lg pb-12 pt-4'>
-          {testCases.slice(0, 2).map((t, idx) => (
-            <div
-              key={idx}
-              className='grid px-7 grid-cols-1 gap-4 text-sm text-gray-700 mt-2'
-            >
-              {/* Input */}
+            <div className='flex gap-6'>
               <div>
-                <label className='text-sm block mb-1'>Input:</label>
-                <div
-                  className='bg-gray-100 rounded p-2 whitespace-pre-wrap'
-                  dangerouslySetInnerHTML={{
-                    __html: t?.input?.replace(/\n/g, '<br/>')
-                  }}
-                />
+                <span className='text-gray-600'>Time: </span>
+                <span className='font-medium text-gray-900'>{summary.avgTime}s</span>
               </div>
-
-              {/* Output */}
               <div>
-                <label className='text-sm block mb-1'>Expected Output:</label>
-                <div
-                  className='bg-gray-100 rounded p-2 whitespace-pre-wrap'
-                  dangerouslySetInnerHTML={{
-                    __html: t?.output?.replace(/\n/g, '<br/>')
-                  }}
-                />
+                <span className='text-gray-600'>Memory: </span>
+                <span className='font-medium text-gray-900'>{summary.avgMemory} KB</span>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       )}
 
-      {view === 'testcases' && testCases.length === 0 && (
-        <div className='text-gray-600 text-sm text-center mt-4'>
-          No test cases available.
-        </div>
-      )}
+      {/* Content Area */}
+      <div className='flex-1 overflow-y-auto bg-white pb-6'>
+        {view === 'result' && (
+          <div className='px-6 pt-6'>
+            {isExecuting ? (
+              <div className='flex items-center justify-center py-12'>
+                <div className='flex items-center gap-3 bg-gray-50 px-4 py-3 rounded border border-gray-200'>
+                  <CircularProgress size={14} />
+                  <p className='text-xs text-gray-600'>{loadingTest}</p>
+                </div>
+              </div>
+            ) : results?.length > 0 ? (
+              <div className='space-y-6'>
+                {results.slice(0, 2).map((r, idx) => (
+                  <div key={idx} className='border border-gray-200 rounded overflow-hidden'>
+                    {/* Header */}
+                    <div className={`px-4 py-3 flex items-center gap-2 ${
+                      r?.passed ? 'bg-green-50 border-b border-green-100' : 'bg-red-50 border-b border-red-100'
+                    }`}>
+                      <div className={`w-2 h-2 rounded-full ${r?.passed ? 'bg-green-600' : 'bg-red-600'}`}></div>
+                      <span className='text-sm font-medium text-gray-900'>Case {idx + 1}</span>
+                    </div>
 
-     
+                    {/* Content */}
+                    <div className='p-4 space-y-4'>
+                      {/* Input */}
+                      <div>
+                        <label className='text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block'>Input:</label>
+                        <pre className='bg-gray-50 border border-gray-200 rounded p-3 text-xs text-gray-900 font-mono overflow-x-auto whitespace-pre-wrap'>
+                          {r?.input}
+                        </pre>
+                      </div>
+
+                      {/* Expected Output */}
+                      <div>
+                        <label className='text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block'>Expected Output:</label>
+                        <pre className='bg-gray-50 border border-gray-200 rounded p-3 text-xs text-gray-900 font-mono overflow-x-auto whitespace-pre-wrap'>
+                          {r?.expected}
+                        </pre>
+                      </div>
+
+                      {/* Your Output */}
+                      <div>
+                        <label className='text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block'>Your Output:</label>
+                        <pre className='bg-gray-50 border border-gray-200 rounded p-3 text-xs text-gray-900 font-mono overflow-x-auto whitespace-pre-wrap'>
+                          {r?.output}
+                        </pre>
+                      </div>
+
+                      {/* Error */}
+                      {!r?.passed && r?.error && (
+                        <div className='bg-red-50 border border-red-200 rounded p-3'>
+                          <p className='text-xs font-semibold text-red-700'>Error:</p>
+                          <p className='text-xs text-red-600 font-mono mt-1'>{r?.error}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className='flex items-center justify-center py-12 text-gray-500 text-sm'>
+                No output available.
+              </div>
+            )}
+          </div>
+        )}
+
+        {view === 'testcases' && testCases.length > 0 && (
+          <div className='px-6 pt-4 space-y-6'>
+            {testCases.slice(0, 2).map((t, idx) => (
+              <div key={idx} className='border border-gray-200 rounded overflow-hidden'>
+                {/* Header */}
+                <div className='px-4 py-3 bg-gray-50 border-b border-gray-200'>
+                  <span className='text-sm font-medium text-gray-900'>Test Case {idx + 1}</span>
+                </div>
+
+                {/* Content */}
+                <div className='p-4 space-y-4'>
+                  {/* Input */}
+                  <div>
+                    <label className='text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block'>Input:</label>
+                    <pre className='bg-gray-50 border border-gray-200 rounded p-3 text-xs text-gray-900 font-mono overflow-x-auto whitespace-pre-wrap'>
+                      {t?.input}
+                    </pre>
+                  </div>
+
+                  {/* Output */}
+                  <div>
+                    <label className='text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2 block'>Expected Output:</label>
+                    <pre className='bg-gray-50 border border-gray-200 rounded p-3 text-xs text-gray-900 font-mono overflow-x-auto whitespace-pre-wrap'>
+                      {t?.output}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {view === 'testcases' && testCases.length === 0 && (
+          <div className='flex items-center justify-center py-12 text-gray-500 text-sm'>
+            No test cases available.
+          </div>
+        )}
+      </div>
     </div>
   )
 }

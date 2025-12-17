@@ -40,10 +40,8 @@ export const useCodeExecutor = ({ CODE_EXECUTION_API, headers ,setTokens, setSum
         problemId
       } , {withCredentials:true});
       const data = res.data;
-      const tokens  = data.tokens;
-      console.log("HEY")
+      const tokens  = data;
       setTokens(tokens);
-      console.log(problemId);
       sessionStorage.setItem(`problem-token-${problemId}`, JSON.stringify(tokens));
       const outputs = await fetchResultsInBatches({tokens,setSummary, CODE_EXECUTION_API, headers})
 

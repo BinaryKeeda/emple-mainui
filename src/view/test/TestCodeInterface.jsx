@@ -1,23 +1,18 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { BASE_URL } from '../../lib/config'
 import CodeOutputWindow from './CodeOutputWindow'
 import CodeEditor from './CodeEditor'
-import { Box, IconButton, Modal, Typography } from '@mui/material'
-import Loader from './components/Loader'
-import { useRef } from 'react'
+import { Box, IconButton, Modal, Typography, Tooltip, Drawer } from '@mui/material'
 import axios from 'axios'
-import { useEffect } from 'react'
-import { IosArrowRtl24Filled, IosArrowLtr24Filled } from '@fluentui/react-icons'
-import { MoreHorizontal20Filled } from '@fluentui/react-icons'
+import { Close, ShortText, UnfoldMore } from '@mui/icons-material'
 import Header from './components/Header'
 import TestProblemDescription from './TestProblemDescription'
 import { useTest } from './context/TestProvider'
 import { runSingleTest } from './helpers/coderunner'
-import { Close, ShortText } from '@mui/icons-material'
 import { setLoading } from '../../redux/slice/UserSlice'
 import { Button } from '@mui/material'
 import { useOutputWindow } from './context/TestOutputContext'
+
 export default function TestCodeInterface() {
   const {
     section,
@@ -29,71 +24,59 @@ export default function TestCodeInterface() {
     setIsSubmitted,
     data,
     helpers,
-    sections
-    ,ufmSubmit
-    ,sectionId
+    sections,
+    ufmSubmit,
+    sectionId
   } = useTest()
-   const {
-      isExecuting = false,
-      setResults
-      
-    } = useOutputWindow()
+  
+  const { isExecuting = false, setResults } = useOutputWindow()
+  
   const [timeLeft, setTimeLeft] = useState(Number.MAX_SAFE_INTEGER)
   const [answers, setAnswers] = useState({})
-  const [leftWidth, setLeftWidth] = useState(46)
-  const [topHeight, setTopHeight] = useState(70) // in %
-  const verticalDrag = useRef(false)
-
+  const [leftWidth, setLeftWidth] = useState(35)
+  const [topHeight, setTopHeight] = useState(70)
   const [problems, setProblems] = useState([])
   const [activeProblemIndex, setActiveProblemIndex] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [customTest, setCustomTest] = useState("")
+  const [customTestOpen, setCustomTestOpen] = useState(false)
+  const [customOutput, setCustomOutput] = useState("")
+  const [showConfirmBox, setShowConfirmBox] = useState(false)
+  const [isRunningCustomTest, setIsRunningCustomTest] = useState(false)
+  
   const containerRef = useRef(null)
   const isDragging = useRef(false)
-  const [submitting, setSubmitting] = useState(false)
-  const [showModal, setShowModal] = useState(false);
-
+  const verticalDrag = useRef(false)
+  const hasMountedRef = useRef(false)
 
   useEffect(() => {
     setProblems(section.problems)
   }, [])
+  
   useEffect(() => {
-    const saved = sessionStorage.getItem(
-      `${response[current].sectionId}sectionAnswers`
-    )
-    if (saved) {
-      setAnswers(JSON.parse(saved))
-    }
+    const saved = sessionStorage.getItem(`${response[current].sectionId}sectionAnswers`)
+    if (saved) setAnswers(JSON.parse(saved))
   }, [])
-  const handlePrev = () => {
-    setActiveProblemIndex(prev => Math.max(prev - 1, 0));
-    setResults([])
-  }
-
-  const handleNext = () => {
-    setActiveProblemIndex(prev => Math.min(prev + 1, problems.length - 1))
-    setResults([])
-  }
 
   const submitHandler = async (autoSubmit = false) => {
     try {
       setSubmitting(true)
-      let isAnswerable = true;
-      if(answers && !autoSubmit) {
-        Object.keys(answers).map((item) => {
-          if(answers[item].tokens.length == 0) {
-            isAnswerable = false;
-            setLoading(false);
-            setShowConfirmBox(false);
-            setShowModal(true);
-            return;
+      let isAnswerable = true
+      
+      if (answers && !autoSubmit) {
+        Object.keys(answers).forEach((item) => {
+          if (answers[item].tokens.length === 0) {
+            isAnswerable = false
+            setLoading(false)
+            setShowConfirmBox(false)
+            setShowModal(true)
           }
         })
       }
-      if(!isAnswerable) return;
-      console.log(answers)
-      console.log(data?._id)
-      console.log(sectionId)
-      console.log(current)
-      console.log(autoSubmit)
+      
+      if (!isAnswerable) return
+      
       const res = await axios.post(
         `${BASE_URL}/api/exam/submit-section`,
         {
@@ -104,49 +87,46 @@ export default function TestCodeInterface() {
           current,
           autoSubmit
         },
-        {
-          withCredentials: true
-        }
+        { withCredentials: true }
       )
+      
       sessionStorage.removeItem(`${response[current].sectionId}sectionAnswers`)
       setCurrent(res.data.nextSection)
-      console.log(res.data)
-
       setIsSubmitted(res.data.submitted)
     } catch (e) {
       console.log(e)
-    }finally{
+    } finally {
       setSubmitting(false)
     }
   }
-  const hasMountedRef = useRef(false)
 
   useEffect(() => {
     if (!hasMountedRef.current) {
       hasMountedRef.current = true
       return
     }
-
     if (timeLeft !== Number.MAX_SAFE_INTEGER && timeLeft < 0) {
       submitHandler(true)
     }
   }, [timeLeft])
 
   useEffect(() => {
-    if(ufmSubmit) {
+    if (ufmSubmit) {
       submitHandler?.(true)
-      setIsSubmitted(true);
+      setIsSubmitted(true)
     }
-  },[ufmSubmit]);
+  }, [ufmSubmit])
 
+  // Horizontal resize handlers
   const handleMouseMove = e => {
     if (!isDragging.current || !containerRef.current) return
     const containerWidth = containerRef.current.getBoundingClientRect().width
     const newLeftWidth = (e.clientX / containerWidth) * 100
-    if (newLeftWidth > 20 && newLeftWidth < 80) {
+    if (newLeftWidth > 20 && newLeftWidth < 60) {
       setLeftWidth(newLeftWidth)
     }
   }
+
   const handleMouseDown = () => {
     isDragging.current = true
   }
@@ -154,17 +134,17 @@ export default function TestCodeInterface() {
   const handleMouseUp = () => {
     isDragging.current = false
   }
+
+  // Vertical resize handlers
   const handleVerticalMouseDown = () => {
     verticalDrag.current = true
   }
 
   const handleVerticalMouseMove = e => {
     if (!verticalDrag.current || !containerRef.current) return
-
     const containerHeight = containerRef.current.getBoundingClientRect().height
     const offsetTop = containerRef.current.getBoundingClientRect().top
     const newTopHeight = ((e.clientY - offsetTop) / containerHeight) * 100
-
     if (newTopHeight > 10 && newTopHeight < 90) {
       setTopHeight(newTopHeight)
     }
@@ -173,6 +153,7 @@ export default function TestCodeInterface() {
   const handleVerticalMouseUp = () => {
     verticalDrag.current = false
   }
+
   useEffect(() => {
     window.addEventListener('mousemove', handleVerticalMouseMove)
     window.addEventListener('mouseup', handleVerticalMouseUp)
@@ -182,7 +163,6 @@ export default function TestCodeInterface() {
     }
   }, [])
 
-  const activeProblem = problems[activeProblemIndex]
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mouseup', handleMouseUp)
@@ -192,22 +172,24 @@ export default function TestCodeInterface() {
     }
   }, [])
 
-
-  const [customTest, setCustomTest] = useState("");
-  const [customTestOpen, setCustomTestOpen] = useState(false);
-  const [customOutput, setCustomOutput] = useState("");
-  const [showConfirmBox, setShowConfirmBox] = useState(false)
- 
   const runCustomCode = async () => {
-    console.log(answers[activeProblem._id])
-    const output = await runSingleTest({
-      language: activeProblem.language,
-      source_code: answers[activeProblem._id]?.code || "",
-      input: customTest,
-      expectedOutput: ""
-    })
-    setCustomOutput(output);
+    try {
+      setIsRunningCustomTest(true)
+      setCustomOutput("")
+      const output = await runSingleTest({
+        language: activeProblem.language,
+        source_code: answers[activeProblem._id]?.code || "",
+        input: customTest,
+        expectedOutput: ""
+      })
+      setCustomOutput(output)
+    } catch (error) {
+      setCustomOutput({ error: "Failed to run test" })
+    } finally {
+      setIsRunningCustomTest(false)
+    }
   }
+
   useEffect(() => {
     const syncServerTime = async () => {
       try {
@@ -215,16 +197,13 @@ export default function TestCodeInterface() {
         const res = await axios.get(`${BASE_URL}/api/test/campus/time`)
         const resCame = Date.now()
         let serverNow = res.data.serverTime
-        const roundTrip = resCame - reqMade // total latency
+        const roundTrip = resCame - reqMade
         const latency = roundTrip / 2
-
-        // Adjusted server time (from client's perspective)
         serverNow = serverNow + latency
 
         const testStartTime = new Date(response[current]?.startedAt).getTime()
         const alreadySpent = parseInt(response?.durationUnavailaible || 0)
         const durationMs = parseInt(section.maxTime) * 60 * 1000
-
         const timeUsed = serverNow - testStartTime - alreadySpent
         const remainingTime = durationMs - timeUsed
 
@@ -236,88 +215,86 @@ export default function TestCodeInterface() {
 
     if (response[current]) {
       syncServerTime()
-
       const interval = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev - 1000 < 0) {
-            // submitHandler();
-          }
-          return prev - 1000;
-        }) // countdown every second
-
+        setTimeLeft(prev => prev - 1000)
       }, 1000)
-
       return () => clearInterval(interval)
     }
   }, [data])
+
+  const activeProblem = problems[activeProblemIndex]
+
   return (
     <>
       <Header timeLeft={timeLeft} />
+      
       <section
         ref={containerRef}
-        className='h-[calc(100vh-(58px))] mt-[2px] w-full flex overflow-hidden'
+        className='h-[calc(100vh-58px)] mt-[2px] w-full flex overflow-hidden relative bg-gray-50'
       >
+        {/* LEFT PANEL - Problem Description */}
         <div
-          className='h-full flex flex-col bg-gray-50 overflow-hidden'
+          className='h-full flex flex-col bg-white overflow-hidden border-r border-gray-200'
           style={{ width: `${leftWidth}%` }}
         >
-          {/* Top: ProblemDescription */}
+          {/* Problem Description */}
           <div
-            className='overflow-y-auto border-b border-gray-300'
+            className='overflow-y-auto'
             style={{ height: `${topHeight}%` }}
           >
             <TestProblemDescription problem={activeProblem} />
           </div>
 
-          {/* Divider: vertical draggable */}
+          {/* Vertical Resize Icon */}
           <div
-            className='h-[6px] gap-1 cursor-ns-resize bg-gray-300 flex items-center justify-center'
+            className='h-1 cursor-ns-resize bg-white hover:bg-blue-500 flex items-center justify-center transition-colors group relative border-y border-gray-100'
             onMouseDown={handleVerticalMouseDown}
           >
-            <MoreHorizontal20Filled
-              style={{
-                height: '29px',
-                width: '29px'
-              }}
-            />
+            <div className='absolute bg-white group-hover:bg-blue-500 rounded-full p-1 shadow-sm border border-gray-200 group-hover:border-blue-500 transition-all'>
+              <UnfoldMore 
+                sx={{ 
+                  zIndex:1999,
+                  fontSize: 16,
+                  color: '#6b7280',
+                  transition: 'color 0.2s'
+                }} 
+                className='group-hover:!text-white'
+              />
+            </div>
           </div>
 
-          {/* Bottom: CodeOutputWindow */}
+          {/* Code Output Window */}
           <div
-            className='overflow-y-auto'
-            style={{ height: `${100 - topHeight - 1}%` }}
+            className='overflow-y-auto bg-white'
+            style={{ height: `${100 - topHeight - 0.4}%` }}
           >
-
             <CodeOutputWindow testCases={activeProblem?.testCases} />
           </div>
         </div>
 
-        {/* Divider */}
-        <div className=' flex justify-center px-[1px] items-center bg-gray-200  transition duration-150 relative z-10'>
+        {/* HORIZONTAL RESIZE ICON */}
+        <div className='w-1 flex justify-center items-center bg-white hover:bg-blue-500 transition-colors cursor-ew-resize group relative border-x border-gray-100'>
           <div
-            onMouseEnter={e => {
-              const parent = e.currentTarget.parentNode
-              parent.style.backgroundColor = '#e2e8f0' // Equivalent to bg-gray-300
-            }}
-            onMouseLeave={e => {
-              const parent = e.currentTarget.parentNode
-              parent.style.backgroundColor = '#e5e7eb' // Back to bg-gray-200
-            }}
             onMouseDown={handleMouseDown}
-            className='cursor-ew-resize gap-1 py-1  text-gray-900 select-none text-2xl  mx-auto rounded-full    z-50'
+            className='absolute z-[999] bg-white group-hover:bg-blue-500 rounded-full p-1 shadow-sm border border-gray-200 group-hover:border-blue-500 transition-all'
           >
-            {/* <ArrowLeft sx={{ marginLeft: -0.5, color: '#FFF', fontSize: 20 }} />
-            <ArrowRight sx={{ marginLeft: -2, fontSize: 20, color: '#fff' }} /> */}
-            <div className='h-[5px] w-[5px] bg-black mt-1  rounded-full'></div>
-            <div className='h-[5px] w-[5px] bg-black mt-1  rounded-full'></div>
-            <div className='h-[5px] w-[5px] bg-black mt-1 rounded-full'></div>
+            <UnfoldMore 
+              sx={{ 
+                fontSize: 16,
+                zIndex:1999,
+                color: '#6b7280',
+                transform: 'rotate(90deg)',
+                transition: 'color 0.2s'
+              }} 
+              className='group-hover:!text-white'
+            />
           </div>
         </div>
 
-        {/* Right Pane - Code */}
+        {/* RIGHT PANEL - Code Editor */}
         <div
-          className='h-full overflow-y-auto bg-white'
-          style={{ width: `${100 - leftWidth}%` }}
+          className='h-full overflow-y-auto bg-white relative'
+          style={{ width: `calc(${100 - leftWidth}% - 64px)` }}
         >
           <CodeEditor
             showConfirmBox={showConfirmBox}
@@ -326,92 +303,203 @@ export default function TestCodeInterface() {
             hasMore={problems.length > activeProblemIndex + 1}
             timeLeft={timeLeft}
             response={response}
-            submitHandler={() => {submitHandler(false)}}
+            submitHandler={() => submitHandler(false)}
             setAnswers={setAnswers}
             setSubmitting={setSubmitting}
             problem={activeProblem}
             current={current}
           />
+        </div>
 
-          <IconButton onClick={() => setCustomTestOpen(true)}  sx={{
-            position:"absolute",
-            right:0,
-            top:"100px" ,
-            bgcolor:"#1976d2" ,
-            color:"white",
-          }}>
-            <ShortText sx={{color:"#fff"}}/>
+        {/* PROBLEM NAVIGATION - Right Fixed Sidebar with circles and lines */}
+        <div className='w-16 bg-white border-l border-gray-200 flex flex-col items-center py-6 overflow-y-auto shadow-sm relative'>
+          <div className='flex flex-col items-center gap-0 relative'>
+            {problems.map((problem, index) => {
+              const isActive = index === activeProblemIndex
+              const isCompleted = answers[problem._id]?.code?.length > 0
+              const isLast = index === problems.length - 1
+              
+              return (
+                <div key={problem._id} className='flex flex-col items-center relative'>
+                  {/* Circle */}
+                  <Tooltip 
+                    title={`Problem ${index + 1}${isCompleted ? ' ✓' : ''}`} 
+                    placement="left"
+                    arrow
+                  >
+                    <button
+                      onClick={() => {
+                        setActiveProblemIndex(index)
+                        setResults([])
+                      }}
+                      disabled={isExecuting}
+                      className={`
+                        relative w-10 h-10 rounded-full flex items-center justify-center
+                        font-semibold text-sm transition-all duration-200 border-2
+                        ${isActive 
+                          ? 'bg-blue-500 text-white border-blue-600 shadow-lg' 
+                          : isCompleted 
+                            ? 'bg-white text-blue-600 border-blue-500 shadow hover:shadow-md' 
+                            : 'bg-white text-gray-400 border-gray-300 hover:border-blue-300'
+                        }
+                        ${isExecuting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                      `}
+                    >
+                      {index + 1}
+                    </button>
+                  </Tooltip>
+
+                  {/* Connecting Line */}
+                  {!isLast && (
+                    <div 
+                      className={`
+                        w-0.5 h-5 my-1 transition-all duration-200
+                        ${isCompleted && answers[problems[index + 1]._id]?.code?.length > 0
+                          ? 'bg-blue-500' 
+                          : 'bg-gray-300'
+                        }
+                      `}
+                    />
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* CUSTOM TEST TOGGLE - Fixed Button at Bottom */}
+        <Tooltip title="Custom Test Case" placement="left" arrow>
+          <IconButton 
+            onClick={() => setCustomTestOpen(true)}  
+            sx={{
+              position: "fixed",
+              right: 80,
+              bottom: 24,
+              bgcolor: "#3b82f6",
+              color: "white",
+              boxShadow: 3,
+              width: 56,
+              height: 56,
+              zIndex: 10,
+              '&:hover': {
+                bgcolor: "#2563eb",
+                boxShadow: 4,
+                transform: 'scale(1.05)',
+              },
+              transition: 'all 0.2s'
+            }}
+          >
+            <ShortText sx={{ fontSize: 28 }} />
           </IconButton>
+        </Tooltip>
+      </section>
+
+      {/* CUSTOM TEST SIDEBAR - Right Drawer */}
+      <Drawer
+        anchor="right"
+        open={customTestOpen}
+        onClose={() => setCustomTestOpen(false)}
+        PaperProps={{
+          sx: {
+            width: 450,
+            bgcolor: '#ffffff',
+            marginTop: '58px',
+            height: 'calc(100vh - 58px)',
+            boxShadow: '-4px 0 12px rgba(0,0,0,0.08)'
+          }
+        }}
+      >
+        <div className='flex flex-col h-full'>
+          {/* Header */}
+          <div className='bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between'>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Custom Test Case</h2>
+              <p className="text-sm text-gray-500 mt-0.5">Run your code with custom inputs</p>
+            </div>
+            <IconButton
+              onClick={() => setCustomTestOpen(false)}
+              size="small"
+              sx={{ 
+                color: '#6b7280',
+                '&:hover': { bgcolor: '#f3f4f6' }
+              }}
+            >
+              <Close />
+            </IconButton>
+          </div>
+
+          {/* Content */}
+          <div className='flex-1 flex flex-col overflow-hidden'>
+            {/* Input Section */}
+            <div className='flex-1 flex flex-col p-6 border-b border-gray-200'>
+              <label className='text-sm font-medium text-gray-700 mb-2'>
+                Input
+              </label>
+              <textarea
+                value={customTest}
+                onChange={(e) => setCustomTest(e.target.value)}
+                placeholder="Enter your test input here...&#10;&#10;Example:&#10;5&#10;1 2 3 4 5"
+                disabled={isRunningCustomTest}
+                className="flex-1 p-4 border border-gray-300 rounded-lg resize-none 
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
+                bg-white text-sm font-mono transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            {/* Output Section */}
+            <div className='flex-1 flex flex-col p-6 bg-gray-50'>
+              <label className='text-sm font-medium text-gray-700 mb-2'>
+                Output
+              </label>
+              <div className="flex-1 bg-white border border-gray-300 rounded-lg p-4 
+              overflow-auto font-mono text-sm">
+                {isRunningCustomTest ? (
+                  <div className='flex flex-col items-center justify-center h-full'>
+                    <div className='w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-3'></div>
+                    <p className="text-gray-500 text-sm">Running test...</p>
+                  </div>
+                ) : customOutput ? (
+                  <pre className="whitespace-pre-wrap text-gray-800 leading-relaxed">
+                    {JSON.stringify(customOutput, null, 2)}
+                  </pre>
+                ) : (
+                  <div className='flex items-center justify-center h-full text-center'>
+                    <p className="text-gray-400 text-sm">Output will appear here</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer with Run Button */}
+          <div className='border-t border-gray-200 p-6 bg-white'>
+            <button
+              onClick={runCustomCode}
+              disabled={isRunningCustomTest || !customTest.trim()}
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 
+              disabled:bg-gray-300 disabled:cursor-not-allowed
+              transition-all font-medium shadow-sm hover:shadow-md 
+              flex items-center justify-center gap-2"
+            >
+              {isRunningCustomTest ? (
+                <>
+                  <div className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+                  Running...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                  </svg>
+                  Run Test
+                </>
+              )}
+            </button>
+          </div>
         </div>
+      </Drawer>
 
-        {/* Problem Tabs */}
-      </section>
-      <section className='h-[50px] bg-white pb-1 -pt-7  z-50 left-0 absolute flex justify-center items-center gap-4 bottom-0 w-full shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]'>
-        <button
-       
-          onClick={handlePrev}
-          disabled={activeProblemIndex === 0||isExecuting}
-          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8  transition ${activeProblemIndex === 0
-            ? 'opacity-50 cursor-not-allowed bg-white '
-            : 'hover:bg-gray-200'
-            }`}
-        >
-          <IosArrowLtr24Filled style={{ height: '13px', width: '13px' }} />
-          <span className='text-gray-900 text-xs'>Prev</span>
-        </button>
-
-        <span className='text-gray-600 text-xs font-medium'>
-          {activeProblemIndex + 1} / {problems.length}
-        </span>
-
-        <button
-          onClick={handleNext}
-          disabled={activeProblemIndex === problems.length - 1 || isExecuting}
-          className={`rounded-xl cursor-pointer bg-gray-200 flex items-center justify-center px-3 h-8 transition ${activeProblemIndex === problems.length - 1
-            ? 'opacity-50 cursor-not-allowed bg-white'
-            : 'hover:bg-gray-300'
-            }`}
-        >
-          <span className='text-gray-900 text-xs'>Next</span>
-          <IosArrowRtl24Filled style={{ height: '13px', width: '13px' }} />
-        </button>
-      </section>
-
-      <section className={`bg-white ${customTestOpen ? "translate-x-0" : "translate-x-full"} shadow-xl border-l absolute z-[999] top-[60px] right-0 h-[calc(100vh-60px)] w-[400px] flex flex-col p-4`}>
-
-        {/* Close Button */}
-        <button
-          // onClick={onClose}
-          onClick={() => { setCustomTestOpen(false) }}
-          className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
-        >
-          <Close />
-        </button>
-
-        <h2 className="text-xl font-semibold mb-3">Custom Test Runner</h2>
-
-        <textarea
-          value={customTest}
-          onChange={(e) => setCustomTest(e.target.value)}
-          placeholder="Write your custom test here..."
-          className="flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-        />
-
-        <button
-          onClick={runCustomCode}
-          className="mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Run Test
-        </button>
-
-        <div className="mt-4 bg-gray-50 border rounded-lg p-3 text-sm h-[250px] overflow-auto">
-          <pre className="whitespace-pre-wrap">
-            {JSON.stringify(customOutput, null, 2)}
-          </pre>
-        </div>
-
-      </section>
-
+      {/* MODAL */}
       <Modal open={showModal} onClose={() => setShowModal(false)}>
         <Box
           sx={{
@@ -426,20 +514,24 @@ export default function TestCodeInterface() {
             borderRadius: 2,
           }}
         >
-          <Typography variant="h6" fontWeight={600}>
+          <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>
             Pending Codes
           </Typography>
 
-          <Typography sx={{ mt: 1 }}>
+          <Typography sx={{ color: '#6b7280' }}>
             Please run all the codes before submitting
           </Typography>
 
-          <Button sx={{ mt: 2 }} onClick={() => setShowModal(false)} variant="contained">
+          <Button 
+            sx={{ mt: 3 }} 
+            onClick={() => setShowModal(false)} 
+            variant="contained"
+            fullWidth
+          >
             OK
           </Button>
         </Box>
       </Modal>
-
     </>
   )
 }
