@@ -1,418 +1,6 @@
-// import React from 'react'
-// import { useTest } from '../../context/TestProvider'
-// import Loader from '../../layout/Loader'
-// import axios from 'axios'
-// import {
-//   ArrowNext20Filled,
-//   CheckmarkSquare20Filled,
-//   LockClosed16Filled
-// } from '@fluentui/react-icons'
-// import { BASE_URL, LOGO } from '../../lib/config'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { useEffect } from 'react'
-// import { useState } from 'react'
-// import { Box, Icon, IconButton, Modal } from '@mui/material'
-// import { logOutUser } from '../../redux/thunks/UserThunks'
-// import Stepper from './components/Stepper'
-// import BackGround from './BackGround'
-// // import {logoutUser} from '../../redux/thunks/UserThunks';
-
-// export default function TestAttemptPage () {
-//   const {
-//     data,
-//     current,
-//     setTest,
-//     response,
-//     test,
-//     section,
-//     loading,
-//     error,
-//     helpers
-//   } = useTest()
-//   const [loader, setLoader] = useState(false)
-//   const dispatch = useDispatch()
-//   const [isFullScreen, setIsFullScreen] = useState(true)
-//   const [autoSubmit, setAutoSubmit] = useState(false)
-//   const [showFullscreenModal, setShowFullscreenModal] = useState(true)
-//   const [exitCount, setExitCount] = useState(
-//     parseInt(localStorage.getItem('count')) || 0
-//   )
-
-//   // useEffect(() => {
-//   //   if (exitCount > 2) {
-//   //     // dispatch(logoutUser());
-//   //     // setAutoSubmit(true);
-//   //   }
-//   // }, [exitCount])
-//   // Auto fullscreen request if not already fullscreen
-//   const enterFullScreen = () => {
-//     const el = document.documentElement
-//     if (el.requestFullscreen) el.requestFullscreen()
-//     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen()
-//     else if (el.mozRequestFullScreen) el.mozRequestFullScreen()
-//     else if (el.msRequestFullscreen) el.msRequestFullscreen()
-//   }
-
-//   // Re-enter fullscreen when modal appears
-//   const reEnterFullScreen = () => {
-//     enterFullScreen()
-//     setShowFullscreenModal(false)
-//   }
-
-//   const handleKey = e => {
-//     if (e.key == 'F' || e.key == 'f') reEnterFullScreen()
-//   }
-
-//   const markUFM = async () => {
-//     try {
-//       const res = await axios.post(
-//         `${BASE_URL}/api/test/campus/mark-ufm`,
-//         {
-//           submissionId: data._id
-//         },
-//         { withCredentials: true }
-//       )
-//       // console.log(res.data.submitted)
-//       if (res.data.submitted) {
-//         setAutoSubmit(true)
-//         console.log('UFM marked, reloading page')
-//         window.location.reload()
-//       }
-//       return res.data
-//     } catch (error) {
-//       console.error('Error marking UFM:', error)
-//       return { success: false, message: 'Failed to mark UFM' }
-//     }
-//   }
-
-//   useEffect(() => {
-//     const handleFullscreenChange = () => {
-//       const isFS = !!document.fullscreenElement
-//       // setIsFullScreen(isFS)
-
-//       if (!isFS) {
-//         markUFM()
-//         setExitCount(prev => prev + 1)
-
-//         setShowFullscreenModal(true)
-//       } else {
-//         setShowFullscreenModal(false)
-//       }
-//     }
-
-//     const handleVisibilityChange = () => {
-//       if (document.visibilityState === 'hidden') {
-//         const newCount = exitCount + 1
-//         localStorage.setItem('ufm', newCount)
-//         setExitCount(newCount)
-//         alert('Tab switch detected , Another attempt may submit the quiz.')
-//         markUFM()
-//       }
-//     }
-
-//     document.addEventListener('fullscreenchange', handleFullscreenChange)
-//     document.addEventListener('visibilitychange', handleVisibilityChange)
-//     document.addEventListener('keypress', handleKey)
-//     // Optional: Warn before unload (refresh/close)
-//     // window.addEventListener('beforeunload', e => {
-//     //   e.preventDefault()
-//     //   e.returnValue = ''
-//     // })
-
-//     return () => {
-//       document.removeEventListener('fullscreenchange', handleFullscreenChange)
-//       document.removeEventListener('visibilitychange', handleVisibilityChange)
-//       // window.removeEventListener('beforeunload', () => {})
-//     }
-//   }, [])
-
-//   const userId = useSelector(s => s.auth.user._id)
-//   const testId = useSelector(s => s.auth.testId)
-//   if (loading)
-//     return (
-//       <div className='flex justify-center items-center h-screen text-2xl'>
-//         <Loader />
-//       </div>
-//     )
-
-//   if (error) return <>Error</>
-
-//   if (!helpers.hasAgreed) {
-//     return (
-//       <>
-//         <TestInstructions />
-//       </>
-//     )
-//   }
-
-//   if (helpers.isSubmitted) {
-//     return <SubmitModal />
-//   }
-//   const startSection = async () => {
-//     try {
-//       setLoader(true)
-//       const res = await axios.post(
-//         `${BASE_URL}/api/test/campus/start-section`,
-//         {
-//           testId,
-//           userId,
-//           sectionId: section.sectionId,
-//           sectionType: section.type
-//         },
-//         { withCredentials: true }
-//       )
-//       helpers.setData(prev => ({
-//         ...prev,
-//         response: [...(prev.response || []), res.data.section]
-//       }))
-//     } catch (error) {
-//       console.error(error)
-//     } finally {
-//       setLoader(false)
-//     }
-//   }
-
-//   return (
-//     <>
-//       {loader && (
-//         <>
-//           <Modal open={loader || false}>
-//             <div
-//               style={{ transform: 'translate(-50%, -50%)' }}
-//               className='relative top-[50%] left-[50%] p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-white shadow-lg'
-//               role='dialog'
-//               aria-modal='true'
-//             >
-//               <Loader />
-//             </div>
-//           </Modal>
-//         </>
-//       )}
-//       {!response ||
-//       response.length <= current ||
-//       response[current]?.isSubmitted ? (
-//         <>
-//           <header className=' z-50 fixed  top-0 w-full bg-  flex items-center px-5 py-2  '>
-//             <img src={LOGO} className='h-9' alt='' />
-//           </header>
-//           <section className='mt-[60px] pb-20 w-screen  mx-auto flex flex-col items-center space-y-4'>
-//             <Stepper test={test} current={current} startSection={0} />
-//             <BackGround />
-
-//             {test.map((s, index) => {
-//               let status
-
-//               if (current === -1) {
-//                 status = index === 0 ? 'unlocked' : 'locked'
-//               } else if (index < current) {
-//                 status = 'done'
-//                 return
-//               } else if (index == current) {
-//                 status = 'unlocked'
-//               } else {
-//                 status = 'locked'
-//               }
-
-//               return (
-//                 <>
-//                   <div
-//                     key={index}
-//                     onClick={() => {
-//                       if (status === 'unlocked') {
-//                         // startSection()
-//                       }
-//                     }}
-//                     className={`w-full relative  z-50 max-w-3xl  flex items-center justify-between px-6 py-4 rounded-lg shadow-md border-l-4 transition-all duration-200
-//                     ${status === 'done' ? 'border-green-500 bg-green-50' : ''}
-//                     ${
-//                       status === 'unlocked'
-//                         ? 'border-blue-500 bg-blue-100 hover:bg-blue-100 cursor-pointer'
-//                         : ''
-//                     }
-//                     ${
-//                       status === 'locked'
-//                         ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
-//                         : ''
-//                     }
-//                   `}
-//                   >
-//                     <div className='flex  flex-col'>
-//                       <h2 className='text-lg font-semibold'>{s.title}</h2>
-//                       <span className='text-sm capitalize text-gray-500'>
-//                         {s.type}
-//                       </span>
-
-//                       <span className='text-xs text-gray-600'>
-//                         {/* {s?.questions?.length || s?.problems?.length} Questions
-//                         for {s.maxTime} minutes */}
-//                         Status :{' '}
-//                         {status == 'locked'
-//                           ? 'Upcoming'
-//                           : status == 'done'
-//                           ? 'Completed'
-//                           : 'Current'}
-//                       </span>
-//                     </div>
-
-//                     {/* {status == 'unlocked' && (
-//                       <span className='text-xs text-gray-500 left-0 bottom-3 text-center w-full absolute'>
-//                         Click to Attempt
-//                       </span>
-//                     )} */}
-//                     <div className='ml-4'>
-//                       {status === 'locked' ? (
-//                         <LockClosed16Filled className='w-5 h-5' />
-//                       ) : status === 'done' ? (
-//                         <CheckmarkSquare20Filled className='w-5 h-5 text-green-600' />
-//                       ) : (
-//                         // <ArrowNext20Filled />
-//                         <button
-//                           onClick={() => {
-//                             startSection()
-//                           }}
-//                           className='bg-sky-700 cursor-pointer rounded-md px-3 py-1  text-xs text-white'
-//                         >
-//                           Proceed
-//                         </button>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </>
-//               )
-//             })}
-//             {/* <p>
-//               Note : All the sections are mandatory to attempt then only the
-//               submmission would be counted
-//             </p> */}
-//           </section>
-//         </>
-//       ) : (
-//         <>
-//           {section.type == 'quiz' ? (
-//             <>
-//               <TestQuizInterface autoSubmit={autoSubmit} />
-//             </>
-//           ) : (
-//             <>
-//               <TestCodingInterface autoSubmit={autoSubmit} />
-//             </>
-//           )}
-//         </>
-//       )}
-//       <Modal
-//         open={showFullscreenModal || autoSubmit}
-//         onClose={() => {}}
-//         sx={{ border: 'none' }}
-//         aria-labelledby='fullscreen-warning'
-//         aria-describedby='fullscreen-required'
-//       >
-//         <Box className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-white p-6 rounded-md shadow-lg w-[90%] max-w-[400px] text-center'>
-//           {!autoSubmit ? (
-//             <>
-//               <h2 className='text-xl font-semibold text-red-600 mb-2'>
-//                 Fullscreen Required
-//               </h2>
-
-//               {exitCount >= 2 ? (
-//                 <p className='text-sm text-gray-600 mb-4'>
-//                   You have exited fullscreen mode multiple times. Please try
-//                   again to continue the test.
-//                 </p>
-//               ) : exitCount >= 1 ? (
-//                 <p className='text-gray-700 mb-4'>
-//                   Warning: One more attempt to leave fullscreen will result in
-//                   automatic submission.
-//                 </p>
-//               ) : (
-//                 <p className='text-gray-700 mb-4'>
-//                   Please switch to fullscreen mode to continue the test.
-//                 </p>
-//               )}
-
-//               <button
-//                 onClick={reEnterFullScreen}
-//                 className='bg-blue-600 cursor-pointer hover:bg-blue-700 text-white px-4 py-2 rounded-md'
-//               >
-//                 Enter Fullscreen (Press F)
-//               </button>
-//             </>
-//           ) : (
-//             <>
-//               <div className='flex items-center gap-2 mb-2'>
-//                 <svg
-//                   className='w-6 h-6 text-red-600'
-//                   fill='none'
-//                   stroke='currentColor'
-//                   viewBox='0 0 24 24'
-//                 >
-//                   <path
-//                     strokeLinecap='round'
-//                     strokeLinejoin='round'
-//                     strokeWidth={2}
-//                     d='M12 9v2m0 4h.01M5.93 5.93l12.14 12.14M12 5v.01M5 12H4.99M19 12h.01M12 19v.01'
-//                   />
-//                 </svg>
-//                 <h2 className='text-xl font-semibold text-red-600'>
-//                   Unfair Means Detected
-//                 </h2>
-//               </div>
-//               <p className='text-gray-700'>
-//                 Your test is being auto-submitted due to policy violation.
-//               </p>
-//             </>
-//           )}
-//         </Box>
-//       </Modal>
-//     </>
-//   )
-// }
-// const SubmitModal = () => {
-//   const [count, setCount] = useState(5)
-//   const dispacth = useDispatch()
-//   const handleLogout = () => {
-//     dispacth(logOutUser())
-//   }
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setCount(prev => {
-//         if (prev <= 1) {
-//           dispacth(logOutUser())
-//         }
-//         return prev - 1
-//       })
-//     }, 1000)
-//   }, [])
-//   return (
-//     <div className='fixed inset-0 z-[999] grid h-screen w-screen place-items-center bg-opacity-60 backdrop-blur-sm'>
-//       <div className='relative m-4 p-6 w-2/5 min-w-[40%] max-w-[40%] rounded-lg bg-gray-50 shadow-lg transition-all duration-300 scale-100 opacity-100 translate-y-0'>
-//         <div className=' py-4 flex gap-3 items-center text-slate-600 font-light'>
-//           <span className='flex  w-[140px] justify-center'>
-//             <img
-//               className='h-20'
-//               src='https://cdn-icons-png.freepik.com/256/18945/18945371.png?uid=R128329910&ga=GA1.1.1460744493.1740725947&semt=ais_hybrid'
-//               alt=''
-//             />
-//           </span>
-//           <p>
-//             Your test has been successfully queued for evaluation. You will be
-//             notified once the evaluation is complete.
-//           </p>
-//         </div>
-//         <div className='flex justify-end pt-6'>
-//           <button
-//             onClick={handleLogout}
-//             className='rounded-md cursor-pointer bg-gray-600 py-2 px-4 text-sm text-white hover:bg-green-700'
-//           >
-//             Close {'( ' + count + ' )'}
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 import WarningModal from './components/WarningModal'
 import TestInstructions from './TestInstructions'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import {
   handleFullScreenChange,
   handleVisibilityChange,
@@ -426,9 +14,10 @@ import Loader from './components/Loader'
 import TestSubmissionModal from './TestSubmissionModal'
 import TestUserDetailsInterface from './TestUserDetailsInterface'
 import { useTest } from './context/TestProvider'
-import axios from 'axios';
+import axios from 'axios'
 import { BASE_URL } from '../../lib/config'
-export default function TestAttemptPage () {
+
+export default function TestAttemptPage() {
   const {
     hasAgreed,
     loading,
@@ -444,6 +33,7 @@ export default function TestAttemptPage () {
     setUFMSubmit,
     ufmSubmit
   } = useTest()
+  
   const [loader, setLoader] = useState(false)
   const [warningModal, setWarningModal] = useState({
     open: false,
@@ -452,43 +42,329 @@ export default function TestAttemptPage () {
     color: '',
     justCame: true
   })
+  
+  const devToolsCheckInterval = useRef(null)
+  const blurCheckInterval = useRef(null)
+  const originalWindowSize = useRef({ width: window.innerWidth, height: window.innerHeight })
+  
+  // Track UFM call state to prevent duplicates
+  const ufmCallInProgress = useRef(false)
+  const lastUFMCall = useRef(0)
+  const UFM_COOLDOWN = 2000 // 2 seconds cooldown between UFM calls
+  
+  // Track specific violation states to prevent repeated calls for same issue
+  const activeViolations = useRef({
+    devTools: false,
+    blur: false,
+    fullscreen: false,
+    visibility: false,
+    resize: false
+  })
 
-  const handleUFM = async () => {
-    try{
-      const res = await axios.put(`${BASE_URL}/api/exam/ufm-count`,  {
-        submissionId: submissionId
-      },{withCredentials:true});
+  const handleUFM = async (violationType = 'general') => {
+    const now = Date.now()
+    
+    // Prevent duplicate calls within cooldown period
+    if (ufmCallInProgress.current || (now - lastUFMCall.current < UFM_COOLDOWN)) {
+      console.log('UFM call skipped - cooldown active')
+      return
+    }
+    
+    // Prevent duplicate calls for the same active violation
+    if (activeViolations.current[violationType]) {
+      console.log(`UFM call skipped - ${violationType} already logged`)
+      return
+    }
+    
+    ufmCallInProgress.current = true
+    activeViolations.current[violationType] = true
+    lastUFMCall.current = now
+    
+    try {
+      const res = await axios.put(
+        `${BASE_URL}/api/exam/ufm-count`,
+        {
+          submissionId: submissionId
+        },
+        { withCredentials: true }
+      )
       setUFMSubmit(res.data.isSubmitted)
-      console.log(res);
-    }catch(e) {
-      console.log(e);
+      console.log('UFM logged:', violationType, res)
+    } catch (e) {
+      console.log('UFM error:', e)
+    } finally {
+      ufmCallInProgress.current = false
+      
+      // Clear the violation flag after cooldown to allow future detections
+      setTimeout(() => {
+        activeViolations.current[violationType] = false
+      }, UFM_COOLDOWN)
     }
   }
 
-  useEffect(() => {
-    const onVisibilityChange = () => {
-      if (document.visibilityState == 'hidden') {
-        handleUFM()
-        handleVisibilityChange({ setWarningModal })
+  // 🚨 DETECT DEVTOOLS OPENING
+  const detectDevTools = () => {
+    const threshold = 160
+    const widthThreshold = window.outerWidth - window.innerWidth > threshold
+    const heightThreshold = window.outerHeight - window.innerHeight > threshold
+    
+    // Check if devtools is docked
+    if (widthThreshold || heightThreshold) {
+      if (!activeViolations.current.devTools) {
+        handleUFM('devTools');
+        setWarningModal({
+          open: true,
+          warning: '⚠️ Developer tools detected! Close them immediately.',
+          count: 0,
+          color: 'red',
+          justCame: false
+        })
+      }
+      return true
+    }
+
+    // Detect undocked devtools via console
+    const start = performance.now()
+    debugger // This pauses if devtools is open
+    const end = performance.now()
+    
+    if (end - start > 100) {
+      if (!activeViolations.current.devTools) {
+        handleUFM('devTools')
+        setWarningModal({
+          open: true,
+          warning: '⚠️ Developer tools detected! Close them immediately.',
+          count: 0,
+          color: 'red',
+          justCame: false
+        })
+      }
+      return true
+    }
+
+    // Clear devTools violation if no longer detected
+    if (activeViolations.current.devTools && !widthThreshold && !heightThreshold) {
+      activeViolations.current.devTools = false
+    }
+
+    return false
+  }
+
+  // 🚨 DETECT WINDOW BLUR (Focus Loss)
+  const handleWindowBlur = () => {
+    if (!hasAgreed || isSubmitted) return
+    
+    if (!activeViolations.current.blur) {
+      handleUFM('blur')
+      setWarningModal(prev => ({
+        open: true,
+        warning: '⚠️ Window focus lost! Keep the test window focused.',
+        count: prev.count + 1,
+        color: 'orange',
+        justCame: false
+      }))
+    }
+  }
+
+  // 🚨 DETECT WINDOW RESIZE
+  const handleWindowResize = () => {
+    if (!hasAgreed || isSubmitted) return
+    
+    const currentWidth = window.innerWidth
+    const currentHeight = window.innerHeight
+    const originalWidth = originalWindowSize.current.width
+    const originalHeight = originalWindowSize.current.height
+    
+    // Allow small tolerance for browser chrome changes
+    const widthDiff = Math.abs(currentWidth - originalWidth)
+    const heightDiff = Math.abs(currentHeight - originalHeight)
+    
+    if (widthDiff > 50 || heightDiff > 50) {
+      if (!activeViolations.current.resize) {
+        handleUFM('resize')
+        setWarningModal({
+          open: true,
+          warning: '⚠️ Window resize detected! Keep the window maximized.',
+          count: 0,
+          color: 'orange',
+          justCame: false
+        })
       }
     }
-    const onFullScreenChange = () => {
-      if (!document.fullscreenElement) {
-        handleUFM();
-        handleFullScreenChange({ setWarningModal })
+  }
+
+  // 🚨 PREVENT RIGHT CLICK
+  const preventRightClick = (e) => {
+    e.preventDefault()
+    handleUFM('rightClick')
+    setWarningModal({
+      open: true,
+      warning: '⚠️ Right-click is disabled during the test.',
+      count: 0,
+      color: 'red',
+      justCame: false
+    })
+  }
+
+  // 🚨 PREVENT COMMON KEYBOARD SHORTCUTS
+  const preventShortcuts = (e) => {
+    // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+    if (
+      e.keyCode === 123 || // F12
+      (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+      (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+      (e.ctrlKey && e.shiftKey && e.keyCode === 67) || // Ctrl+Shift+C
+      (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+      (e.metaKey && e.altKey && e.keyCode === 73) || // Cmd+Option+I (Mac)
+      (e.metaKey && e.altKey && e.keyCode === 74) || // Cmd+Option+J (Mac)
+      (e.metaKey && e.altKey && e.keyCode === 67) || // Cmd+Option+C (Mac)
+      (e.ctrlKey && e.keyCode === 83) || // Ctrl+S (Save)
+      (e.ctrlKey && e.keyCode === 80) || // Ctrl+P (Print)
+      (e.metaKey && e.keyCode === 83) || // Cmd+S (Save Mac)
+      (e.metaKey && e.keyCode === 80) // Cmd+P (Print Mac)
+    ) {
+      e.preventDefault()
+      handleUFM('shortcut')
+      setWarningModal({
+        open: true,
+        warning: '⚠️ Keyboard shortcuts are disabled during the test.',
+        count: 0,
+        color: 'red',
+        justCame: false
+      })
+    }
+  }
+
+  // 🚨 PREVENT COPY/PASTE/CUT (except in code editor areas)
+  const preventCopyPaste = (e) => {
+    // Allow in specific elements like code editors
+    if (
+      e.target.tagName === 'TEXTAREA' ||
+      e.target.tagName === 'INPUT' ||
+      e.target.contentEditable === 'true' ||
+      e.target.closest('.monaco-editor') || // Monaco editor
+      e.target.closest('.code-editor') // Custom code editor
+    ) {
+      return
+    }
+
+    e.preventDefault()
+    handleUFM('copyPaste')
+    setWarningModal({
+      open: true,
+      warning: '⚠️ Copy/Paste is restricted during the test.',
+      count: 0,
+      color: 'orange',
+      justCame: false
+    })
+  }
+
+  useEffect(() => {
+    // Only enforce these rules after test has started
+    if (!hasAgreed || isSubmitted) return
+
+    // Visibility change detection
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        if (!activeViolations.current.visibility) {
+          handleUFM('visibility')
+          handleVisibilityChange({ setWarningModal })
+        }
+      } else {
+        // Clear visibility violation when user returns
+        activeViolations.current.visibility = false
       }
     }
 
+    // Fullscreen change detection
+    const onFullScreenChange = () => {
+      if (!document.fullscreenElement) {
+        if (!activeViolations.current.fullscreen) {
+          handleUFM('fullscreen')
+          handleFullScreenChange({ setWarningModal })
+        }
+      } else {
+        // Clear fullscreen violation when user returns to fullscreen
+        activeViolations.current.fullscreen = false
+      }
+    }
+
+    // Add all event listeners
     document.addEventListener('visibilitychange', onVisibilityChange)
     document.addEventListener('fullscreenchange', onFullScreenChange)
+    document.addEventListener('contextmenu', preventRightClick)
+    document.addEventListener('keydown', preventShortcuts)
+    document.addEventListener('copy', preventCopyPaste)
+    document.addEventListener('cut', preventCopyPaste)
+    document.addEventListener('paste', preventCopyPaste)
+    window.addEventListener('blur', handleWindowBlur)
+    window.addEventListener('resize', handleWindowResize)
+
+    // Start devtools detection (check every 1 second)
+    devToolsCheckInterval.current = setInterval(detectDevTools, 1000)
+
+    // Continuous blur check (some students alt-tab quickly)
+    blurCheckInterval.current = setInterval(() => {
+      if (!document.hasFocus() && hasAgreed && !isSubmitted) {
+        handleWindowBlur()
+      }
+    }, 500)
+
+    // Disable text selection on the entire page
+    document.body.style.userSelect = 'none'
+    document.body.style.webkitUserSelect = 'none'
+    document.body.style.msUserSelect = 'none'
+
+    // Store initial window size
+    originalWindowSize.current = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+
+    // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', onVisibilityChange)
       document.removeEventListener('fullscreenchange', onFullScreenChange)
+      document.removeEventListener('contextmenu', preventRightClick)
+      document.removeEventListener('keydown', preventShortcuts)
+      document.removeEventListener('copy', preventCopyPaste)
+      document.removeEventListener('cut', preventCopyPaste)
+      document.removeEventListener('paste', preventCopyPaste)
+      window.removeEventListener('blur', handleWindowBlur)
+      window.removeEventListener('resize', handleWindowResize)
+
+      if (devToolsCheckInterval.current) {
+        clearInterval(devToolsCheckInterval.current)
+      }
+      if (blurCheckInterval.current) {
+        clearInterval(blurCheckInterval.current)
+      }
+
+      // Re-enable text selection
+      document.body.style.userSelect = ''
+      document.body.style.webkitUserSelect = ''
+      document.body.style.msUserSelect = ''
     }
-  }, [])
-  
+  }, [hasAgreed, isSubmitted])
+
+  // 🚨 CLEAR CONSOLE PERIODICALLY
+  useEffect(() => {
+    if (!hasAgreed || isSubmitted) return
+
+    const clearConsoleInterval = setInterval(() => {
+      console.clear()
+      console.log('%c⚠️ STOP!', 'color: red; font-size: 50px; font-weight: bold;')
+      console.log(
+        '%cThis is a secure exam environment. Any attempt to use developer tools will be logged.',
+        'font-size: 16px;'
+      )
+    }, 8000)
+
+    return () => clearInterval(clearConsoleInterval)
+  }, [hasAgreed, isSubmitted])
+
   if (error) return <>Error</>
-  if (loading) return <><Loader/></>
+  if (loading) return <Loader />
 
   if (!userDetails || userDetails.length === 0) {
     return <TestUserDetailsInterface />
@@ -496,10 +372,9 @@ export default function TestAttemptPage () {
 
   if (!hasAgreed) return <TestInstructions />
   if (isSubmitted) return <TestSubmissionModal />
-  
 
   return (
-    <div className='max-h-screen  overflow-y-hidden'>
+    <div className='max-h-screen overflow-y-hidden'>
       {!response ||
       response.length <= current ||
       response[current]?.isSubmitted ? (
@@ -538,7 +413,7 @@ export default function TestAttemptPage () {
           }}
           warning={
             warningModal.justCame
-              ? 'Please Switch to Full Screen '
+              ? 'Please Switch to Full Screen'
               : warningModal.warning
           }
           color={warningModal.justCame ? 'green' : warningModal.color}
