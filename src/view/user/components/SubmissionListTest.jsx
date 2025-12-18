@@ -44,7 +44,7 @@ const SubmissionList = ({ currCategory }) => {
   }
   return (
     <>
-      {/* {loading ? (
+       {loading ? (
         <div>
           <Loader />
         </div>
@@ -117,8 +117,7 @@ const SubmissionList = ({ currCategory }) => {
              Practice Now
            </a>
          </Link>
-        <></>
-      )} */}
+      )} 
     </>
   )
 }

@@ -1,1 +1,0 @@
-import{d as a,B as e}from"./index-BWpwM6wm.js";const t={GET_USER_GROUP:"/api/data/user/groups/",GET_USER_INVITE:"/api/data/user/invites/",GET_USER_SECTION:"/api/data/user/sections/"};a.create({baseURL:`${e}`,headers:{"Content-Type":"application/json"}});const i=a.create({baseURL:`${e}`,withCredentials:!0,headers:{"Content-Type":"application/json"}});export{t as G,i as u};
