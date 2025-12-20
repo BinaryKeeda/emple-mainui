@@ -129,6 +129,7 @@ const App = () => {
       }
     }
   }, [user])
+  // new change
   const { loading } = useSelector(s => s.auth)
   return loading ? (
     <div className='flex justify-center items-center h-screen w-screen'>
