@@ -20,12 +20,6 @@ jobs:
       - name: Reach Place
         run: cd 
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
