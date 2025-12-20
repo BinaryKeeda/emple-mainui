@@ -1,9 +1,9 @@
-export const BASE_URL =  false ? 'http://localhost:5001' : 'https://api.binarykeeda.com';
-export const GOOGLE_CLIENT_ID = "969367563916-sco9e8grkep5rf113sk0bkik1aert4fr.apps.googleusercontent.com";
-export const CODE_EXECUTION_API = "https://execution.api.binarykeeda.com" ||  "https://judge0.binarykeeda.com";
-export const MESSAGE_QUEUE_URL = false ? "http://localhost:3001" : "https://evaluator.binarykeeda.com";
-export const PAYMENT_KEY =  false ?  "rzp_test_RGIjVTm6peDV3h" : "rzp_live_Ri4zDpRTJwCTaV" 
-export const PAYMENT_URL =  false ?  "http://localhost:5007" : "https://payment.binarykeeda.com" 
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const GOOGLE_CLIENT_ID =  import.meta.env.VITE_GOOGLE_CLIENT_ID;
+export const CODE_EXECUTION_API = import.meta.env.VITE_CODE_EXECUTION_API;
+export const MESSAGE_QUEUE_URL = import.meta.env.VITE_MESSAGE_QUEUE_URL;
+export const PAYMENT_KEY =  import.meta.env.VITE_PAYMENT_KEY;
+export const PAYMENT_URL =  import.meta.env.VITE_PAYMENT_URL;
 // export const BASE_URL =  import.meta.env.VITE_API_BASE_URL;
 // export const GOOGLE_CLIENT_ID = "969367563916-sco9e8grkep5rf113sk0bkik1aert4fr.apps.googleusercontent.com";
 // export const CODE_EXECUTION_API = "https://execution.api.binarykeeda.com" ||  "https://judge0.binarykeeda.com";
