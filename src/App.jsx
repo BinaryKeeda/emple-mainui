@@ -159,7 +159,7 @@ const App = () => {
                   {/*                        Public Routes Starts                   */}
                   {/* ============================================================= */}
 
-                  <Route path='/' element={<NotFound />} />
+                  <Route path='/' element={<Home />} />
                   {/* <Route path="/" element={<>home</>} /> */}
                   <Route path='/profile/:id' element={<UserProfile />} />
                   <Route path='/counselling' element={<CounsellingHome />} />
