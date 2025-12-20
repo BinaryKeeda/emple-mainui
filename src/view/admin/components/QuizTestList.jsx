@@ -17,7 +17,7 @@ const QuizTestList = ({ type }) => {
     sortOrder: "desc",
   });
 
-  const queryKey = [type, { endpoint: `${type}`, params: filters }];
+  const queryKey = ["admin-" + type, { endpoint: `${type}`, params: filters }];
 
   const { data, isLoading } = useQuery({
     queryKey,

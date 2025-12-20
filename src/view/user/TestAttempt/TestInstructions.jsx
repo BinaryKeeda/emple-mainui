@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useTest } from '../../../context/TestProvider'
 import { BASE_URL, LOGO } from '../../../lib/config'
 import axios from 'axios'
 import { useSnackbar } from '../../../context/SnackBarContext'
 import { Modal } from '@mui/material'
 import Loader from '../../../layout/Loader'
+import { useTest } from '../../test/context/TestProvider'
 
 export default function TestInstructions () {
   const { test, testResponse, setHasAgreed ,setStartedAt } = useTest()

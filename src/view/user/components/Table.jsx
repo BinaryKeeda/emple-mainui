@@ -8,7 +8,9 @@ import {
   setFilter
 } from '../../../redux/reducers/quizReducer'
 import Loader from '../../../layout/Loader'
-import { TextField, MenuItem } from '@mui/material'
+import { TextField, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material'
+import { useState } from 'react'
+import Coin from '../../../utilities/Coin'
 
 const Table = ({ currCategory }) => {
   const {
@@ -20,6 +22,24 @@ const Table = ({ currCategory }) => {
     currentPage
   } = useSelector(s => s.quiz)
   const dispatch = useDispatch()
+
+  // ---------------------- MODAL STATE ------------------------
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedQuiz, setSelectedQuiz] = useState(null)
+
+  const handleOpenModal = (quiz) => {
+    setSelectedQuiz(quiz)
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+    setSelectedQuiz(null)
+  }
+
+  const handleProceed = () => {
+    window.location.href = `/user/quiz/${selectedQuiz.slug}`
+  }
 
   // 🔹 Difficulty Sort
   const handleDifficultySort = () => {
@@ -82,6 +102,7 @@ const Table = ({ currCategory }) => {
 
   return (
     <div className='relative flex flex-col w-full h-full overflow-scroll custom-scrollbar bg-primary shadow-md rounded-lg bg-clip-border'>
+
       {/* 🔹 Filters Row */}
       <div className='flex justify-l items-center p-3 gap-4'>
         <TextField
@@ -142,46 +163,51 @@ const Table = ({ currCategory }) => {
                 </th>
               </tr>
             </thead>
+
             <tbody>
-              {data[currentPage]?.map((i, key) => (
-                <tr
-                  key={key}
-                  className='hover bg-primary hover:bg-support border-b border-slate-200'
-                >
-                  <td className='p-4 py-5'>
-                    <p className='block font-semibold text-sm text-slate-800'>
-                      {i.title}
-                    </p>
-                  </td>
-                  <td className='p-4 py-5'>
-                    <p className='text-sm text-slate-500'>{i.difficulty}</p>
-                  </td>
-                  <td className='p-4 py-5'>
-                    <p className='text-sm text-slate-500'>
-                      {i.duration + ' min'}
-                    </p>
-                  </td>
-                  <td className='p-4 py-5'>
-                    {i?.isSubmitted ? (
-                      <Link className='text-xs px-4 py-2 rounded-full font-medium text-green-600 bg-green-100 hover:bg-green-200 transition'>
-                        Submitted
-                      </Link>
-                    ) : i?.hasAttempted === 0 ? (
-                      <Link
-                        to={`/user/quiz/${i.slug}`}
-                        className='text-xs px-5 py-2 rounded-full font-medium text-white bg-sky-600 hover:bg-sky-500 transition'
-                      >
-                        Attempt
-                      </Link>
-                    ) : (
-                      <div className='flex items-center gap-2 text-slate-500'>
-                        <LockRounded fontSize='small' />
-                        <p className='text-sm'>Locked</p>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {data[currentPage]?.map((i, key) => {
+                const price = i?.type === "test" ? 10 : 5
+
+                return (
+                  <tr
+                    key={key}
+                    className='hover bg-primary hover:bg-support border-b border-slate-200'
+                  >
+                    <td className='p-4 py-5'>
+                      <p className='block font-semibold text-sm text-slate-800'>
+                        {i.title}
+                      </p>
+                    </td>
+                    <td className='p-4 py-5'>
+                      <p className='text-sm text-slate-500'>{i.difficulty}</p>
+                    </td>
+                    <td className='p-4 py-5'>
+                      <p className='text-sm text-slate-500'>
+                        {i.duration + ' min'}
+                      </p>
+                    </td>
+                    <td className='p-4 py-5'>
+                      {i?.isSubmitted ? (
+                        <Link className='text-xs px-4 py-2 rounded-full font-medium text-green-600 bg-green-100 hover:bg-green-200 transition'>
+                          Submitted
+                        </Link>
+                      ) : i?.hasAttempted === 0 ? (
+                        <button
+                          onClick={() => handleOpenModal(i)}
+                          className='text-xs px-5 py-2 rounded-full font-medium text-white bg-sky-600 hover:bg-sky-500 transition'
+                        >
+                          Attempt
+                        </button>
+                      ) : (
+                        <div className='flex items-center gap-2 text-slate-500'>
+                          <LockRounded fontSize='small' />
+                          <p className='text-sm'>Locked</p>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
 
@@ -209,6 +235,36 @@ const Table = ({ currCategory }) => {
           </div>
         </>
       )}
+
+      {/* ------------------------- PAYMENT CONFIRMATION MODAL ------------------------- */}
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Confirm Attempt</DialogTitle>
+
+        <DialogContent>
+          <Typography>
+            {selectedQuiz?.type === "test"
+              ? "Attempting this test will cost you $10."
+              : <p className='flex gap-1 items-center'>
+
+                {"Attempting this quiz will cost you  5"} <Coin />
+                  Do you want to continue?
+              </p>
+            }
+          </Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Cancel</Button>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleProceed}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

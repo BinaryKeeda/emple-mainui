@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 import { BASE_URL } from '../../../lib/config'
 import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function Addquiz ({ setModalClose }) {
   const user = useSelector(state => state.auth.user)
@@ -31,7 +32,7 @@ export default function Addquiz ({ setModalClose }) {
     category: '',
     difficulty: ''
   })
-
+  const queryClient = useQueryClient();
   const changeHandler = e => {
     const { name, value } = e.target
     setFormData({
@@ -48,7 +49,7 @@ export default function Addquiz ({ setModalClose }) {
     const { title, marks, duration, category, difficulty } = formData
 
     // Basic validation
-    if (!title || !marks || !duration || !category || !difficulty) {
+    if (!title || !marks || !duration || !category) {
       enqueueSnackbar('Please fill in all required fields.', {
         variant: 'warning'
       })
@@ -70,9 +71,11 @@ export default function Addquiz ({ setModalClose }) {
       }) 
       const quizId = res.data.quiz._id;
 
-      setModalClose(false)
       enqueueSnackbar('Quiz added successfully 🎉', { variant: 'success' })
       // window.location.reload()
+      await queryClient.invalidateQueries(['admin-quiz']);
+      setModalClose(false)
+
       navigate('/admin/edit/quiz/'+quizId)
     } catch (error) {
       console.error(error)

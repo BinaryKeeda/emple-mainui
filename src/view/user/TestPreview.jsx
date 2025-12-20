@@ -1,340 +1,292 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { BASE_URL } from '../../lib/config'
-import { useParams } from 'react-router-dom'
-import { IconButton } from '@mui/material'
-import { ArrowBackIos, ArrowForward, ArrowForwardIos } from '@mui/icons-material'
-
-/** ==== Compute Full Test + Section Analysis ==== */
-/** ==== Compute Full Test + Section Analysis ==== */
-const computeAnalysis = (response, testId) => {
-  let totalMarks = 0
-  let obtainedMarks = 0
-  let negativeMarks = 0
-  let sectionAnalysis = []
-
-  response.forEach(section => {
-    const meta = testId.sections.find(s => s._id === section.sectionId)
-    const questions = meta?.questionSet || []
-
-    let sectionTotal = 0
-    let sectionObtained = 0
-    let sectionNegative = 0
-    let correctCount = 0
-    let wrongCount = 0
-    let skippedCount = 0
-
-    /** === QUIZ SECTION === */
-    if (section.sectionType === 'Quiz') {
-      // Flatten user's answers into a single map: { qid: markedAnswer }
-      const userAnswers = Object.assign({}, ...section.quizAnswers)
-
-      questions.forEach(q => {
-        const markedAnswer = userAnswers[q._id] || null
-        sectionTotal += q.marks
-        totalMarks += q.marks
-
-        if (!markedAnswer) {
-          skippedCount++
-          return
-        }
-
-        let isCorrect = false
-        if (q.category === 'Text') {
-          isCorrect =
-            q.answer?.trim().toLowerCase() ===
-            markedAnswer?.trim().toLowerCase()
-        } else {
-          const correctOption = q.options.find(o => o.isCorrect)
-          isCorrect = correctOption?.text === markedAnswer
-        }
-
-        if (isCorrect) {
-          sectionObtained += q.marks
-          obtainedMarks += q.marks
-          correctCount++
-        } else {
-          wrongCount++
-          if (q.negative) {
-            sectionNegative += q.negative
-            negativeMarks += q.negative
-          }
-        }
-      })
-    }
-
-    /** === CODING SECTION === */
-    if (section.sectionType === 'Coding') {
-      section.codingAnswers?.forEach(ansBlock => {
-        const qid = Object.keys(ansBlock)[0]
-        const codeData = ansBlock[qid]
-
-        const totalCases = codeData.totalTestCases || 0
-        const passedCases = codeData.passedTestCases || 0
-
-        sectionTotal += totalCases
-        sectionObtained += passedCases
-        totalMarks += totalCases
-        obtainedMarks += passedCases
-      })
-    }
-
-    sectionAnalysis.push({
-      sectionName: meta?.name || 'Untitled Section',
-      sectionType: section.sectionType,
-      totalMarks: sectionTotal,
-      obtainedMarks: sectionObtained,
-      negativeMarks: sectionNegative,
-      correctCount,
-      wrongCount,
-      skippedCount,
-    })
-  })
-
-  return {
-    totalMarks,
-    obtainedMarks,
-    negativeMarks,
-    cumulativeMarks: obtainedMarks - negativeMarks,
-    sectionAnalysis,
-    verdict: obtainedMarks - negativeMarks >= totalMarks * 0.4 ? 'Pass' : 'Fail' // 40% pass
-  }
-}
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../lib/config";
+import { useParams } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 const TestSeriesPreview = () => {
-  const [data, setData] = useState(null)
-  const [analysis, setAnalysis] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
+  const [data, setData] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
-  const { id: responseId } = useParams()
+  const { id: responseId } = useParams();
 
   useEffect(() => {
     const fetchTestResponse = async () => {
       try {
         const res = await axios.get(
           `${BASE_URL}/api/test/response/${responseId}`,
-          {
-            withCredentials: true
-          }
-        )
+          { withCredentials: true }
+        );
+
         if (res.data?.status) {
-          const result = res.data.data
-          setData(result)
-          const stats = computeAnalysis(result.response, result.testId)
-          setAnalysis(stats)
+          const result = res.data.data;
+          setData(result);
+          setAnalysis(
+            computeAnalysis(result.response, result.testSnapshot)
+          );
         }
       } catch (err) {
-        console.error('Error fetching preview:', err.message)
+        console.error("Error fetching preview:", err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
+    };
+
+    fetchTestResponse();
+  }, [responseId]);
+
+  if (loading) return <p className="text-center py-6">Loading...</p>;
+  if (!data) return <p className="text-center text-red-500 py-6">No data found</p>;
+
+  const { response, testSnapshot } = data;
+
+  if (!response || response.length === 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-xl font-bold">Test Preview</h2>
+        <p className="mt-4 text-red-500">
+          No responses available for this test.
+        </p>
+      </div>
+    );
+  }
+
+  /* Pagination Handlers */
+  const nextSection = () => {
+    if (currentSectionIndex < testSnapshot.length - 1) {
+      setCurrentSectionIndex(currentSectionIndex + 1);
     }
-    fetchTestResponse()
-  }, [responseId])
+  };
 
-  if (loading) return <p className='text-center py-6'>Loading...</p>
-  if (!data)
-    return <p className='text-center py-6 text-red-500'>No data found</p>
+  const prevSection = () => {
+    if (currentSectionIndex > 0) {
+      setCurrentSectionIndex(currentSectionIndex - 1);
+    }
+  };
 
-  const { testId, response } = data
-  const section = response[currentSectionIndex]
-  const sectionMeta = testId.sections.find(s => s._id === section.sectionId)
-  const sectionName = sectionMeta?.name || `Section ${currentSectionIndex + 1}`
-  const sectionType = section.sectionType
+  const currentSectionSnap = testSnapshot[currentSectionIndex];
+  const currentSectionResponse = response.find(
+    (s) => s.sectionId === currentSectionSnap?.sectionId
+  );
 
   return (
-    <div className='p-6 bg-gray-50 min-h-screen'>
-      <h2 className='text-3xl font-bold mb-6'>Test Preview: {testId?.name}</h2>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-gray-800">Test Preview</h2>
 
-      {/* ==== Full Test Analysis ==== */}
-      {analysis && (
-        <div className='bg-white p-6 rounded-xl shadow-lg mb-6 border border-gray-200'>
-          <div className='flex justify-between items-center border-b pb-3 mb-4'>
-            <h3 className='text-xl font-semibold text-gray-800'>
-              Full Test Analysis
-            </h3>
-            <span
-              className={`px-4 py-1.5 rounded-full text-sm font-medium border ${analysis.verdict === 'Pass'
-                  ? 'bg-green-50 text-green-700 border-green-200'
-                  : 'bg-red-50 text-red-700 border-red-200'
-                }`}
-            >
-              {analysis.verdict}
-            </span>
-          </div>
-
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-            <div className='bg-gray-50 p-4 rounded-lg border border-gray-100'>
-              <p className='text-xs uppercase tracking-wider text-gray-500'>
-                Total Marks
-              </p>
-              <p className='mt-1 text-lg font-bold text-gray-800'>
-                {analysis.totalMarks}
-              </p>
-            </div>
-
-            <div className='bg-gray-50 p-4 rounded-lg border border-gray-100'>
-              <p className='text-xs uppercase tracking-wider text-gray-500'>
-                Obtained
-              </p>
-              <p className='mt-1 text-lg font-bold text-green-600'>
-                {analysis.obtainedMarks}
-              </p>
-            </div>
-
-            <div className='bg-gray-50 p-4 rounded-lg border border-gray-100'>
-              <p className='text-xs uppercase tracking-wider text-gray-500'>
-                Negative
-              </p>
-              <p className='mt-1 text-lg font-bold text-red-500'>
-                {analysis.negativeMarks}
-              </p>
-            </div>
-
-            <div className='bg-gray-50 p-4 rounded-lg border border-gray-100'>
-              <p className='text-xs uppercase tracking-wider text-gray-500'>
-                Cumulative
-              </p>
-              <p className='mt-1 text-lg font-bold text-gray-800'>
-                {analysis.cumulativeMarks}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ==== Section Analysis Table ==== */}
-      {analysis && (
-        <div className='bg-white overflow-auto p-6 rounded-lg shadow mb-6'>
-          <h3 className='text-xl font-semibold mb-4'>Section Analysis</h3>
-          <table className='w-full overflow-x-auto max-w-screen text-sm border'>
-            <thead className='bg-gray-100'>
-              <tr>
-                <th className='border p-2'>Section</th>
-                <th className='border p-2'>Type</th>
-                <th className='border p-2'>Total</th>
-                <th className='border p-2'>Obtained</th>
-                <th className='border p-2'>Negative</th>
-                <th className='border p-2'>Correct</th>
-                <th className='border p-2'>Wrong</th>
-                <th className='border p-2'>Skipped</th>
-              </tr>
-            </thead>
-            <tbody>
-              {analysis.sectionAnalysis.map((sec, idx) => (
-                <tr key={idx}>
-                  <td className='border p-2'>{sec.sectionName}</td>
-                  <td className='border p-2'>{sec.sectionType}</td>
-                  <td className='border p-2'>{sec.totalMarks}</td>
-                  <td className='border p-2'>{sec.obtainedMarks}</td>
-                  <td className='border p-2'>{sec.negativeMarks}</td>
-                  <td className='border p-2'>{sec.correctCount}</td>
-                  <td className='border p-2'>{sec.wrongCount}</td>
-                  <td className='border p-2'>{sec.skippedCount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      <div className='flex text-xs justify-center'>
-        <p>Switch Sections</p>
-      </div>
-
-      <div className='flex mb-5 items-center text-xs justify-center gap-3'>
-        <IconButton
-          disabled={currentSectionIndex === 0}
-          onClick={() => setCurrentSectionIndex(i => i - 1)}
-          className='px-4 py-2 bg-gray-500 text-white rounded disabled:bg-gray-300'
-        >
+      {/* ---------- Pagination Header ---------- */}
+      <div className="flex items-center justify-between mb-6 bg-white shadow p-4 rounded-xl border">
+        <IconButton onClick={prevSection} disabled={currentSectionIndex === 0}>
           <ArrowBackIos />
         </IconButton>
-        <span>
-          {currentSectionIndex + 1} / {response.length}
-        </span>
+
+        <h1 className="text-xl font-semibold text-gray-700">
+          Section {currentSectionIndex + 1}: {currentSectionSnap?.title}
+        </h1>
+
         <IconButton
-          disabled={currentSectionIndex === response.length - 1}
-          onClick={() => setCurrentSectionIndex(i => i + 1)}
-          className='px-4 py-2 bg-gray-500 text-white rounded disabled:bg-gray-300'
+          onClick={nextSection}
+          disabled={currentSectionIndex === testSnapshot.length - 1}
         >
           <ArrowForwardIos />
         </IconButton>
       </div>
-      {/* ==== Current Section Questions ==== */}
-      <div className='bg-white p-6 rounded-lg shadow mb-6'>
-        <h3 className='text-xl font-semibold mb-4'>
-          {sectionName} ({sectionType})
-        </h3>
 
-        {sectionType === 'Quiz' &&
-          sectionMeta?.questionSet?.map((q, idx) => {
-            const userAnswerObj = section.quizAnswers.find(
-              a => a[q._id] !== undefined
-            )
-            const userAnswer = userAnswerObj ? userAnswerObj[q._id] : null
-            const correctAnswer =
-              q.options?.find(o => o.isCorrect)?.text || q.answer
+      {/* ---------- Section Renderer ---------- */}
+      <div className="bg-white shadow-md rounded-xl border p-6">
+        {currentSectionSnap.type === "quiz" && (
+          <QuizSection
+            section={currentSectionSnap}
+            sectionResponse={currentSectionResponse}
+          />
+        )}
 
-            let scoreDisplay = '0'
-            if (userAnswer) {
-              scoreDisplay =
-                userAnswer === correctAnswer ? `+${q.marks}` : `-${q.negative}`
-            }
-
-            return (
-              <div key={q._id} className='border p-4 mb-4 rounded bg-gray-50'>
-                <p className='font-medium mb-2'>
-                  Q{idx + 1}: {q.question}
-                </p>
-                {q.options?.length > 0 && (
-                  <ul className='list-disc pl-5'>
-                    {q.options.map((opt, i) => (
-                      <li
-                        key={opt._id}
-                        className={
-                          opt.text === correctAnswer
-                            ? 'text-green-600 font-semibold'
-                            : opt.text === userAnswer &&
-                              opt.text !== correctAnswer
-                              ? 'text-red-600 font-semibold'
-                              : ''
-                        }
-                      >
-                        {String.fromCharCode(65 + i)}. {opt.text}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <p>Your Answer: {userAnswer || 'Not Attempted'}</p>
-                <p>Correct Answer: {correctAnswer}</p>
-                <p className='font-bold'>Marks: {scoreDisplay}</p>
-              </div>
-            )
-          })}
-
-        {sectionType === 'Coding' &&
-          section.codingAnswers.map((ansBlock, idx) => {
-            const qid = Object.keys(ansBlock)[0]
-            const codeData = ansBlock[qid]
-            return (
-              <div key={qid} className='border p-4 mb-4 rounded bg-gray-50'>
-                <p className='font-medium mb-2'>Coding Problem {idx + 1}</p>
-                <p>
-                  Marks: {codeData.passedTestCases} / {codeData.totalTestCases}
-                </p>
-                <pre className='bg-white p-2 rounded border overflow-x-auto'>
-                  {codeData.code}
-                </pre>
-              </div>
-            )
-          })}
+        {currentSectionSnap.type === "coding" && (
+          <CodingSection
+            section={currentSectionSnap}
+            sectionResponse={currentSectionResponse}
+          />
+        )}
       </div>
 
-      {/* ==== Pagination ==== */}
-    </div>
-  )
-}
+      {/* ---------- Pagination Footer ---------- */}
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={prevSection}
+          disabled={currentSectionIndex === 0}
+          className="px-4 py-2 rounded-md bg-gray-200 disabled:opacity-50"
+        >
+          Previous
+        </button>
 
-export default TestSeriesPreview
+        <button
+          onClick={nextSection}
+          disabled={currentSectionIndex === testSnapshot.length - 1}
+          className="px-4 py-2 rounded-md bg-blue-600 text-white disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/* ------------------------ QUIZ SECTION ------------------------ */
+
+const QuizSection = ({ section, sectionResponse }) => {
+  return (
+    <div className="space-y-6">
+      {section?.questions?.map((ques, idx) => {
+
+        const userAnswer = sectionResponse?.quizAnswers?.[0]?.[ques?._id];
+        console.log(userAnswer)
+
+        return (
+          <div
+            key={ques?._id}
+            className="bg-gray-50 p-4 rounded-xl border border-gray-200"
+          >
+            <pre className="text-lg font-medium text-gray-900 mb-3">
+              {`Q${idx + 1}. ${ques.question}`}
+            </pre>
+
+            <div>
+              {ques.answer &&
+                <>
+                  <label className="text-xs" htmlFor="">Correct Answer</label>
+                  <pre className="bg-gray-50 px-4 py-3 rounded-lg border-2 border-gray-100">
+                    {ques.answer}
+                  </pre>
+                  <label className="text-xs" htmlFor="">Your Answer</label>
+                  <pre className={`bg-gray-50 px-4 py-3 rounded-lg border-[1px] ${ userAnswer !== ques?.answer ?  'border-red-500':'border-green-100' }`}>
+                    {userAnswer ?? "Not Attempted"}
+                  </pre>
+                </>
+              }
+            </div>
+            <div className="flex flex-col gap-3">
+              
+              {ques?.options?.map((op, opIndex) => {
+                const isCorrect = op?.isCorrect;
+                const a = ["1", "2", "3"]
+                const str = "1"
+                a.includes(str);
+                const isUserAnswer =  ques?.category == 'MSQ' ?  userAnswer?.includes(op?.text)  : userAnswer === op?.text;
+
+                return (
+                  <div
+                    key={opIndex}
+                    className={`
+                      px-4 py-3 rounded-md border 
+                      flex justify-between items-center
+                      ${isCorrect ? "bg-green-100 border-green-400" : "bg-white"}
+                      ${isUserAnswer && !isCorrect ? "bg-red-100 border-red-400" : ""}
+                    `}
+                  >
+                    <span className="text-gray-900">{op?.text}</span>
+
+                    <div className="flex gap-3 text-sm">
+                      {isCorrect && (
+                        <span className="text-green-700 font-semibold">✓ Correct</span>
+                      )}
+                      {isUserAnswer && (
+                        <span className="text-blue-700 font-semibold">
+                          Your Answer
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+/* ------------------------ CODING SECTION ------------------------ */
+
+const CodingSection = ({ section, sectionResponse }) => {
+  return (
+    <div className="space-y-10">
+      {section?.problems?.map((problem) => (
+        <div key={problem?._id} className="space-y-6">
+          <h1 className="text-2xl font-bold text-gray-800">{problem?.title}</h1>
+
+          <SectionCard title="Description">
+            <p className="text-gray-700 whitespace-pre-line">
+              {problem.description}
+            </p>
+          </SectionCard>
+
+          {problem.constraints?.length > 0 && (
+            <SectionCard title="Constraints">
+              <ul className="list-disc pl-6 text-gray-700">
+                {problem.constraints.map((c, idx) => (
+                  <li key={idx}>{c}</li>
+                ))}
+              </ul>
+            </SectionCard>
+          )}
+
+          {problem.examples?.length > 0 && (
+            <SectionCard title="Examples">
+              {problem.examples.map((ex, idx) => (
+                <div key={idx} className="bg-gray-100 p-4 rounded-md border mb-4">
+                  <p className="font-medium text-gray-800">Input:</p>
+                  <pre className="text-gray-700">{ex.input}</pre>
+
+                  <p className="font-medium text-gray-800 mt-2">Output:</p>
+                  <pre className="text-gray-700">{ex.output}</pre>
+
+                  {ex.explanation && (
+                    <>
+                      <p className="font-medium text-gray-800 mt-2">
+                        Explanation:
+                      </p>
+                      <pre className="text-gray-700">
+                        {ex.explanation}
+                      </pre>
+                    </>
+                  )}
+                </div>
+              ))}
+            </SectionCard>
+          )}
+
+          <SectionCard title="Your Submitted Code">
+            <pre className="bg-black text-green-400 p-4 rounded-lg overflow-auto text-sm">
+              {sectionResponse?.codingAnswers[0][problem._id]?.code || ""}
+            </pre>
+          </SectionCard>
+
+          <SectionCard title="Testcases">
+            <pre className="bg-gray-900 text-gray-200 p-4 rounded-lg overflow-auto text-sm">
+              {sectionResponse?.codingAnswers[0][problem._id]?.total ?? 0}
+            </pre>
+          </SectionCard>
+
+          <SectionCard title="Passed">
+            <pre className="bg-gray-800 text-white p-4 rounded-lg text-sm">
+              {String(sectionResponse?.codingAnswers[0][problem._id]?.passed) ?? 0}
+            </pre>
+          </SectionCard>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ------------------------ Reusable Card ------------------------ */
+const SectionCard = ({ title, children }) => (
+  <div className="bg-white p-5 rounded-lg shadow border border-gray-200">
+    <h2 className="text-xl font-semibold text-gray-700 mb-3">{title}</h2>
+    {children}
+  </div>
+);
+
+export default TestSeriesPreview;

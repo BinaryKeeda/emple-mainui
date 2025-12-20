@@ -35,11 +35,13 @@ const Solution = () => {
   const [redirectModal, setRedirectModal] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [errorModal, setErrorModal] = useState({ open: false, message: "" })
 
   const answersRef = useRef(answers)
   answersRef.current = answers
 
   const currentQuestion = quiz?.questions[currentIndex]
+
 
   const isMSQ = question =>
     question?.options?.filter(opt => opt.isCorrect).length > 1
@@ -106,7 +108,7 @@ const Solution = () => {
         if (!data) throw new Error('Invalid response')
 
         setQuiz(data.quiz)
-        setQuestionSet(data.quiz.questions)
+        setQuestionSet(data.quiz?.questions)
 
         if (data.solution) {
           setSolution(data.solution)
@@ -131,7 +133,7 @@ const Solution = () => {
         }
 
         // Load cached progress
-        const cached = localStorage.getItem(`solution-${slug}`)
+        const cached = sessionStorage.getItem(`solution-${slug}`)
         if (cached) {
           const parsed = JSON.parse(cached)
           setAnswers(parsed.answers || {})
@@ -139,8 +141,11 @@ const Solution = () => {
           setCurrentIndex(parsed.currentIndex || 0)
         }
       } catch (e) {
-        console.error('Failed to fetch quiz', e)
-        navigate('/user')
+        console.error(JSON.stringify(e))
+        setErrorModal({
+          open: true,
+          message: "Insufficient Coins"
+        })
       }
     }
 
@@ -154,10 +159,10 @@ const Solution = () => {
     }
   }, [currentIndex, currentQuestion])
 
-  // Save progress to localStorage
+  // Save progress to sessionStorage
   useEffect(() => {
     if (!quiz) return
-    localStorage.setItem(
+    sessionStorage.setItem(
       `solution-${slug}`,
       JSON.stringify({
         answers,
@@ -221,7 +226,7 @@ const Solution = () => {
         },
         { withCredentials: true }
       )
-      localStorage.removeItem(`solution-${slug}`)
+      sessionStorage.removeItem(`solution-${slug}`)
     } catch (e) {
       console.error('Submission failed', e)
       setRedirectModal(false)
@@ -235,7 +240,7 @@ const Solution = () => {
       <div>
         <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
         <div className='grid grid-cols-6 gap-2 lg:grid-cols-5'>
-          {quiz.questions.map((q, idx) => (
+          {quiz?.questions.map((q, idx) => (
             <button
               key={q._id}
               className={`${getButtonStyle(
@@ -285,7 +290,7 @@ const Solution = () => {
     </div>
   )
 
-  if (!quiz)
+  if (!quiz && !errorModal.open)
     return (
       <div className='h-screen flex justify-center items-center'>
         <Loader />
@@ -317,120 +322,129 @@ const Solution = () => {
       {/* Main content */}
       <main className='flex bg-white flex-col lg:flex-row h-[calc(100vh-60px)] pt-[0px]'>
         {/* Question Section */}
-        <section className='flex-1 p-5 flex flex-col justify-between'>
-          <div className='border p-8 rounded-sm shadow-sm'>
-            <div className='flex justify-between'>
-              <p className='mb-6 text-base'>
-                Q{currentIndex + 1}.{' '}
-                <span
-                  style={{ whiteSpace: 'pre-line' }}
-                  dangerouslySetInnerHTML={{
-                    __html: currentQuestion?.question
-                  }}
-                ></span>
-              </p>
-              <div className='flex items-center gap-2'>
-                <span className='bg-green-100 border-green-400 border p-1 w-[40px] text-xs'>
-                  {' + '}
-                  {currentQuestion.marks}
-                </span>
-                <span className='bg-red-100 border-red-400 border p-1 w-[40px] text-center text-xs'>
-                  {currentQuestion.negative}
-                </span>
-              </div>
-            </div>
+        {
+          currentQuestion &&
 
-            {currentQuestion?.image && (
-              <img className='h-60 mb-4' src={currentQuestion?.image} alt='' />
-            )}
+          <>
+            <section className='flex-1 p-5 flex flex-col justify-between'>
+              <div className='border p-8 rounded-sm shadow-sm'>
+                <div className='flex justify-between'>
+                  <p className='mb-6 text-base'>
+                    Q{currentIndex + 1}.{' '}
+                    <span
+                      style={{ whiteSpace: 'pre-line' }}
+                      dangerouslySetInnerHTML={{
+                        __html: currentQuestion?.question
+                      }}
+                    ></span>
+                  </p>
+                  <div className='flex items-center gap-2'>
+                    <span className='bg-green-100 border-green-400 border p-1 w-[40px] text-xs'>
+                      {' + '}
+                      {currentQuestion?.marks}
+                    </span>
+                    <span className='bg-red-100 border-red-400 border p-1 w-[40px] text-center text-xs'>
+                      {currentQuestion?.negative}
+                    </span>
+                  </div>
+                </div>
 
-            <div className='space-y-4'>
-              {currentQuestion?.category != 'Text' ? (
-                currentQuestion.options.map((opt, idx) => {
-                  const qId = currentQuestion._id
-                  const isChecked = isMSQ(currentQuestion)
-                    ? answers[qId]?.includes(opt.text)
-                    : answers[qId] === opt.text
+                {currentQuestion?.image && (
+                  <img className='h-60 mb-4' src={currentQuestion?.image} alt='' />
+                )}
+                <div className='space-y-4'>
+                  {currentQuestion?.category != 'Text' ? (
+                    currentQuestion?.options.map((opt, idx) => {
+                      const qId = currentQuestion?._id
+                      const isChecked = isMSQ(currentQuestion)
+                        ? answers[qId]?.includes(opt?.text)
+                        : answers[qId] === opt?.text
 
-                  return (
-                    <label
-                      key={idx}
-                      className={`flex items-center p-3 border rounded-md cursor-pointer transition ${isChecked
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-300'
-                        }`}
-                    >
-                      <input
-                        type={isMSQ(currentQuestion) ? 'checkbox' : 'radio'}
-                        className='mr-3'
-                        name={`question-${qId}`}
-                        value={opt.text}
-                        checked={isChecked}
-                        onChange={() =>
-                          handleOptionChange(currentQuestion, opt.text)
-                        }
-                      />
-                      <span>{opt.text}</span>
-                    </label>
-                  )
-                })
-              ) : (
-                <TextField
-                  label='Your Answer'
-                  fullWidth
-                  value={answers[currentQuestion._id] || ''}
-                  onChange={e =>
-                    handleTextChange(currentQuestion._id, e.target.value)
-                  }
-                />
-              )}
-
-              <div className='flex justify-end'>
-                <button
-                  onClick={() => {
-                    setAnswers(prev => {
-                      const updated = { ...prev }
-                      delete updated[currentQuestion._id]
-                      return updated
+                      return (
+                        <label
+                          key={idx}
+                          className={`flex items-center p-3 border rounded-md cursor-pointer transition ${isChecked
+                            ? 'border-blue-600 bg-blue-50'
+                            : 'border-gray-300'
+                            }`}
+                        >
+                          <input
+                            type={isMSQ(currentQuestion) ? 'checkbox' : 'radio'}
+                            className='mr-3'
+                            name={`question-${qId}`}
+                            value={opt.text}
+                            checked={isChecked}
+                            onChange={() =>
+                              handleOptionChange(currentQuestion, opt?.text)
+                            }
+                          />
+                          <span>{opt.text}</span>
+                        </label>
+                      )
                     })
-                  }}
-                  className='text-sm text-gray-700'
-                >
-                  Clear choice
-                </button>
+                  ) : (
+                    <TextField
+                      label='Your Answer'
+                      fullWidth
+                      value={answers[currentQuestion?._id] || ''}
+                      onChange={e =>
+                        handleTextChange(currentQuestion?._id, e.target.value)
+                      }
+                    />
+                  )}
+
+                  <div className='flex justify-end'>
+                    <button
+                      onClick={() => {
+                        setAnswers(prev => {
+                          const updated = { ...prev }
+                          delete updated[currentQuestion?._id]
+                          return updated
+                        })
+                      }}
+                      className='text-sm text-gray-700'
+                    >
+                      Clear choice
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className='mt-8 flex gap-4 justify-end'>
-            <button
-              onClick={() => setCurrentIndex(i => Math.max(i - 1, 0))}
-              disabled={currentIndex === 0}
-              className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
-            >
-              Previous
-            </button>
+              <div className='mt-8 flex gap-4 justify-end'>
+                <button
+                  onClick={() => setCurrentIndex(i => Math.max(i - 1, 0))}
+                  disabled={currentIndex === 0}
+                  className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
+                >
+                  Previous
+                </button>
 
-            {currentIndex === questionSet.length - 1 ?
-              <button onClick={() => setShowConfirmModal(true)} className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'>
-                Submit
-              </button> : <button
-                onClick={() =>
-                  setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
-                }
-                disabled={currentIndex === questionSet.length - 1}
-                className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
-              >
-                Next
-              </button>}
-          </div>
-        </section>
+                {currentIndex === questionSet.length - 1 ?
+                  <button onClick={() => setShowConfirmModal(true)} className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'>
+                    Submit
+                  </button> : <button
+                    onClick={() =>
+                      setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
+                    }
+                    disabled={currentIndex === questionSet.length - 1}
+                    className='px-4 py-2 rounded-md bg-[#1876d2] text-white text-sm disabled:opacity-50'
+                  >
+                    Next
+                  </button>}
+              </div>
+            </section>
+          </>
+        }
 
         {/* Sidebar for large screens */}
-        <section className='hidden lg:flex lg:w-1/4 border-l border-gray-200'>
-          <SidebarContent />
-        </section>
-
+        {
+          currentQuestion &&
+          <>
+            <section className='hidden lg:flex lg:w-1/4 border-l border-gray-200'>
+              <SidebarContent />
+            </section>
+          </>
+        }
         {/* Drawer Sidebar for small screens */}
         <Drawer
           anchor='left'
@@ -503,6 +517,29 @@ const Solution = () => {
           </div>
         </div>
       </Modal>
+      {/* Error Modal */}
+      <Modal open={errorModal.open}>
+        <div
+          className="relative top-[50%] left-[50%] p-6 w-2/5 min-w-[80%] md:min-w-[40%] rounded-lg bg-white shadow-lg"
+          style={{ transform: "translate(-50%, -50%)" }}
+        >
+          <div className="flex items-center pb-4 text-xl font-semibold text-red-600">
+            Error
+          </div>
+          <div className="border-t border-slate-200 py-4 text-slate-600 leading-relaxed">
+            {errorModal.message}
+          </div>
+          <div className="flex items-center justify-end pt-4">
+            <button
+              className="rounded-md bg-red-600 py-2 px-4 text-sm text-white"
+              onClick={() => navigate('/user/coins-add')}
+            >
+              Go Back Home
+            </button>
+          </div>
+        </div>
+      </Modal>
+
     </>
   )
 }

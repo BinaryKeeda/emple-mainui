@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 import { BASE_URL } from "../../lib/config";
+
+
 export const getUser = createAsyncThunk('api/getuser', async (token, thunkAPI) => {
     try {
         const response = await axios.get(`${BASE_URL}/auth/user`, {

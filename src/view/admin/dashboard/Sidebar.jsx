@@ -57,12 +57,12 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
       path: '/admin/test',
       type: 'private'
     },
-    {
-      icon: <ApartmentOutlined sx={{ fontSize: '18px' }} />,
-      label: 'Campus Test',
-      path: '/admin/campustest',
-      type: 'private'
-    },
+    // {
+    //   icon: <ApartmentOutlined sx={{ fontSize: '18px' }} />,
+    //   label: 'Campus Test',
+    //   path: '/admin/campustest',
+    //   type: 'private'
+    // },
     {
       icon: <SchemaOutlined sx={{ fontSize: '18px' }} />,
       label: 'Problems',

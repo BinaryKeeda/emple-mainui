@@ -23,14 +23,13 @@ const AddTestModal = lazy(() => import('../modals/AddTest'))
 const AddCampusTestModal = lazy(() => import('../modals/AddCampusTest'))
 const AddProblem = lazy(() => import('../modals/AddProblem'))
 const AddQuestionBank = lazy(() => import('../modals/AddQuestionBank'))
-export default function Home () {
+export default function Home() {
   const [showAddGroupAdmin, setShowAddGroupadmin] = useState(false)
   const [showAddQuiz, setShowAddQuiz] = useState(false)
   const [showAddTest, setShowAddTest] = useState(false)
   const [showAddCampustest, setshowAddCampustest] = useState(false)
   const [showAddProblem, setShowAddProblem] = useState(false)
   const [showAddQuestionBank, setShowAddQuestionBank] = useState(false)
-  const navigate = useNavigate()
   const { data, isLoading } = useQuery({
     queryKey: ['adminSummary'],
     queryFn: async () => {
@@ -57,7 +56,6 @@ export default function Home () {
         groups,
         problems,
         users,
-        questionBank
       },
       todayUsers
     } = data
@@ -66,7 +64,7 @@ export default function Home () {
       <>
         <DashboardCard title='Total Users' count={users} disabled />
         <DashboardCard title="Today's Signups" count={todayUsers} disabled />
-        <DashboardCard title='Total Groups' count={groups} onAdd={() => {}} />
+        <DashboardCard title='Total Groups' count={groups} onAdd={() => { }} />
         <DashboardCard
           title='Total Quizzes'
           count={quizzes}
@@ -80,9 +78,9 @@ export default function Home () {
         <DashboardCard
           title='Campus Tests'
           count={campusTests}
-          onAdd={() => {}}
+          onAdd={() => { }}
         />
-        <DashboardCard title='Problems' count={problems} onAdd={() => {}} />
+        <DashboardCard title='Problems' count={problems} onAdd={() => { }} />
         {/* <DashboardCard title='Question Bank' count={questionBank} onAdd={() => {}} /> */}
       </>
     )
@@ -154,7 +152,7 @@ export default function Home () {
           >
             Add Quiz <Add16Regular />
           </Button>
-          <Button
+          {/* <Button
             variant='contained'
             sx={{
               fontSize: 13,
@@ -168,21 +166,6 @@ export default function Home () {
             onClick={() => setshowAddCampustest(true)}
           >
             Add Campus Test <Add16Regular />
-          </Button>
-          {/* <Button
-            variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              borderRadius: 2
-            }}
-            onClick={() => setShowAddProblem(true)}
-          >
-            Add Problem <Add16Regular />
           </Button> */}
         </div>
       </section>
@@ -262,7 +245,7 @@ export default function Home () {
 const DashboardCard = ({
   title = '',
   count = 0,
-  onAdd = () => {},
+  onAdd = () => { },
   disabled = false,
   isLoading = false
 }) => (

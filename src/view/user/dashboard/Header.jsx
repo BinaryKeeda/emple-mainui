@@ -10,6 +10,7 @@ import {
   Box,
   Divider,
   IconButton,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,14 +24,15 @@ import NotificationsDrawer from './NotificationDrawer'
 import { Cart16Filled, Cart20Regular, Cart24Regular } from '@fluentui/react-icons'
 import { useSnackbar } from 'notistack'
 import useInvitation from '../hooks/useInvitation'
+import { use } from 'react'
+import Coin from '../../../utilities/Coin'
 
 const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
   const { toggleTheme, theme } = useContext(ThemeContext)
   const dispatch = useDispatch()
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [badgeCount, setBadgeCount] = useState(0)
-  const { data } = useInvitation({ userId:user._id });
-
+  const { data } = useInvitation(user ? { userId: user._id } : {});
 
   const handleLogout = () => {
     try {
@@ -64,7 +66,25 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
             </Link>
           </div>
 
+
           <div className='flex items-center gap-3'>
+            {user?.coins &&
+              <div className="flex gap-1 rounded-lg items-center">
+
+                <Coin />
+                <div className='text-sm'>
+                  <span>
+                    {user?.coins}
+                  </span>
+                </div>
+              </div>
+            }
+            <Tooltip title="But More Coins" sx={{ cursor: "pointer" }}>
+              <Link to={"/user/coins-add"}>
+                <Cart20Regular style={{ cursor: "pointer" }} />
+              </Link>
+            </Tooltip>
+
             {user ? (
               <>
                 {/* <Box
@@ -103,8 +123,8 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
                   <Badge
                     badgeContent={badgeCount}
                     color='error'
-                    sx={{position:"relative"}}
-                    
+                    sx={{ position: "relative" }}
+
                     overlap='circular'
                   >
                     <Notifications />
@@ -139,6 +159,7 @@ const Header = React.memo(({ user, menuOpen, setMenuOpen }) => {
               </div>
             )}
           </div>
+
         </nav>
       </header>
 

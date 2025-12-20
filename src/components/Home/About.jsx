@@ -31,7 +31,7 @@ export default function About() {
                   About Us
                 </h2>
                 <p className="text-gray-700 md:md:text-lg  sm:text-sm font-normal leading-relaxed  text-justify">
-                  We are Binary Keeda, an innovative E-learning and Testing
+                  We are BinaryKeeda, an innovative E-learning and Testing
                   startup on a mission to transform education for the digital
                   generation. Our platform empowers students with personalized
                   learning paths, expert-led courses, and real-time assessments
@@ -39,7 +39,7 @@ export default function About() {
                   future.
                   <p className="text-gray-700 md:text-lg sm:text-sm  font-normal leading-relaxed text-justify">
                     Whether you're looking to master coding, cybersecurity,
-                    digital marketing, or other in-demand fields, Binary Keeda
+                    digital marketing, or other in-demand fields, BinaryKeeda
                     bridges the gap between knowledge and real-world
                     application. Learn. Practice. Excel. Join the movement
                     that's redefining how students learn, grow, and succeed.

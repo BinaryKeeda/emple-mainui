@@ -12,7 +12,6 @@ import { SnackbarProvider } from 'notistack'
 import Loader from './layout/Loader'
 import { LoginModalProvider } from './context/LoginModalContext'
 import { Slide } from '@mui/material'
-// Lazy-loaded pages
 
 
 const ExternalRedirect = ({ url }) => {
@@ -23,7 +22,6 @@ const ExternalRedirect = ({ url }) => {
   return null; // nothing to render
 };
 
-// export default ExternalRedirect;
 
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
@@ -37,6 +35,7 @@ const Home = lazy(() => import('./pages/Home'))
 const NotFound = lazy(() => import('./utilities/NotFound'))
 const Terms = lazy(() => import('./pages/Terms'))
 const Policy = lazy(() => import('./pages/PrivacyPolicy'))
+const ExamAttempt = lazy(() => import('./view/test/Home'))
 const CLIENT_ID = GOOGLE_CLIENT_ID
 const App = () => {
   const dispatch = useDispatch()
@@ -84,6 +83,8 @@ const App = () => {
   )
   const Users = lazy(() => import('./view/admin/pages/Users'))
   const EditQuiz = lazy(() => import('./view/admin/pages/EditQuiz'))
+  const CoinsAdd = lazy(() => import('./view/user/CoinsAdd'));
+  const CoinsCheckout = lazy(() => import('./view/user/CoinCheckout'));
   const ViewQuiz = lazy(() => import('./view/admin/pages/Quiz'))
   const AdminHome = lazy(() => import('./view/admin/pages/Home'))
   const AdminTestSeries = lazy(() => import('./view/admin/pages/Test'))
@@ -222,6 +223,7 @@ const App = () => {
                   {/* ============================================================= */}
                   {/*                        User Public Routes Ends                */}
                   {/* ============================================================= */}
+                  <Route path='/user/exam/:id' element={<ExamAttempt />}/>
                   {/* ============================================================= */}
                   {/*                        User  Routes Starts                    */}
                   {/* ============================================================= */}
@@ -235,7 +237,8 @@ const App = () => {
                     }
                   >
                     <Route index element={<UserDashboard />} />
-
+                    <Route path='coins-add' element={<CoinsAdd/>} />
+                    <Route path='coins-add/:id' element={<CoinsCheckout/>} /> 
                     <Route path='group/:id' element={<UserAssociatedGroup />} />
                     <Route path='roadmaps' element={<UserRoadmaps />} />
                     <Route path='profile' element={<UserProfile />} />
@@ -315,12 +318,7 @@ const App = () => {
                   {/* ============================================================= */}
                   {/*                        Admin Routes Ends                    */}
                   {/* ============================================================= */}
-                  <Route
-                    path='/campus-admin'
-                    element={
-                      <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />
-                    }
-                  />
+                  <Route  path='/campus-admin'  element={    <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />  } />
                   <Route
                     path='/campus-superadmin'
                     element={

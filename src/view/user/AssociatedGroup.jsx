@@ -1,4 +1,3 @@
-import React from "react"
 import { useSelector } from "react-redux"
 import { Link, useParams, useSearchParams } from "react-router-dom"
 import { useSectionData } from "./hooks/useGroupData"
@@ -12,8 +11,8 @@ export default function AssociatedGroup() {
   const [searchParams, setSearchParams] = useSearchParams()
   const sectionId = searchParams.get("section")
   const tab = searchParams.get("tab")
-  
-  const { data, error } = useSectionData({ userId , id })
+
+  const { data, error } = useSectionData({ userId, id })
 
   if (error)
     return (
@@ -127,7 +126,7 @@ export default function AssociatedGroup() {
     <div className="min-h-screen">
       {!selectedSection ? (
         <>
-         
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {data?.data?.map((item) => (
               <SectionCard key={item.section._id} section={item.section} />
@@ -136,17 +135,6 @@ export default function AssociatedGroup() {
         </>
       ) : (
         <>
-          <div className="flex items-center justify-between mb-6">
-            <button
-              onClick={() => setSearchParams({})}
-              className="text-sm text-blue-600 hover:text-blue-700 transition-all"
-            >
-              ← Back to sections
-            </button>
-            <h1 className="text-2xl font-semibold text-gray-800">
-              {selectedSection.name}
-            </h1>
-          </div>
           <SectionActions section={selectedSection} />
         </>
       )}

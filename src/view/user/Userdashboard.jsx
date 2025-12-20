@@ -19,7 +19,7 @@ const UserDashboardLayout = ({ children }) => {
   }, [location])
 
   const handleLogout = async () => await customSignOut()
-  if (user && !user?.profileCompleted) return <CompleteProfile />
+  // if (user && !user?.profileCompleted) return <CompleteProfile />
   return (
     <>
 
@@ -29,6 +29,9 @@ const UserDashboardLayout = ({ children }) => {
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
       />
+      {
+        (user && !user?.profileCompleted)  &&  <CompleteProfile />
+      }
 
       <>
         <Drawer
@@ -52,8 +55,8 @@ const UserDashboardLayout = ({ children }) => {
            md:pr-5 py-5  min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
           >
             {/* {(user && !user?.profileCompleted) ? <CompleteProfile /> */}
-              {/* : */}
-             { children || <Outlet />}
+            {/* : */}
+            {children || <Outlet />}
             {/* } */}
           </main>
         </Suspense>

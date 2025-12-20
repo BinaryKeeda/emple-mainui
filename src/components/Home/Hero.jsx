@@ -109,7 +109,7 @@ export default function Hero() {
             <div className="flex flex-col md:flex-row h-full items-center justify-center px-6 md:px-8 max-w-7xl mx-auto relative z-10 gap-8 md:gap-0 ">
                 {/* Hero Image - Shows first on mobile */}
                 <div className="flex justify-center md:justify-start order-1 md:order-2 md:flex-[.7]">
-                    <img src="./assets/hero/hero.png" alt="Binary Keeda learning platform - Student studying with modern educational tools and coding interfaces"
+                    <img src="./assets/hero/hero.png" alt="BinaryKeeda learning platform - Student studying with modern educational tools and coding interfaces"
                         className="w-64 md:w-80 lg:w-96 xl:w-[450px] h-64 md:h-80 lg:h-96 xl:h-[450px] object-contain drop-shadow-lg select-none"
                         draggable="false" />
                 </div>
@@ -126,7 +126,7 @@ export default function Hero() {
                     <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-800 leading-tight">
                         Master Your Skills with
                         <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600"> Binary Keeda</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600"> BinaryKeeda</span>
                     </h1>
                     <p className="mt-4 md:mt-6 text-base md:text-lg lg:text-xl text-gray-600 max-w-lg leading-relaxed mx-auto md:mx-0">
                         Excel in coding, aptitude, reasoning, and core subjects with expert-curated quizzes and interactive challenges designed for your success.
@@ -197,7 +197,7 @@ export default function Hero() {
     {
     <div className="absolute inset-0 flex flex-col items-start justify-center text-start text-white px-10 z-40">
         <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-2xl">
-            Master Your Skills with Binary Keeda
+            Master Your Skills with BinaryKeeda
         </h1>
         <p className="mt-4 text-lg text-start md:text-xl max-w-2xl">
             Learn, practice, and excel in coding, aptitude, reasoning, and core subjects with expert-curated quizzes and challenges.

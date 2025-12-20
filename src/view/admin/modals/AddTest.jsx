@@ -1,85 +1,3 @@
-// import { Close } from '@mui/icons-material';
-// import { TextField, IconButton, Button, Box, Stack } from '@mui/material';
-// import React, { useState } from 'react';
-// import { BASE_URL } from '../../../lib/config';
-// import axios from 'axios'
-// export default function AddTest({ setModalClose }) {
-//   const [name, setName] = useState('');
-//   const [duration, setDuration] = useState('');
-//   const [description, setDescription] = useState('');
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     const testData = {
-//       name,
-//       duration: Number(duration),
-//       description,
-//     };
-
-//     axios.post(
-//       `${BASE_URL}/api/admin/test/add`,
-//       testData,
-//       {withCredentials:true}
-//     )
-//     .then(res => console.log(res.data))
-//     .catch(err => console.error(err));
-
-//     setModalClose(false); // Close modal on submit
-//   };
-
-//   return (
-//     <section className='fixed flex justify-center items-center top-0 left-0 z-50 h-screen w-screen bg-black bg-opacity-50'>
-//       <Box className="relative bg-white rounded-lg p-6 w-[400px] shadow-lg">
-//         {/* Close Button */}
-//         <div className='flex justify-end'>
-//           <IconButton
-//             className="absolute top-2 right-2"
-//             onClick={() => setModalClose(false)}
-//           >
-//             <Close />
-//           </IconButton>
-//         </div>
-
-//         {/* Form Fields */}
-//         <form onSubmit={handleSubmit}>
-//           <Stack spacing={3} mt={2}>
-//             <TextField
-//               autoFocus
-//               variant='standard'
-//               label="Test Name"
-//               fullWidth
-//               value={name}
-//               onChange={(e) => setName(e.target.value)}
-//             />
-//             <TextField
-//               variant='standard'
-//               type='number'
-//               label="Duration (minutes)"
-//               fullWidth
-//               value={duration}
-//               onChange={(e) => setDuration(e.target.value)}
-//             />
-//             <TextField
-//               variant='standard'
-//               label="Test Description"
-//               multiline
-//               rows={3}
-//               fullWidth
-//               value={description}
-//               onChange={(e) => setDescription(e.target.value)}
-//             />
-
-//             <Button type="submit" variant="contained" color="primary">
-//               Create Test
-//             </Button>
-//           </Stack>
-//         </form>
-//       </Box>
-//     </section>
-//   );
-// }
-
 import React, { useState } from 'react'
 import {
   Dialog,
@@ -94,9 +12,9 @@ import {
 import axios from 'axios'
 import { BASE_URL } from '../../../lib/config'
 import { useNavigate } from 'react-router-dom'
-import { red } from '@mui/material/colors'
 import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
+import { useQueryClient } from '@tanstack/react-query'
 const defaultForm = {
   name: '',
   description: '',
@@ -121,7 +39,7 @@ export default function CreateTestModal ({
     setForm(prev => ({ ...prev, [name]: value }))
   }
   const {user} = useSelector(s => s.auth);
-
+  const queryClient = useQueryClient();
   const handleSubmit = async () => {
     if (!form.name || !form.duration || !form.visibility || !form.category) {
       enqueueSnackbar('Please fill all required fields ⚠️', {
@@ -138,6 +56,7 @@ export default function CreateTestModal ({
         { withCredentials: true }
       )
 
+      await queryClient.invalidateQueries({queryKey:['admin-test']});
       onTestCreated(res.data.data)
       setModalClose(false)
       navigate('/admin/edit/test/' + res.data.data)
