@@ -17,9 +17,32 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Reach Place
-        run: cd 
 
+      # 🔍 DEBUG — check secrets existence (safe)
+      - name: Debug secrets
+        run: |
+          if [ -z "${{ secrets.FRONTEND_HOST }}" ]; then
+            echo "❌ FRONTEND_HOST is EMPTY or NOT SET"
+            exit 1
+          else
+            echo "✅ FRONTEND_HOST is set"
+          fi
+
+          if [ -z "${{ secrets.USER }}" ]; then
+            echo "❌ USER is EMPTY or NOT SET"
+            exit 1
+          else
+            echo "✅ USER is set"
+          fi
+
+          if [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
+            echo "❌ EC2_SSH_PRIVATE_KEY is EMPTY or NOT SET"
+            exit 1
+          else
+            echo "✅ EC2_SSH_PRIVATE_KEY is set"
+          fi
+
+      # 🚀 ACTUAL DEPLOY
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -27,9 +50,8 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/Binarykeeda-mainui
             git pull
-            sudo chmod 777 deploy.sh
+            sudo chmod +x deploy.sh
             ./deploy.sh
-
-            
