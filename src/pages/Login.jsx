@@ -244,7 +244,11 @@ export default function Login ({ redirect = '/dashboard' }) {
 
   const handleForgotPassword = () => setForgetPass(true)
   useEffect(() => {
-    window.location.href = "https://login.binarykeeda.com"
+    if(BASE_URL.includes("binarykeeda")) {
+      window.location.href = "https://login.binarykeeda.com"
+    }else{
+      window.location.href = "http://localhost:5174"
+    }
   } , []);
   // return (
   //   <main className='flex w-full h-screen justify-center items-center'>

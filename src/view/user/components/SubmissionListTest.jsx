@@ -108,15 +108,16 @@ const SubmissionList = ({ currCategory }) => {
           </div>
         </>
       ) : (
-         <Link
-           to={'/user/test-series'}
-           className='flex py-10 gap-3 h-full justify-center items-center'
-         >
-           <School color='primary' />{' '}
-           <a className='text-gray-600 text-sm' href=''>
-             Practice Now
-           </a>
-         </Link>
+        //  <Link
+        //    to={'/user/test-series'}
+        //    className='flex py-10 gap-3 h-full justify-center items-center'
+        //  >
+        //    <School color='primary' />{' '}
+        //    <a className='text-gray-600 text-sm' href=''>
+        //      Practice Now
+        //    </a>
+        //  </Link>
+        <></>
       )} 
     </>
   )

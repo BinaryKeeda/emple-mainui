@@ -140,7 +140,8 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
-    navigate(path);
+
+    window.location.href = path;
     onClose();
   };
 

@@ -31,20 +31,7 @@ const TestQuizInterface = ({ autoSubmit }) => {
   const [timeLeft, setTimeLeft] = useState(Number.MAX_SAFE_INTEGER)
   const [reviewQuestions, markForReview] = useState(new Set())
   const isMSQ = question => question.category === 'MSQ'
-  function handleKey (e) {
-    if (e.key === 'ArrowRight') {
-      setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
-    } else if (e.key === 'ArrowLeft') {
-      setCurrentIndex(i => Math.max(i - 1, 0))
-    }
-  }
-  useEffect(() => {
-    // KEY LISTNER
-    window.addEventListener('keyup', handleKey)
-    return () => {
-      window.removeEventListener('keyup', handleKey)
-    }
-  }, [])
+ 
   const handleOptionChange = (question, selectedOption) => {
 
     const qId = question._id
@@ -395,11 +382,7 @@ const TestQuizInterface = ({ autoSubmit }) => {
               </div>
 
               {/* Navigation Arrows */}
-              <div className='flex flex-col items-center text-sm mt-4'>
-                <div className='mb-2 text-gray-500'>
-                  You can use ← and → arrow keys to navigate between questions
-                </div>
-              </div>
+             
             </div>
           </div>
 

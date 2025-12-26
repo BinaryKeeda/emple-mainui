@@ -41,6 +41,7 @@ export const switchToFullScreen = () => {
         } else if (elem.msRequestFullscreen) {
             elem.msRequestFullscreen(); // IE11
         }
+        
 }
 
 export const isFullScreen = () => {

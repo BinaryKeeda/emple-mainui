@@ -179,8 +179,9 @@ export default function TestAttemptPage() {
     const widthDiff = Math.abs(currentWidth - originalWidth)
     const heightDiff = Math.abs(currentHeight - originalHeight)
     
+    // Don't trigger resize detection if fullscreen modal is active
     if (widthDiff > 50 || heightDiff > 50) {
-      if (!activeViolations.current.resize) {
+      if (!activeViolations.current.resize && !warningModal.justCame) {
         handleUFM('resize')
         setWarningModal({
           open: true,
@@ -276,12 +277,18 @@ export default function TestAttemptPage() {
       }
     }
 
-    // Fullscreen change detection
+    // Fullscreen change detection - FIXED
     const onFullScreenChange = () => {
       if (!document.fullscreenElement) {
         if (!activeViolations.current.fullscreen) {
           handleUFM('fullscreen')
-          handleFullScreenChange({ setWarningModal })
+          setWarningModal({
+            open: true,
+            warning: 'Please Switch to Full Screen',
+            count: 0,
+            color: 'green',
+            justCame: true
+          })
         }
       } else {
         // Clear fullscreen violation when user returns to fullscreen
