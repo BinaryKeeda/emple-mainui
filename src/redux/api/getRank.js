@@ -37,6 +37,7 @@ export const getRank = (id, college) => async (dispatch) => {
   } catch (error) {
     console.error(error);
     dispatch(setError(error.message || 'Failed to fetch rank data'));
+    dispatch(setLoading(false));
   } finally {
     dispatch(setLoading(false));
   }

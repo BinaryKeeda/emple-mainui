@@ -64,13 +64,13 @@ function ProgressArea () {
         }
       ]
 
-  if (loading) {
-    return (
-      <div className='flex items-center justify-center flex-[.5] p-6 bg-white rounded-xl shadow'>
-        <Loader />
-      </div>
-    )
-  }
+  // if (loading && !rankData) {
+  //   return (
+  //     <div className='flex items-center justify-center flex-[.5] p-6 bg-white rounded-xl shadow'>
+  //       <Loader />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className='flex relative flex-col items-center justify-center flex-[0.7] h-full  bg-transparent'>
