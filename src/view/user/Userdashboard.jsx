@@ -30,7 +30,7 @@ const UserDashboardLayout = ({ children }) => {
         setMenuOpen={setMenuOpen}
       />
       {
-        (user && !user?.profileCompleted)  &&  <CompleteProfile />
+        // (user && !user?.profileCompleted)  &&  <CompleteProfile />
       }
 
       <>
