@@ -19,7 +19,7 @@ const UserDashboardLayout = ({ children }) => {
   }, [location])
 
   const handleLogout = async () => await customSignOut()
-  // if (user && !user?.profileCompleted) return <CompleteProfile />
+  if (user && !user?.profileCompleted) return <CompleteProfile />
   return (
     <>
 

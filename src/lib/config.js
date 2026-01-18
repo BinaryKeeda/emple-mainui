@@ -4,10 +4,8 @@ export const CODE_EXECUTION_API = import.meta.env.VITE_CODE_EXECUTION_API;
 export const MESSAGE_QUEUE_URL = import.meta.env.VITE_MESSAGE_QUEUE_URL;
 export const PAYMENT_KEY =  import.meta.env.VITE_PAYMENT_KEY;
 export const PAYMENT_URL =  import.meta.env.VITE_PAYMENT_URL;
-// export const BASE_URL =  import.meta.env.VITE_API_BASE_URL;
-// export const GOOGLE_CLIENT_ID = "969367563916-sco9e8grkep5rf113sk0bkik1aert4fr.apps.googleusercontent.com";
-// export const CODE_EXECUTION_API = "https://execution.api.binarykeeda.com" ||  "https://judge0.binarykeeda.com";
-// export const MESSAGE_QUEUE_URL = true ? "http://localhost:3001" : "https://evaluator.binarykeeda.com";
+export const LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
+export const ADMIN_URL = import.meta.env.VITE_ADMIN_URL;
 
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import axios from "axios";

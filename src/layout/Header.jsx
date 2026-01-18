@@ -13,7 +13,7 @@ import {
   Code,
 } from "@mui/icons-material";
 import { IconButton, Fade, Backdrop } from "@mui/material";
-import { BASE_URL } from "../lib/config";
+import { BASE_URL, LOGIN_URL } from "../lib/config";
 
 const resourcesConfig = [
   {
@@ -382,7 +382,7 @@ export default function Header() {
                     </Link>
                   ) : (
                     <Link
-                      to={`${BASE_URL.includes("binarykeeda.com") ? "https://login.binarykeeda.com" : "http://localhost:5174"}`}
+                      to={LOGIN_URL}
                       className="px-6 py-2.5 text-gray-700 hover:text-gray-900 font-medium rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 hover:bg-gray-50"
                     >
                       Login
