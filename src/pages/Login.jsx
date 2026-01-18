@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async'
 import {
   PersonMail16Regular,
   Eye24Regular,
@@ -8,7 +7,7 @@ import React, { useRef, useState } from 'react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { useSnackbar } from '../context/SnackBarContext'
-import { BASE_URL, MESSAGE_QUEUE_URL } from '../lib/config'
+import { BASE_URL, LOGIN_URL, MESSAGE_QUEUE_URL } from '../lib/config'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { loginSuccess } from '../redux/slice/UserSlice'
 import { IconButton } from '@mui/material'
