@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { BASE_URL, GOOGLE_CLIENT_ID } from './lib/config'
+import { ADMIN_URL, BASE_URL, GOOGLE_CLIENT_ID } from './lib/config'
 import { getUser } from './redux/reducers/UserThunks'
 import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
@@ -319,11 +319,11 @@ const App = () => {
                   {/* ============================================================= */}
                   {/*                        Admin Routes Ends                    */}
                   {/* ============================================================= */}
-                  <Route  path='/campus-admin'  element={    <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />  } />
+                  <Route  path='/campus-admin'  element={    <ExternalRedirect url={ADMIN_URL} />  } />
                   <Route
                     path='/campus-superadmin'
                     element={
-                      <ExternalRedirect url={`${String(BASE_URL).includes("binarykeeda.com") ? "https://admin.binarykeeda.com" : "http://localhost:5175"}`} />
+                      <ExternalRedirect url={ADMIN_URL} />
                     }
                   />
 

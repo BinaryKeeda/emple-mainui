@@ -6,6 +6,7 @@ export const PAYMENT_KEY =  import.meta.env.VITE_PAYMENT_KEY;
 export const PAYMENT_URL =  import.meta.env.VITE_PAYMENT_URL;
 export const LOGIN_URL = import.meta.env.VITE_LOGIN_URL;
 export const ADMIN_URL = import.meta.env.VITE_ADMIN_URL;
+export const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import axios from "axios";
