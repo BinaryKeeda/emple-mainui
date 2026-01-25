@@ -22,7 +22,7 @@ const avatars = [
 
 const Specialisations = profileData.specialization
 const years = profileData.yearofgraduation
-const sem = () => {}
+const sem = () => { }
 
 const getMaxSemesters = programName => {
   const matched = profileData.programs.find(p => p.name === programName)
@@ -32,7 +32,7 @@ const getMaxSemesters = programName => {
 
 const programs = profileData.programs
 
-const ProfileModal = ({onClose}) => {
+const ProfileModal = ({ onClose }) => {
   const dropdownRefs = useRef({})
 
   // Function to check if dropdown should open upwards
@@ -49,6 +49,7 @@ const ProfileModal = ({onClose}) => {
   const user = useSelector(state => state.auth.user)
   const [formData, setFormData] = useState({
     yearOfGraduation: '',
+    name: '',
     university: '',
     program: '',
     semester: '',
@@ -77,7 +78,8 @@ const ProfileModal = ({onClose}) => {
         university: user.university || '',
         program: user.program || '',
         semester: user.semester || '',
-        specialisation: user.specialisation || ''
+        specialisation: user.specialisation || '',
+        name:user?.name
       })
       setAvatarSelectedUrl(user.avatar || '')
     }
@@ -183,6 +185,7 @@ const ProfileModal = ({onClose}) => {
       const payload = {
         ...formData,
         id: user._id,
+
         avatar: avatarSelectedUrl
       }
 
@@ -278,7 +281,16 @@ const ProfileModal = ({onClose}) => {
           {/* Name and Email */}
           <div className='mb-6'>
             <h2 className='text-xl font-bold text-gray-800'>
-              {user?.name || 'Thomas Holmes'}
+              <input type="text"
+                className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent'
+                value={formData.name}
+                onChange={(e) => {
+                  setFormData((prev) => {
+                    return { ...prev, name: e.target.value }
+                  })
+                }} name="name" id="" />
+
+              {/* {user?.name || 'Thomas Holmes'} */}
             </h2>
             <p className='text-[#7e7e7e]'>
               <span className='mr-1'>
@@ -513,11 +525,10 @@ const ProfileModal = ({onClose}) => {
                   </div>
                   {showDropdowns.yearOfGraduation && (
                     <div
-                      className={`absolute z-10 ${
-                        shouldOpenUpwards('yearOfGraduation')
+                      className={`absolute z-10 ${shouldOpenUpwards('yearOfGraduation')
                           ? 'bottom-full mb-1'
                           : 'mt-1'
-                      } w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-[130px] overflow-y-auto`}
+                        } w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-[130px] overflow-y-auto`}
                       ref={el =>
                         (dropdownRefs.current['yearOfGraduation-dropdown'] = el)
                       }
@@ -600,11 +611,10 @@ const ProfileModal = ({onClose}) => {
                   src={url}
                   alt='avatar'
                   onClick={() => handleAvatarSelect(url)}
-                  className={`w-16 h-16 rounded-full cursor-pointer transition-all ${
-                    avatarSelectedUrl === url
+                  className={`w-16 h-16 rounded-full cursor-pointer transition-all ${avatarSelectedUrl === url
                       ? 'ring-4 ring-[#db5602] scale-110'
                       : 'hover:ring-2 hover:ring-[#db5602]/50'
-                  }`}
+                    }`}
                 />
               ))}
             </div>

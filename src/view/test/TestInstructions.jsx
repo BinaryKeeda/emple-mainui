@@ -33,7 +33,9 @@ export default function TestInstructions () {
         },
         { withCredentials: true }
       )
+
       if(res.data?.success) {
+        
         setHasAgreed(true)
       }else{
         enqueueSnackbar(res.data?.message, {
