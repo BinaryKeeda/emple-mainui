@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Book, LockRounded, School, Visibility } from '@mui/icons-material'
+import {  Visibility } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   resetState,
@@ -9,7 +9,6 @@ import {
 import { useEffect } from 'react'
 import Loader from '../../../layout/Loader'
 import { getTestSolutions } from '../../../redux/api/getTestSolution'
-import { IconButton } from '@mui/material'
 import { SectionHeader } from '../utils/Helpers'
 
 const SubmissionList = ({ currCategory }) => {
@@ -74,7 +73,7 @@ const SubmissionList = ({ currCategory }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data[currentPage]?.map((i, key) => (
+                  {data[currentPage]?.slice(0,5)?.map((i, key) => (
                     <tr
                       key={key}
                       className='hover bg-primary dark:text-gray-50 hover:bg-support border-b border-slate-200'
