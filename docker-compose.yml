@@ -5,38 +5,36 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        VITE_MESSAGE_QUEUE_URL: ${VITE_MESSAGE_QUEUE_URL}
+        VITE_CODE_EXECUTION_API: ${VITE_CODE_EXECUTION_API}
+        VITE_PAYMENT_KEY: ${VITE_PAYMENT_KEY}
+        VITE_PAYMENT_URL: ${VITE_PAYMENT_URL}
+        VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
+        VITE_LOGIN_URL: ${VITE_LOGIN_URL}
+        VITE_ADMIN_URL: ${VITE_ADMIN_URL}
+        VITE_FRONTEND_URL: ${VITE_FRONTEND_URL}
+
     container_name: binarykeeda-ui-prod
-    args:
-      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
-      VITE_MESSAGE_QUEUE_URL: ${VITE_MESSAGE_QUEUE_URL}
-      VITE_CODE_EXECUTION_API: ${VITE_CODE_EXECUTION_API}
-      VITE_PAYMENT_KEY: ${VITE_PAYMENT_KEY}
-      VITE_PAYMENT_URL: ${VITE_PAYMENT_URL}
-      VITE_GOOGLE_CLIENT_ID: ${VITE_GOOGLE_CLIENT_ID}
-      VITE_LOGIN_URL: ${VITE_LOGIN_URL}
-      VITE_ADMIN_URL: ${VITE_ADMIN_URL}
-      VITE_FRONTEND_URL: ${VITE_FRONTEND_URL}
     restart: always
     ports:
       - "3030:80"
+
+    # optional (not used by Vite, ok to keep)
     env_file:
       - .env
+
     networks:
       - binarykeeda-network-prod
+
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost/",
-        ]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
     logging:
       driver: json-file
       options:
