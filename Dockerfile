@@ -4,9 +4,9 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copy dependency files first (better caching)
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 
-RUN npm ci --force
+RUN yarn install --frozen-lockfile
 
 # Copy source
 COPY . .
@@ -34,7 +34,7 @@ ENV VITE_PORT=$VITE_PORT \
   VITE_ADMIN_URL=${VITE_ADMIN_URL} \
   VITE_FRONTEND_URL=${VITE_FRONTEND_URL}
 
-RUN npm run build
+RUN yarn build
 
 
 # ---------- Runtime stage ----------
