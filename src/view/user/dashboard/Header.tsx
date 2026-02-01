@@ -256,7 +256,7 @@ export default function Header({
                   sx={{ bgcolor: 'grey.500' }}
                 />
                 <Link
-                  to={'/register'}
+                  to={'/signup'}
                   className='text-sm font-medium hover:underline'
                 >
                   Signup

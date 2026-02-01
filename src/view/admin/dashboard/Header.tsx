@@ -27,7 +27,6 @@ const Header = React.memo(
     setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
   }) => {
     const [notificationOpen, setNotificationOpen] = useState(false)
-    const { toggleTheme, theme } = useContext(ThemeContext);
  
     return (
       <>

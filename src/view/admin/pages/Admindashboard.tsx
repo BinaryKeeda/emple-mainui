@@ -14,7 +14,6 @@ const AdminDashboardLayout = ({ children }: {
   // const { user } = useSelector((s) => s.auth);
   const { user } = useUser();
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const sdk = useDescope();
   useEffect(() => {

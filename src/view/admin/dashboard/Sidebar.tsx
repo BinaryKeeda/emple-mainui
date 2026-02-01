@@ -52,7 +52,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }: {
     {
       icon: <DashboardOutlined sx={{ fontSize: '18px' }} />,
       label: 'Dashboard',
-      path: '/user/',
+      path: '/admin/',
       type: 'private'
     },
     {

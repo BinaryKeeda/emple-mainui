@@ -29,7 +29,7 @@ export function CustomLabel({
         fontWeight: '400',
         color: '#0f1729',
         display: 'flex',
-        marginBottom: '11px',
+        marginBottom: '4px',
         alignItems: 'center',
         gap: '4px',
       }}

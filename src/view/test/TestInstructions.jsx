@@ -8,11 +8,12 @@ import { useSelector } from 'react-redux'
 import Header from './components/Header'
 import { useTest } from './context/TestProvider'
 import { useSnackbar } from 'notistack'
+import { useUser } from '../../context/UserContext'
 export default function TestInstructions () {
   const [submitting, setIsSubmitting] = useState(false)
   const { data, helpers, setHasAgreed , isProtected} = useTest()
   const navigate = useNavigate()
-  const userId = useSelector(s => s.auth.user._id)
+  const {user} = useUser()
   // const testId = useSelector(s => s.auth.testId)
   const [passcode,setPasscode] = useState("");
   const { test, testId } = useTest()

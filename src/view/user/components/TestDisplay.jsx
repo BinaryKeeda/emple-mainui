@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../lib/config'
 import axios from 'axios'
 import { Lock } from '@mui/icons-material'
 
-export default function TestDisplay ({ sectionId, isGroup = false}) {
+export default function TestDisplay ({ sectionId, isGroup = false, userId}) {
   const [page, setPage] = useState(1)
   const limit = 10
 
@@ -13,7 +13,8 @@ export default function TestDisplay ({ sectionId, isGroup = false}) {
       sectionId,
       page,
       limit,
-      isGroup
+      isGroup,
+      userId
     }),
     [sectionId, page, limit]
   )

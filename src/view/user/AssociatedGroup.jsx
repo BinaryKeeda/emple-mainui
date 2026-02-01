@@ -86,7 +86,7 @@ export default function AssociatedGroup() {
     if (tab === "quiz")
       return <QuizDisplay sectionId={section._id} isGroup={true} />
     if (tab === "test")
-      return <TestDisplay sectionId={section._id} isGroup={true} />
+      return <TestDisplay userId={user._id} sectionId={section._id} isGroup={true} />
 
     return (
       <div className="flex px-5  gap-8 py-6">

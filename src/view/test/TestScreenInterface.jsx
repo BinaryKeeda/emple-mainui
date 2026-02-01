@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { CheckmarkSquare20Filled, LockClosed16Filled } from '@fluentui/react-icons'
 import { useTest } from './context/TestProvider'
+import { useUser } from '../../context/UserContext'
 
 export default function TestScreenInterface ({
   setLoader,
@@ -13,7 +14,8 @@ export default function TestScreenInterface ({
   current
 }) {
   const { section, setData , testId} = useTest()
-  const userId = useSelector(s => s.auth.user._id)
+  const { user } = useUser();
+  const userId = user._id;
   const startSection = async () => {
     try {
       setLoader(true)
