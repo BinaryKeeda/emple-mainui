@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BASE_URL } from '../../lib/config';
 import store from "../store";
 import { incrementPage, setCurrentPage, setHasMore, setTotalPage, testFailure, testRequest, testSuccess } from "../reducers/testReducer";
 import { tuple } from "zod";
+import { BASE_URL } from "../../lib/Lib";
 
 export const getTestAdmin = async () => {
     const { data, page , category} = store.getState().test;
