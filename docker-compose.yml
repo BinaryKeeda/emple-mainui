@@ -15,7 +15,7 @@ services:
         VITE_LOGIN_URL: ${VITE_LOGIN_URL}
         VITE_ADMIN_URL: ${VITE_ADMIN_URL}
         VITE_FRONTEND_URL: ${VITE_FRONTEND_URL}
-
+        VITE_APP_DESCOPE_PROJECT_ID: ${VITE_APP_DESCOPE_PROJECT_ID}
     container_name: binarykeeda-ui-prod
     restart: always
     ports:
