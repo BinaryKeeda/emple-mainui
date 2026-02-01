@@ -11,7 +11,7 @@ import Loader from '../../../layout/Loader'
 import { getTestSolutions } from '../../../redux/api/getTestSolution'
 import { SectionHeader } from '../utils/Helpers'
 
-const SubmissionList = ({ currCategory }) => {
+const SubmissionListTest = () => {
   const { hasMore, category, page, loading, data, currentPage, totalPages } =
     useSelector(s => s.testSolution)
 
@@ -122,4 +122,4 @@ const SubmissionList = ({ currCategory }) => {
   )
 }
 
-export default SubmissionList
+export default SubmissionListTest

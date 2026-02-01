@@ -5,29 +5,24 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
-  Divider,
   IconButton,
-  Typography,
   Tooltip,
-  Switch
 } from '@mui/material'
 import {
-  PersonAdd,
-  Settings,
-  Logout,
-  DarkMode,
-  LightMode,
   PowerSettingsNew
 } from '@mui/icons-material'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useUser } from '../../../context/UserContext'
 
-const AccountMenu = ({ handleLogout }) => {
+const AccountMenu = ({ handleLogout }: {
+  handleLogout: () => void
+}) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-  const { user } = useSelector(s => s.auth)
+  // const { user } = useSelector(s => s.auth)
+  const { user } = useUser();
 
-  const handleClick = event => {
+  const handleClick = (event:any) => {
     setAnchorEl(event.currentTarget)
   }
 
@@ -47,7 +42,7 @@ const AccountMenu = ({ handleLogout }) => {
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={user.avatar} sx={{ width: 32, height: 32 }}>
+            <Avatar src={user?.avatar ?? ""} sx={{ width: 32, height: 32 }}>
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </Avatar>
           </IconButton>
@@ -89,11 +84,11 @@ const AccountMenu = ({ handleLogout }) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Link
-          to={`/profile/${user._id}`}
+          to={`/profile/${user?._id as string}`}
           style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <MenuItem onClick={handleClose}>
-            <Avatar src={user.avatar}>
+            <Avatar src={user?.avatar as string}>
               {' '}
               {user?.name?.[0]?.toUpperCase() || 'U'}
             </Avatar>{' '}

@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    /* =======================
+       Runtime & Environment
+       ======================= */
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    /* =======================
+    
+       Modules & Bundler
+       ======================= */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    /* =======================
+       Type Safety
+       ======================= */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    /* =======================
+       Migration Support
+       ======================= */
+    "allowJs": true,
+    "checkJs": false,
+    /* =======================
+       Interop & Imports
+       ======================= */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    /* =======================
+       Build Behavior
+       ======================= */
+    "isolatedModules": true,
+    "noEmit": true,
+    /* =======================
+       Global Types
+       ======================= */
+    "types": [
+      "react",
+      "react-dom"
+    ],
+    /* =======================
+       Performance
+       ======================= */
+    "skipLibCheck": true
+  },
+  "include": [
+    "src",
+    "vite-env.d.ts"
+  ],
+}

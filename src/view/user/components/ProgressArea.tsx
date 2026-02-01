@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux'
 import React from 'react'
 import Loader from '../../../layout/Loader'
 import { SectionHeader } from '../utils/Helpers'
+import { useRankData } from '../../../hooks/user/UserApi'
+import { useUser } from '../../../context/UserContext'
 
 const pieParams = {
   margin: { right: 5, top: -4 },
@@ -25,52 +27,57 @@ const fadedColors = {
   misc: '#FFA64D' // slightly deeper orange
 }
 
-function ProgressArea () {
-  const { data: rankData, loading } = useSelector(s => s.auth.rankData)
+function ProgressArea({
+  rankData,
+  rankDataLoading
+}: {
+  rankData: any,
+  rankDataLoading: boolean
+}) {
 
-  const aptitude = rankData?.userRank?.solutions?.aptitude?.attempted || 0
-  const core = rankData?.userRank?.solutions?.core?.attempted || 0
-  const misc = rankData?.userRank?.solutions?.miscellaneous?.attempted || 0
+  const aptitude = rankData?.getRank?.userRank?.solutions?.aptitude?.attempted || 0
+  const core = rankData?.getRank?.userRank?.solutions?.core?.attempted || 0
+  const misc = rankData?.getRank?.userRank?.solutions?.miscellaneous?.attempted || 0
 
   const isEmpty = aptitude === 0 && core === 0 && misc === 0
 
   const pieData = isEmpty
     ? [
-        {
-          label: 'No data yet',
-          color: '#e5e7eb',
-          value: 1,
-          fadedColor: '#f3f4f6'
-        }
-      ]
+      {
+        label: 'No data yet',
+        color: '#e5e7eb',
+        value: 1,
+        fadedColor: '#f3f4f6'
+      }
+    ]
     : [
-        {
-          label: 'Aptitude',
-          color: themeColors.aptitude,
-          value: aptitude,
-          fadedColor: fadedColors.aptitude
-        },
-        {
-          label: 'Core',
-          color: themeColors.core,
-          value: core,
-          fadedColor: fadedColors.core
-        },
-        {
-          label: 'Miscellaneous',
-          color: themeColors.misc,
-          value: misc,
-          fadedColor: fadedColors.misc
-        }
-      ]
+      {
+        label: 'Aptitude',
+        color: themeColors.aptitude,
+        value: aptitude,
+        fadedColor: fadedColors.aptitude
+      },
+      {
+        label: 'Core',
+        color: themeColors.core,
+        value: core,
+        fadedColor: fadedColors.core
+      },
+      {
+        label: 'Miscellaneous',
+        color: themeColors.misc,
+        value: misc,
+        fadedColor: fadedColors.misc
+      }
+    ]
 
-  // if (loading && !rankData) {
-  //   return (
-  //     <div className='flex items-center justify-center flex-[.5] p-6 bg-white rounded-xl shadow'>
-  //       <Loader />
-  //     </div>
-  //   )
-  // }
+  if (rankDataLoading) {
+    return (
+      <div className='flex items-center justify-center flex-[.5] p-6 bg-white rounded-xl shadow'>
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div className='flex relative flex-col items-center justify-center flex-[0.7] h-full  bg-transparent'>
@@ -112,7 +119,7 @@ function ProgressArea () {
               highlightScope: { faded: 'global', highlighted: 'item' },
               faded: {
                 additionalRadius: -5,
-                color: item => item.color
+                // color: item => item.color
               },
               arcLabelMinAngle: 15
             }
@@ -124,7 +131,7 @@ function ProgressArea () {
       <div className='flex flex-1 p-4 rounded-xl shadow-lg bg-white flex-col w-full mt-2'>
         <span className='px-2 flex flex-col gap-1 pb-2'>
           <SectionHeader title={'Average Marks'} />
-           <hr className='border-gray-300 mb-1 ' />
+          <hr className='border-gray-300 mb-1 ' />
         </span>
         {[
           {
@@ -145,7 +152,7 @@ function ProgressArea () {
               {item.label}
             </label>
             <Box width='100%'>
-              <LinearProgressWithLabel value={item.value} color='primary' />
+              <LinearProgressWithLabel value={item.value}  />
             </Box>
           </div>
         ))}

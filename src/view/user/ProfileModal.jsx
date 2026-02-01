@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import { logOutUser } from '../../redux/reducers/UserThunks'
 import { Avatar } from '@mui/material'
 import profileData from '../../pages/profileData.json'
+import { useUser } from '../../context/UserContext'
 const avatars = [
   'https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_20.png',
   'https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_17.png',
@@ -46,7 +47,7 @@ const ProfileModal = ({ onClose }) => {
 
     return spaceBelow < dropdownHeight
   }
-  const user = useSelector(state => state.auth.user)
+  const {user} = useUser();
   const [formData, setFormData] = useState({
     yearOfGraduation: '',
     name: '',

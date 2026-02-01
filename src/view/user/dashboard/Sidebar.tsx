@@ -12,9 +12,14 @@ import { Avatar, IconButton } from '@mui/material'
 import { useState } from 'react'
 import useGroupData from '../hooks/useGroupData'
 import useInviteData from '../hooks/useInviteData'
+import { useUser } from '../../../context/UserContext'
 
-export default function Sidebar({ showMenu, setShowMenu }) {
-  const { user } = useSelector(s => s.auth)
+export default function Sidebar({ showMenu, setShowMenu }: {
+  showMenu: boolean,
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>
+}) {
+  // const { user } = useSelector(s => s.auth)
+  const { user } = useUser();
   const { id } = useParams()
   /// user.groups = [
   //   {
@@ -23,7 +28,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
   //     sections: [{ _id: "68ce8cf02c704a4da7987871", name: "UPES 2026" }]
   //   }
   // ]
-  const { data } = useGroupData({ userId: user?._id });
+  const { data } = useGroupData({ userId: user?._id as string });
 
 
   const NAV_ITEMS = [
@@ -37,7 +42,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
       icon: <BookOutlined sx={{ fontSize: 25 }} />,
       label: 'Practice',
       path: '/user/practice',
-      type: 'public'
+      type: 'private'
     },
     {
       icon: <SchoolOutlined sx={{ fontSize: 25 }} />,
@@ -48,7 +53,8 @@ export default function Sidebar({ showMenu, setShowMenu }) {
     {
       icon: <ReceiptLong sx={{ fontSize: 25 }} />,
       label: 'ATS',
-      path: '/user/resume'
+      path: '/user/resume',
+      type: 'private'
     }
   ]
 
@@ -57,7 +63,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
       <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] h-screen w-[90px] z-[999] left-0 top-0'>
         <ul className='flex items-center gap-3 mt-3 flex-col'>
           <span className='mb-4'>
-            <Avatar src={user?.avatar} />
+            <Avatar src={user?.avatar as string} />
           </span>
           {NAV_ITEMS.map((item, index) => {
             if (item.type === 'private' && !user) return null
@@ -100,12 +106,13 @@ export default function Sidebar({ showMenu, setShowMenu }) {
           })}
 
 
-          {data && data?.data?.map((group) => {
+          {data && data?.data?.map((group: any) => {
             const isActive = location.pathname === `/user/group/${group?.group?._id}`
+            // const isActive = false;
 
             return (
               <motion.div
-                key={group._id}
+                // key={group._id}
                 className='relative flex items-center justify-center w-full'
                 whileHover={{ scale: 1 }}
               >
@@ -178,7 +185,7 @@ export default function Sidebar({ showMenu, setShowMenu }) {
                   </Link>
                 )
               })}
-              {data?.data?.map((item) => (
+              {data?.data?.map((item:any) => (
                 <Link
                   key={item._id}
                   to={`/user/group/${item?.group?._id}`} // link with group id

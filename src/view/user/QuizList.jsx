@@ -9,20 +9,21 @@ import { resetState, setCategory } from '../../redux/reducers/quizReducer'
 import { getQuiz } from '../../redux/api/getQuiz'
 import { useEffect } from 'react'
 import { useLoginModal } from '../../context/LoginModalContext'
+import { useUser } from '../../context/UserContext'
 
 function QuizList () {
   const dispatch = useDispatch()
   const { name } = useParams()
-  const user = useSelector(s => s.auth.user, shallowEqual)
-  const { openLogin, closeLogin } = useLoginModal()
+  const user = useUser();
+  // const { openLogin, closeLogin } = useLoginModal()
 
-  useEffect(() => {
-    if (!user) {
-      openLogin()
-    } else {
-      closeLogin()
-    }
-  }, [user, openLogin, closeLogin])
+  // useEffect(() => {
+    // if (!user) {
+      // openLogin()
+    // } else {
+      // closeLogin()
+    // }
+  // }, [user, openLogin, closeLogin])
 
   // If not logged in, we can return null or a placeholder
   if (!user) {

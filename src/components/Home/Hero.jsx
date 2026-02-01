@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from 'react-scroll'
+import { useUser } from "../../context/UserContext";
 
 export default function Hero() {
-    const { user } = useSelector(s => s.auth)
+    // const { user } = useSelector(s => s.auth)
+    const { user } = useUser();
     return (
         <section id="home" className="relative h-[calc(100vh-140px)] min-h-[750px] md:min-h-0 w-full overflow-hidden" >
             {/* Layered Background Elements */}
@@ -148,7 +150,6 @@ export default function Hero() {
                     </div>
 
                     <div className="mt-6 md:mt-8 flex gap-4 justify-center md:justify-start items-center md:items-start">
-                        <Link to={user ? `/${user.role}` : '/login'}>
                             <button className="group relative overflow-hidden rounded-lg bg-gradient-to-r from-[#ca5a27] to-[#e67e22] px-8 py-3 text-white font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-out hover:animate-none"
                                 style={{
                                     animation: 'gentle-float 2.5s ease-in-out infinite'
@@ -161,7 +162,6 @@ export default function Hero() {
                                 </span>
                                 <div className="absolute inset-0 bg-gradient-to-r from-[#e67e22] to-[#ca5a27] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </button>
-                        </Link>
                         <ScrollLink to="about" smooth duration={1000} className="cursor-pointer"> 
                             <button className="group relative overflow-hidden rounded-lg border border-orange-600 px-8 py-3 text-orange-600 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 ease-out hover:bg-orange-50">
                                 <span className="relative z-10 flex items-center gap-2">

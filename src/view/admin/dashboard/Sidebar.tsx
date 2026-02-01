@@ -34,15 +34,25 @@ import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
+import { useUser } from '../../../context/UserContext'
 
-const Drawer = React.memo(({ showMenu, setShowMenu }) => {
-  const { user } = useSelector(s => s.auth)
+const Drawer = React.memo(({ showMenu, setShowMenu }: {
+  showMenu: boolean,
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const { user } = useUser();
 
-  const NAV_ITEMS = [
+  const NAV_ITEMS : {
+    icon: React.ReactNode;
+    label: string;
+    path: string;
+    type?: 'private' | 'public';
+    upcoming?: string;
+  }[] = [
     {
       icon: <DashboardOutlined sx={{ fontSize: '18px' }} />,
       label: 'Dashboard',
-      path: '/admin/',
+      path: '/user/',
       type: 'private'
     },
     {
@@ -70,8 +80,8 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
       type: 'private'
     },
     {
-      icon:<Pool/>,
-      label: 'Question Bank' ,
+      icon: <Pool />,
+      label: 'Question Bank',
       path: '/admin/questionbank',
       type: 'private'
     },
@@ -80,7 +90,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
       label: 'Groups',
       path: '/admin/groups',
       type: 'private',
-    // upcoming: 'true
+      // upcoming: 'true
     },
     // {
     //   icon: <PeopleAltOutlined sx={{ fontSize: '18px' }} />,
@@ -98,7 +108,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
     // }
   ]
 
-  const path = useLocation()
+  const path = useLocation().pathname
 
   return (
     <>
@@ -109,17 +119,16 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
                     z-40 h-[calc(100vh-59px)] top-[60px] fixed left-0
                     bg-primary
                     transition-all duration-300 ease-in-out
-                    ${
-                      showMenu
-                        ? 'lg:w-[150px] md:w-[100px]  '
-                        : 'w-0 lg:w-[87px]'
-                    }
+                    ${showMenu
+            ? 'lg:w-[150px] md:w-[100px]  '
+            : 'w-0 lg:w-[87px]'
+          }
                     overflow-hidden
                 `}
       >
         <ul className='pt-5'>
           {NAV_ITEMS.map((item, i) => {
-            const isActive = item.path === path.pathname
+            const isActive = item.path === path
             if (!user && item.type == 'private') return
             return (
               <Link

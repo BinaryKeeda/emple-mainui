@@ -5,8 +5,6 @@ import { setRankData, setError, setLoading } from '../slice/UserSlice';
 export const getRank = (id, college) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-
-
     const response = await axios.post(`${BASE_URL}/graphql` , {
       query:`#graphql
       query Query($userId: ID!, $university: String!) {

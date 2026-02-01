@@ -5,10 +5,12 @@ import { Edit } from '@mui/icons-material'
 import ProfileModal from '../ProfileModal'
 import { SectionHeader } from '../utils/Helpers'
 import { useTheme } from '@mui/material/styles'
+import { useUser } from '../../../context/UserContext'
 
-const MiniBarChart = React.memo(() => {
-  const { data: rankData } = useSelector(s => s.auth.rankData)
-  const solutions = rankData?.userRank?.solutions || {}
+const MiniBarChart = React.memo(({ rankData }: {
+  rankData: any
+}) => {
+  const solutions = rankData?.getRank?.userRank?.solutions || {}
 
   const categories = [
     { key: 'aptitude', label: 'Aptitude', color: '#FFDAB3' },
@@ -60,26 +62,28 @@ const MiniBarChart = React.memo(() => {
   )
 })
 
-const ProfileCard = React.memo(({ user }) => {
+const ProfileCard = ({ rankData }: {
+  rankData: any
+}) => {
+
+  const { user } = useUser()
   const [showEditModal, setShowEditModal] = useState(false)
   const theme = useTheme()
 
-  const fallback = (value, defaultValue = 'Not Provided') =>
+  const fallback = (value: string, defaultValue = 'Not Provided') =>
     value || defaultValue
 
   return (
     <div className='flex relative flex-col flex-1 pb-4 overflow-visible bg-white dark:bg-[#1e1e1e] shadow-lg rounded-xl w-full max-w-sm'>
-      {/* Avatar + Name + Email */}
       <div className='flex flex-col overflow-visible h-max items-center px-6 mt-[-14px] mb-1'>
         <Avatar
-          alt={user?.name}
-          src={user?.avatar}
+          alt={user?.name ?? ""}
+          src={user?.avatar ?? ""}
           sx={{
             width: 80,
             height: 80,
-            border: `3px solid ${
-              theme.palette.mode === 'dark' ? '#1e1e1e' : '#fff'
-            }`,
+            border: `3px solid ${theme.palette.mode === 'dark' ? '#1e1e1e' : '#fff'
+              }`,
             boxShadow: '0 2px 6px rgba(0,0,0,0.15)'
           }}
         />
@@ -88,50 +92,40 @@ const ProfileCard = React.memo(({ user }) => {
             variant='subtitle1'
             className='text-gray-900 dark:text-white'
           >
-            {fallback(user?.name, 'Unknown')}
+            {fallback(user?.name ?? "", 'Unknown')}
           </Typography>
           <Typography
             variant='body2'
             className='text-gray-500 dark:text-gray-300'
           >
-            {fallback(user?.email, 'No email')}
+            {fallback(user?.email ?? "", 'No email')}
           </Typography>
         </div>
       </div>
 
-      {/* Profile Details */}
       <div className='mt-2 px-6 text-xs flex flex-col gap-2 h-max overflow-hidden text-gray-700 dark:text-gray-400'>
         <div className='flex justify-between text-gray-900'>
           <span className='font-medium'>Semester:</span>
-          <span>{fallback(user?.semester)}</span>
+          <span>{fallback(user?.semester ?? "")}</span>
         </div>
         <div className='flex justify-between gap-4'>
           <span className='font-medium'>Program:</span>
-          <span className='text-wrap'>{fallback(user?.program)}</span>
+          <span className='text-wrap'>{fallback(user?.program ?? "")}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium'>University:</span>
-          <span>{fallback(user?.university)}</span>
+          <span>{fallback(user?.university ?? "")}</span>
         </div>
         <div className='flex justify-between'>
           <span className='font-medium'>Specialisation:</span>
-          <span>{fallback(user?.specialisation)}</span>
+          <span>{fallback(user?.specialisation ?? "")}</span>
         </div>
-        {/* <div className='flex justify-between'>
-          <span className='font-medium'>Joined:</span>
-          <span>
-            {user?.createdAt
-              ? new Date(user.createdAt).toDateString()
-              : 'Unknown'}
-          </span>
-        </div> */}
         <div className='flex justify-between'>
           <span className='font-medium'>Status:</span>
           <span className='text-green-600 font-medium'>Active</span>
         </div>
       </div>
 
-      {/* Edit Button */}
       <div className='absolute right-0 top-0 p-3'>
         <Tooltip title='Edit Profile'>
           <span
@@ -145,20 +139,18 @@ const ProfileCard = React.memo(({ user }) => {
         </Tooltip>
       </div>
 
-      {/* Mini Bar Chart */}
       <div className='mt-4' style={{ minHeight: 180 }}>
-        <MiniBarChart />
+        <MiniBarChart rankData={rankData} />
       </div>
 
       {/* Edit Modal */}
       {showEditModal && (
         <ProfileModal
-          open={showEditModal}
           onClose={() => setShowEditModal(false)}
         />
       )}
     </div>
   )
-})
+}
 
 export default ProfileCard

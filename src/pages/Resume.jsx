@@ -99,16 +99,15 @@ function ResumeATSPage () {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [result, setResult] = useState(null)
-  const { openLogin, closeLogin } = useLoginModal()
-  const { user } = useSelector(s => s.auth)
+const { user } = useSelector(s => s.auth)
 
-  useEffect(() => {
-    if (!user) {
-      openLogin()
-    } else {
-      closeLogin()
-    }
-  }, [user, openLogin, closeLogin])
+  // useEffect(() => {
+  //   if (!user) {
+  //     openLogin()
+  //   } else {
+  //     closeLogin()
+  //   }
+  // }, [user, openLogin, closeLogin])
 
   const handleSubmit = async () => {
     // Check if user is logged in

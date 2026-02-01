@@ -3,9 +3,10 @@ import { Link, useParams, useSearchParams } from "react-router-dom"
 import { useSectionData } from "./hooks/useGroupData"
 import QuizDisplay from "./components/QuizDisplay"
 import TestDisplay from "./components/TestDisplay"
+import { useUser } from "../../context/UserContext"
 
 export default function AssociatedGroup() {
-  const { user } = useSelector((s) => s.auth)
+  const { user } = useUser()
   const userId = user._id
   const { id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()

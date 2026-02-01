@@ -10,12 +10,12 @@ const Home = () => {
     <>
       {/* <HomeHelmet /> */}
       <section className='bg-'>
+        {/* hie */}
         <Hero />
         <About />
         <Showcase />
         <Accordion />
       </section>
-
 
     </>
   )

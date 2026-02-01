@@ -11,7 +11,7 @@ import { getSolutions } from '../../../redux/api/getSolutions'
 import Loader from '../../../layout/Loader'
 import { SectionHeader } from '../utils/Helpers'
 
-const SubmissionList = ({ currCategory }) => {
+const SubmissionList = () => {
   const { hasMore, category, page, loading, data, currentPage, totalPages } =
     useSelector(s => s.solution)
 

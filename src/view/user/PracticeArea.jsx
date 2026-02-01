@@ -9,6 +9,7 @@ import {
 import { Helmet } from 'react-helmet-async'
 import { useSelector } from 'react-redux'
 import { useLoginModal } from '../../context/LoginModalContext'
+import { useUser } from '../../context/UserContext'
 
 // Icons
 const ICONS = [<CalculateOutlinedIcon />, <HubIcon />, <LanOutlinedIcon />]
@@ -94,8 +95,8 @@ const LANDING_CARDS = [
 function PracticePage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const selectedTab = searchParams.get('tab')
-  const { openLogin } = useLoginModal()
-  const user = useSelector((state) => state.auth.user)
+  // const { openLogin } = useLoginModal()
+  const user = useUser();
   const location = useLocation() // to build redirect URL
 
   useEffect(() => {

@@ -7,6 +7,21 @@ export default defineConfig(({ mode }) => ({
   ],
   server: {
     port: 5173,
+    proxy: {
+
+      '/campus-admin': {
+        target: 'http://localhost:5174',
+        changeOrigin: true,
+        ws: true,
+        configure(proxy) {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            if (req.url === '/campus-admin') {
+              proxyReq.path += '/'
+            }
+          })
+        }
+      }
+    }
   },
 
 }))

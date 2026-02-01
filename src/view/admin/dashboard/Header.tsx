@@ -9,7 +9,6 @@ import {
 import { Avatar, Divider, Icon, IconButton } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { logOutUser } from '../../../redux/reducers/UserThunks'
-import Cookies from 'js-cookie'
 import AccountMenu from '../utils/HeaderMenu'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -21,18 +20,15 @@ import NotificationsDrawer from './NotificationDrawer'
 // import { handleLogout } from "../../../utils/libs/logout";
 
 const Header = React.memo(
-  ({ user, menuOpen, setMenuOpen }) => {
+  ({ user, menuOpen, setMenuOpen , handleLogout}:{
+    user: any,
+    menuOpen: boolean,
+    handleLogout: any,
+    setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>
+  }) => {
     const [notificationOpen, setNotificationOpen] = useState(false)
     const { toggleTheme, theme } = useContext(ThemeContext);
-    const dispacth = useDispatch()
-    const handleLogout = () => {
-      try {
-        console.log('Btn clicked')
-        dispacth(logOutUser(Cookies.get('token')))
-      } catch (error) {
-        console.log(error, 'logout')
-      }
-    }
+ 
     return (
       <>
         <header className='relative h-[59px]'>
@@ -82,7 +78,7 @@ const Header = React.memo(
                   <Link to={'/register'} className='text-sm font-medium hover:underline'>
                     Signup
                   </Link>
-                  <NotificationsDrawer/>
+                  {/* <NotificationsDrawer/> */}
                 </div>
               )}
             </div>
