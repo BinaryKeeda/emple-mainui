@@ -103,7 +103,7 @@ export default function LoginForm() {
 
     const handleSendOTP = async () => {
         try {
-            await sdk.otp.signIn.email(email);
+            await sdk.otp.signUpOrIn.email(email);
             setStep('otp');
         } catch (_err: any) {
             // setAuthError(err?.errorDescription || 'Failed to send OTP');
@@ -128,7 +128,7 @@ export default function LoginForm() {
         try {
             await sdk.magicLink.signIn.email(
                 email,
-                `${window.location.origin}/auth/verify`
+                `${window.location.origin}/verify`
             );
             setMessage('Verification email sent');
         } catch (_e) {
@@ -169,7 +169,7 @@ export default function LoginForm() {
                             helperText={emailForm.formState.errors.email?.message}
                         />
 
-                        <AuthLink href="/auth/reset">Forgot Password?</AuthLink>
+                        <AuthLink href="/reset">Forgot Password?</AuthLink>
                         <AuthActionButton
                             onClick={emailForm.handleSubmit(handleEmailSubmit)}
                         >
@@ -200,7 +200,7 @@ export default function LoginForm() {
                                 helperText={passwordForm.formState.errors.password?.message}
                             />
 
-                            <AuthLink href="/auth/reset">Forgot Password?</AuthLink>
+                            <AuthLink href="/reset">Forgot Password?</AuthLink>
 
                             <AuthActionButton
                                 onClick={passwordForm.handleSubmit(handlePasswordLogin)}

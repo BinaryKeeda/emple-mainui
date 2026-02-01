@@ -12,7 +12,6 @@ import {
   Code,
 } from "@mui/icons-material";
 import { IconButton, Fade, Backdrop } from "@mui/material";
-import { BASE_URL, LOGIN_URL } from "../lib/config";
 import { useSession } from "@descope/react-sdk";
 import { useUser } from "../context/UserContext";
 
@@ -85,8 +84,9 @@ const ResourcesDropdown = () => {
       >
         Resources
         <ExpandMoreIcon
-          className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-            }`}
+          className={`transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
           sx={{ fontSize: 18 }}
         />
       </button>
@@ -136,16 +136,12 @@ const ResourcesDropdown = () => {
 };
 
 // Mobile Menu Component
-const MobileMenu = ({ isOpen, onClose, user }) => {
-  const navigate = useNavigate();
-
+const MobileMenu = ({ isOpen, onClose }) => {
   const handleNavigation = (path) => {
-
     window.location.href = path;
     onClose();
   };
-  const { isAuthenticated } = useSession();
-
+  const { user } = useUser();
   return (
     <>
       <Backdrop
@@ -157,8 +153,9 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
 
       <Fade in={isOpen} timeout={300}>
         <div
-          className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${isOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
+          className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
           <div className="flex flex-col h-full">
             {/* Header */}
@@ -231,9 +228,13 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
 
             {/* Footer */}
             <div className="p-6 border-t border-gray-100 space-y-3">
-              {isAuthenticated ? (
+              {user ? (
                 <button
-                  onClick={() => handleNavigation(`/${user.role}`)}
+                  onClick={() =>
+                    handleNavigation(
+                      `/${user.role === "user" ? "user" : user.role === "admin" ? "admin" : "campus-admin"}`,
+                    )
+                  }
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
                 >
                   <Dashboard sx={{ fontSize: 20 }} />
@@ -268,20 +269,13 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
 MobileMenu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    role: PropTypes.string,
-  }),
-};
-
-MobileMenu.defaultProps = {
-  user: null,
 };
 
 // Main Header Component
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // const { user } = useSelector((state) => state.auth);
-  const { user } = useUser()
+  const { user } = useUser();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -377,7 +371,6 @@ export default function Header() {
                       to={`/${user.role}`}
                       className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
                     >
-
                       <Dashboard sx={{ fontSize: 18 }} />
 
                       {user?.profileCompleted || user?.role != "user"
@@ -394,8 +387,6 @@ export default function Header() {
                   )}
                 </div>
               </div>
-
-
 
               {/* Mobile Menu Button */}
               <div className="lg:hidden">

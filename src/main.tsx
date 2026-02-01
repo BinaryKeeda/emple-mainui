@@ -14,13 +14,12 @@ import Application from './Application'
 import { client } from './lib/Lib'
 
 const queryClient = new QueryClient()
-const isProd = import.meta.env.MODE === 'production'
 
 createRoot(document.getElementById('root') as HTMLElement).render(
   <AuthProvider
     projectId={import.meta.env.VITE_APP_DESCOPE_PROJECT_ID}
-    sessionTokenViaCookie={isProd}
-    refreshTokenViaCookie={isProd}
+    sessionTokenViaCookie={true}
+    refreshTokenViaCookie={true}
     persistTokens
   >
     <Provider store={store}>
