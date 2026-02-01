@@ -279,6 +279,10 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const handleNavigation = (path) => {
+    window.location.href = path;
+    onClose();
+  };
   const handleNavigationClick = (scrollTo) => {
     if (location.pathname !== "/") {
       navigate("/");
@@ -364,19 +368,18 @@ export default function Header() {
                 <ResourcesDropdown />
                 {/* Auth Buttons - Desktop */}
                 <div className="hidden lg:flex items-center gap-3">
-                  {location.pathname == "/login" ? (
-                    <> </>
-                  ) : isAuthenticated || user ? (
-                    <Link
-                      to={`/${user.role}`}
-                      className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                  {user ? (
+                    <button
+                      onClick={() =>
+                        handleNavigation(
+                          `/${user.role === "user" ? "user" : user.role === "admin" ? "admin" : "campus-admin"}`,
+                        )
+                      }
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
                     >
-                      <Dashboard sx={{ fontSize: 18 }} />
-
-                      {user?.profileCompleted || user?.role != "user"
-                        ? "Dashboard"
-                        : "Complete Profile"}
-                    </Link>
+                      <Dashboard sx={{ fontSize: 20 }} />
+                      Dashboard
+                    </button>
                   ) : (
                     <a
                       href={"/login"}
