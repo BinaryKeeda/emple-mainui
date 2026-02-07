@@ -257,6 +257,8 @@ export default function App() {
   const UserTestOptions = lazy(() => import("./view/user/TestOptions"));
   const UserQuizList = lazy(() => import("./view/user/QuizList"));
   const UserSolutionsList = lazy(() => import("./view/user/UserSolutionList"));
+  const UserAIInterview = lazy(() => import("./view/user/AIInterview"));
+
 
   const CoinsAdd = lazy(() => import("./view/user/CoinsAdd"));
   const CoinsCheckout = lazy(() => import("./view/user/CoinCheckout"));
@@ -387,6 +389,7 @@ export default function App() {
               <Route path="group/:id" element={<UserAssociatedGroup />} />
               <Route path="roadmaps" element={<UserRoadmaps />} />
               <Route path="profile" element={<UserProfile />} />
+              <Route path="interview" element={<UserAIInterview />} />
               <Route
                 path="solutions/list/:slug"
                 element={<UserSolutionsList />}

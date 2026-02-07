@@ -7,6 +7,9 @@ import {
   SchoolOutlined,
   Close,
   ReceiptLong,
+  SmartToyOutlined,
+  ShoppingCartOutlined,
+  MapOutlined
 } from '@mui/icons-material'
 import { Avatar, IconButton } from '@mui/material'
 import { useState } from 'react'
@@ -55,12 +58,33 @@ export default function Sidebar({ showMenu, setShowMenu }: {
       label: 'ATS',
       path: '/user/resume',
       type: 'private'
-    }
+    },
+    {
+      icon: <SmartToyOutlined sx={{ fontSize: 25 }} />,
+      label: 'AI Interview',
+      path: '/user/interview',
+      type: 'public'
+    },
+    {
+      icon: < ShoppingCartOutlined sx={{ fontSize: 25 }} />,
+      label: 'Tech Shop',
+      path: '/user/shop',
+      type: 'public'
+    },
+    {
+      icon: <MapOutlined sx={{ fontSize: 25 }} />,
+      label: 'Roadmaps',
+      path: '/user/Roadmaps',
+      type: 'public'
+    },
+   
   ]
 
   return (
     <>
-      <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] h-screen w-[90px] z-[999] left-0 top-0'>
+      <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] h-screen w-[110px] z-[999] left-0 top-0 '>
+      {/* <aside className='fixed md:flex hidden flex-col bg-[#1C1C1C] w-[90px] left-0 top-[60px] h-[calc(100vh-60px)] z-[40] overflow-y-auto'> */}
+
         <ul className='flex items-center gap-3 mt-3 flex-col'>
           <span className='mb-4'>
             <Avatar src={user?.avatar as string} />

@@ -35,6 +35,7 @@ const NotFound = lazy(() => import("./utilities/NotFound"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Policy = lazy(() => import("./pages/PrivacyPolicy"));
 const ExamAttempt = lazy(() => import("./view/test/Home"));
+const UserAIInterview = React.lazy(() => import("./view/user/AIInterview"));
 const CLIENT_ID = GOOGLE_CLIENT_ID;
 const App = () => {
   // const dispatch = useDispatch();
@@ -232,6 +233,7 @@ const App = () => {
                   <Route path="group/:id" element={<UserAssociatedGroup />} />
                   <Route path="roadmaps" element={<UserRoadmaps />} />
                   <Route path="profile" element={<UserProfile />} />
+                  <Route path="interview" element={<AIInterview />} />
                   <Route
                     path="solutions/list/:slug"
                     element={<UserSolutionsList />}
@@ -328,3 +330,6 @@ const App = () => {
 };
 
 export default App;
+
+
+
