@@ -49,10 +49,10 @@ const SubmissionListTest = () => {
         </div>
       ) : data[currentPage]?.length != 0 ? (
         <>
-          <div className="p-2">
+          {/* <div className="p-2">
 
             <SectionHeader title={'Test Submissions'} />
-          </div>
+          </div> */}
           <div className='flex mt-2 flex-col shadow-xl w-full  overflow-hidden '>
          <p className='w-full  px-4 text-left  bg-[#111827] from-orange-400 via-orange-500 to-orange-600 bg-clip-text text-transparent font-bold text-xl'></p> 
             <div className='relative  flex flex-col w-full  overflow-hidden     bg-primary shadow-md rounded-lg bg-clip-border '>

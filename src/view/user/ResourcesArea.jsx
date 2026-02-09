@@ -64,7 +64,7 @@ function ResourcePage () {
           </div>
         }
       >
-        <section className='grid gap-6 p-5 sm:grid-cols-2 lg:grid-cols-3'>
+        <section className='grid gap-6 p-5 sm:grid-cols-2 lg:grid-cols-3 md:ml-[80px]'>
           {RESOURCE_CARDS.map((card, idx) => (
             <Link to={card.link}
               key={idx}

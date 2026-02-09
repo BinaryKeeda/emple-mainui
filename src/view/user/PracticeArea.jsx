@@ -132,7 +132,7 @@ function PracticePage() {
         }
       >
         <section
-          className={` gap-6 p-5 
+          className={` gap-6 p-5 md:ml-[80px]
                     grid-cols-1
                     sm:grid-cols-2
                     md:grid-cols-3

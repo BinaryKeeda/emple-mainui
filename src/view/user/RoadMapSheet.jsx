@@ -65,7 +65,7 @@ export default function RoadMapSheet() {
   };
 
   return (
-    <section className="flex justify-between gap-5 p-3">
+    <section className="flex justify-between gap-5 p-3 md:ml-[80px]">
       <Helmet>
         <title>BinaryKeeda | Roadmaps Sheet</title>
         <meta

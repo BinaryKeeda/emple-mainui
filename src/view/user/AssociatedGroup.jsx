@@ -124,7 +124,7 @@ export default function AssociatedGroup() {
 
   // ----- Render -----
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen md:ml-[80px]">
       {!selectedSection ? (
         <>
 
