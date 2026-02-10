@@ -390,12 +390,9 @@
 
 
 
-
-
-
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Avatar } from "@mui/material";
+import { Avatar, Tooltip } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import ProfileModal from "./ProfileModal";
 
@@ -406,172 +403,283 @@ export default function Profile() {
 
   const solutions = rankData?.userRank?.solutions || {};
 
+  // Calculate profile completion percentage
+  const calculateCompletion = () => {
+    const fields = [
+      user?.dob, user?.contact, user?.address, user?.university, 
+      user?.program, user?.semester, user?.specialisation, user?.cgpa,
+      user?.marks10th, user?.marks12th, user?.github, user?.linkedin,
+      user?.skills?.length, user?.projectsLink
+    ];
+    const filled = fields.filter(f => f).length;
+    return Math.round((filled / fields.length) * 100);
+  };
+
+  const completionPercentage = calculateCompletion();
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-6 relative">
-          <button
-            onClick={() => setShowModal(true)}
-            className="absolute top-4 right-4 text-gray-600 hover:text-orange-500"
-          >
-            <Edit />
-          </button>
-
+        {/* Clean Profile Header */}
+        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
           <div className="flex items-center gap-6 mb-6">
-            <Avatar src={user?.avatar} sx={{ width: 96, height: 96 }} />
-            <div>
-              <h2 className="text-2xl font-bold mb-1">{user?.name || "User Name"}</h2>
-              <p className="text-gray-500">{user?.email}</p>
+            <Avatar 
+              src={user?.avatar} 
+              sx={{ 
+                width: 100, 
+                height: 100,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+              }} 
+            />
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold text-gray-900 mb-1">{user?.name || "User Name"}</h2>
+              <p className="text-gray-600">{user?.email}</p>
             </div>
+          </div>
+
+          {/* Profile Completion Indicator */}
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-gray-700">Profile Completion</span>
+              <span className="text-sm font-bold text-orange-600">{completionPercentage}%</span>
+            </div>
+            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-orange-500 rounded-full transition-all duration-500"
+                style={{ width: `${completionPercentage}%` }}
+              ></div>
+            </div>
+            {completionPercentage < 100 && (
+              <p className="text-xs text-gray-500 mt-2">Complete your profile to unlock all features!</p>
+            )}
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Personal Information</h3>
+          {/* Personal Information */}
+          <div className="bg-white rounded-lg shadow-md p-6 relative">
+            <button
+              onClick={() => setShowModal(true)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              title="Edit Personal Information"
+            >
+              <Edit sx={{ fontSize: 18 }} />
+            </button>
+            <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Personal Information</h3>
             <div className="space-y-3">
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Date of Birth:</span>
-                <span className="text-gray-600">{user?.dob || "Not Provided"}</span>
+                <Tooltip title={!user?.dob ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.dob || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Contact Number:</span>
-                <span className="text-gray-600">{user?.contact || "Not Provided"}</span>
+                <Tooltip title={!user?.contact ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.contact || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Address:</span>
-                <span className="text-gray-600 text-right">{user?.address || "Not Provided"}</span>
+                <Tooltip title={!user?.address ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600 text-right max-w-xs">{user?.address || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Status:</span>
                 <span className="text-green-600 font-semibold">Active</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Education Details</h3>
+          {/* Education Details */}
+          <div className="bg-white rounded-lg shadow-md p-6 relative">
+            <button
+              onClick={() => setShowModal(true)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              title="Edit Education Details"
+            >
+              <Edit sx={{ fontSize: 18 }} />
+            </button>
+            <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Education Details</h3>
             <div className="space-y-3">
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">University:</span>
-                <span className="text-gray-600">{user?.university || "Not Provided"}</span>
+                <Tooltip title={!user?.university ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.university || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Program:</span>
-                <span className="text-gray-600">{user?.program || "Not Provided"}</span>
+                <Tooltip title={!user?.program ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.program || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Semester:</span>
-                <span className="text-gray-600">{user?.semester || "Not Provided"}</span>
+                <Tooltip title={!user?.semester ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.semester || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Specialisation:</span>
-                <span className="text-gray-600">{user?.specialisation || "Not Provided"}</span>
+                <Tooltip title={!user?.specialisation ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.specialisation || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">CGPA:</span>
-                <span className="text-gray-600">{user?.cgpa || "Not Provided"}</span>
+                <Tooltip title={!user?.cgpa ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.cgpa || "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">10th Marks:</span>
-                <span className="text-gray-600">{user?.marks10th ? `${user.marks10th}%` : "Not Provided"}</span>
+                <Tooltip title={!user?.marks10th ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.marks10th ? `${user.marks10th}%` : "Not Provided"}</span>
+                </Tooltip>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">12th Marks:</span>
-                <span className="text-gray-600">{user?.marks12th ? `${user.marks12th}%` : "Not Provided"}</span>
+                <Tooltip title={!user?.marks12th ? "Click edit to add" : ""} arrow>
+                  <span className="text-gray-600">{user?.marks12th ? `${user.marks12th}%` : "Not Provided"}</span>
+                </Tooltip>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Professional Links</h3>
+          {/* Professional Links */}
+          <div className="bg-white rounded-lg shadow-md p-6 relative">
+            <button
+              onClick={() => setShowModal(true)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              title="Edit Professional Links"
+            >
+              <Edit sx={{ fontSize: 18 }} />
+            </button>
+            <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Professional Links</h3>
             <div className="space-y-3">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center py-2">
                 <span className="font-semibold text-gray-700">GitHub:</span>
                 {user?.github ? (
-                  <a href={user.github} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Profile</a>
+                  <a href={user.github} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">View Profile</a>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center py-2">
                 <span className="font-semibold text-gray-700">LinkedIn:</span>
                 {user?.linkedin ? (
-                  <a href={user.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Profile</a>
+                  <a href={user.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">View Profile</a>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center py-2">
                 <span className="font-semibold text-gray-700">Coding Profile:</span>
                 {user?.codingProfile ? (
-                  <a href={user.codingProfile} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Profile</a>
+                  <a href={user.codingProfile} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">View Profile</a>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center py-2">
                 <span className="font-semibold text-gray-700">Resume:</span>
                 {user?.resume ? (
-                  <a href={user.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Download</a>
+                  <a href={user.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">Download</a>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-bold mb-4 border-b pb-2">Skills & Projects</h3>
+          {/* Skills & Projects */}
+          <div className="bg-white rounded-lg shadow-md p-6 relative">
+            <button
+              onClick={() => setShowModal(true)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              title="Edit Skills & Projects"
+            >
+              <Edit sx={{ fontSize: 18 }} />
+            </button>
+            <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Skills & Projects</h3>
             <div className="space-y-4">
               <div>
-                <span className="font-semibold text-gray-700 block mb-2">Skills:</span>
+                <span className="font-semibold text-gray-700 block mb-3">Skills:</span>
                 {user?.skills && user.skills.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {user.skills.map((skill, index) => (
-                      <span key={index} className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm">{skill}</span>
+                      <span 
+                        key={index} 
+                        className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-medium"
+                      >
+                        {skill}
+                      </span>
                     ))}
                   </div>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add skills" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
-              <div>
-                <span className="font-semibold text-gray-700 block mb-2">Projects:</span>
+              <div className="pt-2">
+                <span className="font-semibold text-gray-700 block mb-3">Projects:</span>
                 {user?.projectsLink ? (
-                  <a href={user.projectsLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Projects</a>
+                  <a 
+                    href={user.projectsLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    View Projects
+                  </a>
                 ) : (
-                  <span className="text-gray-600">Not Provided</span>
+                  <Tooltip title="Click edit to add project link" arrow>
+                    <span className="text-gray-500">Not Provided</span>
+                  </Tooltip>
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
-          <h3 className="text-lg font-bold mb-4 border-b pb-2">Solved Problems</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { key: "aptitude", label: "Aptitude" },
-              { key: "core", label: "Core" },
-              { key: "miscellaneous", label: "Misc" },
-              { key: "ease", label: "Easy" },
-              { key: "medium", label: "Medium" },
-              { key: "hard", label: "Hard" },
-            ].map(({ key, label }) => {
-              const attempted = solutions[key]?.attempted || 0;
-              return (
-                <div key={key} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium">{label}</span>
-                    <span className="text-sm font-semibold">{attempted}</span>
-                  </div>
-                  <div className="bg-gray-200 rounded-full h-2">
-                    <div className="bg-orange-500 h-2 rounded-full transition-all" style={{ width: `${Math.min(attempted * 10, 100)}%` }} />
-                  </div>
-                </div>
-              );
-            })}
+        {/* Account Settings */}
+        <div className="bg-white rounded-lg shadow-md p-6 mt-6 relative">
+          <button
+            onClick={() => setShowModal(true)}
+            className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            title="Edit Account Settings"
+          >
+            <Edit sx={{ fontSize: 18 }} />
+          </button>
+          <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Account Settings</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex justify-between items-center py-2">
+              <span className="font-semibold text-gray-700">Email Notifications:</span>
+              <span className="text-green-600 font-semibold">Enabled</span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="font-semibold text-gray-700">Profile Visibility:</span>
+              <span className="text-gray-600">Public</span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="font-semibold text-gray-700">Two-Factor Auth:</span>
+              <span className="text-gray-500">Not Enabled</span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="font-semibold text-gray-700">Account Created:</span>
+              <span className="text-gray-600">{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}</span>
+            </div>
           </div>
         </div>
       </div>
