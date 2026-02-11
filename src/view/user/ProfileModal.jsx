@@ -33,7 +33,7 @@ const getMaxSemesters = programName => {
 
 const programs = profileData.programs
 
-const ProfileModal = ({ onClose }) => {
+const ProfileModal = ({ open,onClose }) => {
   const dropdownRefs = useRef({})
 
   // Function to check if dropdown should open upwards
@@ -215,7 +215,7 @@ const ProfileModal = ({ onClose }) => {
       console.log(error, 'logout')
     }
   }
-
+if (!open) return null;
   return (
     <div className='fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4'>
       {/* Main Profile Edit Modal */}

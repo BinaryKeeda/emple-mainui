@@ -385,21 +385,28 @@
 
 
 
-
-
-
-
-
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Avatar, Tooltip } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import ProfileModal from "./ProfileModal";
+import PersonalInfoModal from "./PersonalInfoModal";
+import EducationModal from "./EducationModal";
+import LinksModal from "./LinksModal";
+import SkillsModal from "./SkillsModal";
+import AccountSettingsModal from "./AccountSettingsModal";
 
 export default function Profile() {
   const { user } = useSelector((s) => s.auth);
   const { data: rankData } = useSelector((s) => s.auth.rankData);
-  const [showModal, setShowModal] = useState(false);
+  
+  // Separate state for each modal
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPersonalInfoModal, setShowPersonalInfoModal] = useState(false);
+  const [showEducationModal, setShowEducationModal] = useState(false);
+  const [showLinksModal, setShowLinksModal] = useState(false);
+  const [showSkillsModal, setShowSkillsModal] = useState(false);
+  const [showAccountSettingsModal, setShowAccountSettingsModal] = useState(false);
 
   const solutions = rankData?.userRank?.solutions || {};
 
@@ -421,7 +428,15 @@ export default function Profile() {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
         {/* Clean Profile Header */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-6">
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-6 relative hover:shadow-xl transition-shadow">
+          <button
+            onClick={() => setShowProfileModal(true)}
+            className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            title="Edit Profile"
+          >
+            <Edit sx={{ fontSize: 18 }} />
+          </button>
+          
           <div className="flex items-center gap-6 mb-6">
             <Avatar 
               src={user?.avatar} 
@@ -457,9 +472,9 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Personal Information */}
-          <div className="bg-white rounded-lg shadow-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg p-6 relative hover:shadow-xl transition-shadow">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowPersonalInfoModal(true)}
               className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
               title="Edit Personal Information"
             >
@@ -470,19 +485,19 @@ export default function Profile() {
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Date of Birth:</span>
                 <Tooltip title={!user?.dob ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.dob || "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.dob || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Contact Number:</span>
                 <Tooltip title={!user?.contact ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.contact || "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.contact || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Address:</span>
                 <Tooltip title={!user?.address ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600 text-right max-w-xs">{user?.address || "Not Provided"}</span>
+                  <span className="text-gray-500 text-right max-w-xs">{user?.address || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
@@ -493,9 +508,9 @@ export default function Profile() {
           </div>
 
           {/* Education Details */}
-          <div className="bg-white rounded-lg shadow-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg p-6 relative hover:shadow-xl transition-shadow">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowEducationModal(true)}
               className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
               title="Edit Education Details"
             >
@@ -506,52 +521,52 @@ export default function Profile() {
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">University:</span>
                 <Tooltip title={!user?.university ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.university || "Not Provided"}</span>
+                  <span className="text-gray-500 text-right max-w-xs truncate">{user?.university || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Program:</span>
                 <Tooltip title={!user?.program ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.program || "Not Provided"}</span>
+                  <span className="text-gray-500 text-right max-w-xs truncate">{user?.program || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Semester:</span>
                 <Tooltip title={!user?.semester ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.semester || "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.semester || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">Specialisation:</span>
                 <Tooltip title={!user?.specialisation ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600 text-right max-w-xs truncate">{user?.specialisation || "Not Provided"}</span>
+                  <span className="text-gray-500 text-right max-w-xs truncate">{user?.specialisation || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">CGPA:</span>
                 <Tooltip title={!user?.cgpa ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.cgpa || "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.cgpa || "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">10th Marks:</span>
                 <Tooltip title={!user?.marks10th ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.marks10th ? `${user.marks10th}%` : "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.marks10th ? `${user.marks10th}%` : "Not Provided"}</span>
                 </Tooltip>
               </div>
               <div className="flex justify-between py-2">
                 <span className="font-semibold text-gray-700">12th Marks:</span>
                 <Tooltip title={!user?.marks12th ? "Click edit to add" : ""} arrow>
-                  <span className="text-gray-600">{user?.marks12th ? `${user.marks12th}%` : "Not Provided"}</span>
+                  <span className="text-gray-500">{user?.marks12th ? `${user.marks12th}%` : "Not Provided"}</span>
                 </Tooltip>
               </div>
             </div>
           </div>
 
           {/* Professional Links */}
-          <div className="bg-white rounded-lg shadow-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg p-6 relative hover:shadow-xl transition-shadow">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowLinksModal(true)}
               className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
               title="Edit Professional Links"
             >
@@ -603,9 +618,9 @@ export default function Profile() {
           </div>
 
           {/* Skills & Projects */}
-          <div className="bg-white rounded-lg shadow-md p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg p-6 relative hover:shadow-xl transition-shadow">
             <button
-              onClick={() => setShowModal(true)}
+              onClick={() => setShowSkillsModal(true)}
               className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
               title="Edit Skills & Projects"
             >
@@ -628,7 +643,7 @@ export default function Profile() {
                   </div>
                 ) : (
                   <Tooltip title="Click edit to add skills" arrow>
-                    <span className="text-gray-500">Not Provided</span>
+                    <span className="text-gray-500 italic">Not Provided</span>
                   </Tooltip>
                 )}
               </div>
@@ -645,7 +660,7 @@ export default function Profile() {
                   </a>
                 ) : (
                   <Tooltip title="Click edit to add project link" arrow>
-                    <span className="text-gray-500">Not Provided</span>
+                    <span className="text-gray-500 italic">Not Provided</span>
                   </Tooltip>
                 )}
               </div>
@@ -654,16 +669,16 @@ export default function Profile() {
         </div>
 
         {/* Account Settings */}
-        <div className="bg-white rounded-lg shadow-md p-6 mt-6 relative">
+        <div className="bg-white rounded-lg shadow-lg p-6 mt-6 relative hover:shadow-xl transition-shadow">
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowAccountSettingsModal(true)}
             className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
             title="Edit Account Settings"
           >
             <Edit sx={{ fontSize: 18 }} />
           </button>
           <h3 className="text-lg font-bold mb-4 pb-3 border-b border-gray-200">Account Settings</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
             <div className="flex justify-between items-center py-2">
               <span className="font-semibold text-gray-700">Email Notifications:</span>
               <span className="text-green-600 font-semibold">Enabled</span>
@@ -684,7 +699,13 @@ export default function Profile() {
         </div>
       </div>
 
-      {showModal && <ProfileModal user={user} onClose={() => setShowModal(false)} />}
+      {/* All Modals */}
+      <ProfileModal open={showProfileModal} user={user} onClose={() => setShowProfileModal(false)} />
+      <PersonalInfoModal open={showPersonalInfoModal} user={user} onClose={() => setShowPersonalInfoModal(false)} />
+      <EducationModal open={showEducationModal} user={user} onClose={() => setShowEducationModal(false)} />
+      <LinksModal open={showLinksModal} user={user} onClose={() => setShowLinksModal(false)} />
+      <SkillsModal open={showSkillsModal} user={user} onClose={() => setShowSkillsModal(false)} />
+      <AccountSettingsModal open={showAccountSettingsModal} user={user} onClose={() => setShowAccountSettingsModal(false)} />
     </div>
   );
 }
