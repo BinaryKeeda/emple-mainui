@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import {
   DashboardOutlined,
+  ArticleOutlined,
   BookOutlined,
   SchoolOutlined,
   Close,
@@ -65,6 +66,13 @@ export default function Sidebar({ showMenu, setShowMenu }: {
       type: 'public',
       badge: null
     },
+     {
+    icon: <ArticleOutlined sx={{ fontSize: 18 }} />,
+    label: 'Blog',
+    path: '/user/blog',
+    type: 'public',
+    badge: null
+  },
     {
       icon: <ShoppingCartOutlined sx={{ fontSize: 18 }} />,
       label: 'Tech Shop',

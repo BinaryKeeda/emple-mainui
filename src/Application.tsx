@@ -368,10 +368,16 @@ export default function App() {
                 path="user/binarykeeda-roadmap-sheet"
                 element={<UserRoadmaps />}
               />
+              
+              {/* ✅ NEW: Standalone Blog Route */}
+              <Route path="user/blog" element={<UserBlog />} />
+              
+              {/* Individual Blog Post with slug */}
               <Route
                 path="user/binarykeeda-roadmap-sheet/blog/:slug"
                 element={<UserBlog />}
               />
+              
               <Route path="user/practice/:name" element={<UserQuizList />} />
             </Route>
             {/* ============================================================= */}
