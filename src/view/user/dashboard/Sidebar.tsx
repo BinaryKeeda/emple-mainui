@@ -43,7 +43,7 @@ export default function Sidebar({ showMenu, setShowMenu }: {
       label: 'Practice',
       path: '/user/practice',
       type: 'private',
-      badge: 'New'
+      badge: null
     },
     {
       icon: <FolderOutlined sx={{ fontSize: 18 }} />,
@@ -78,7 +78,7 @@ export default function Sidebar({ showMenu, setShowMenu }: {
       label: 'Tech Shop',
       path: '/user/shop',
       type: 'public',
-      badge: 'Sale'
+      badge: null
     },
     {
       icon: <MapOutlined sx={{ fontSize: 18 }} />,
@@ -100,30 +100,17 @@ export default function Sidebar({ showMenu, setShowMenu }: {
     <>
       {/* Desktop Sidebar - White UI */}
       <aside 
-        className='fixed md:flex hidden flex-col bg-white top-[60px] left-0 w-[210px] h-[calc(100vh-60px)] z-[999]'
+        className='fixed md:flex hidden flex-col bg-white top-[71px] left-0 w-[210px] h-[calc(100vh-71px)] z-[999]'
         style={{
           background: 'linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)',
           borderRight: '1px solid #e5e7eb',
           boxShadow: '2px 0 8px rgba(0, 0, 0, 0.02)'
         }}
       >
-        {/* Navigation Header */}
-        <div style={{
-          padding: '1.5rem 1rem 1rem 1rem'
-        }}>
-          <div style={{
-            fontSize: '0.7rem',
-            fontWeight: '700',
-            letterSpacing: '0.05em',
-            color: '#9ca3af',
-            textTransform: 'uppercase'
-          }}>
-            Navigation
-          </div>
-        </div>
+       
 
         {/* Navigation Items */}
-        <nav style={{ flex: 1 }}>
+        <nav style={{ flex: 1 ,paddingTop: '1.5rem' }}>
           {NAV_ITEMS.map((item, index) => {
             if (item.type === 'private' && !user) return null
             const isActive = location.pathname === item.path

@@ -11,204 +11,6 @@ import Signup from "./auth/Signup";
 import { ADMIN_URL } from "./lib/config";
 import AuthGuard from "./auth/AuthGuard";
 import Loader from "./shared/ui/Loader";
-// import { ADMIN_URL, GOOGLE_CLIENT_ID } from "./lib/config";
-// import { HelmetProvider } from "react-helmet-async";
-// import ThemeProvider from "./context/ThemeProvider";
-// import { SnackbarProvider } from "notistack";
-// import Loader from "./layout/Loader";
-// import { Slide } from "@mui/material";
-// import { RoleBasedRoutes, UserRoute } from "./auth/ProtectedRoutes";
-
-// const ExternalRedirect = ({ url }: {
-//   url: string
-// }) => {
-//   window.location.href = ADMIN_URL;
-// }
-//
-// const dispatch = useDispatch();
-// const token = Cookies.get("token");
-// const { user } = useSelector((state) => state.auth);
-
-//   );
-
-//   // admin routes
-
-// <>
-//     {/* <App /> */}
-//     {/* <Routes> */}
-//     {/* ============================================================= */}
-//     {/*                        Public Routes Starts                   */}
-//     {/* ============================================================= */}
-
-//     {/* <Route path="/" element={<> sds</>} /> */}
-//     {/* <Route path="/" element={<>home</>} /> */}
-//     {/* <Route path="/profile/:id" element={<UserProfile />} /> */}
-//     {/* <Route path="/counselling" element={<CounsellingHome />} /> */}
-//     {/* <Route element={<UserRoute />}>
-//     <Route path="/login" element={<Login />} />
-//     <Route path="/register" element={<Register />} />
-//     <Route path="/signin" element={<Redirect />} />
-//     <Route path="/verify/:id" element={<SetUpPassword />} />
-//     <Route path="/reset" element={<ForgerPassword />} />
-//   </Route>
-
-//   <Route path="/privacy-policy" element={<Policy />} />
-//   <Route path="/about" element={<About />} />
-//   <Route path="/contact" element={<Contact />} />
-//   <Route path="/terms-of-service" element={<Terms />} /> */}
-//     {/*  User But Public  */}
-//     {/* ============================================================= */}
-//     {/*                        Public Routes Starts                   */}
-//     {/* ============================================================= */}
-//     {/* ============================================================= */}
-//     {/*                        User Public Routes Starts              */}
-//     {/* ============================================================= */}
-//     {/* <Route path="/" element={<UserLayout />}>
-//     <Route
-//       path="user/practice"
-//       element={<UserPracticeArea />}
-//     />
-//     <Route
-//       path="user/binarykeeda-dsa-sheet"
-//       element={<UserCoding />}
-//     />
-//     <Route path="user/resume" element={<ResumeATS />} />
-//     <Route
-//       path="user/resources"
-//       element={<UserResources />}
-//     ></Route>
-//     <Route
-//       path="user/binarykeeda-dsa-sheet/description/:topicName/:problemTitle"
-//       element={<UserCodingDescription />}
-//     />
-//     <Route
-//       path="/user/binarykeeda-210-sheet"
-//       element={<UserRoadMapSheet />}
-//     />
-//     <Route
-//       path="user/problems"
-//       element={<UserCodingProblems />}
-//     />
-//     <Route
-//       path="user/binarykeeda-roadmap-sheet"
-//       element={<UserRoadmaps />}
-//     />
-//     <Route
-//       path="user/binarykeeda-roadmap-sheet/blog/:slug"
-//       element={<UserBlog />}
-//     />
-//     <Route
-//       path="user/practice/:name"
-//       element={<UserQuizList />}
-//     />
-//   </Route> */}
-//     {/* ============================================================= */}
-//     {/*                        User Public Routes Ends                */}
-//     {/* ============================================================= */}
-//     {/* <Route path="/user/exam/:id" element={<ExamAttempt />} /> */}
-//     {/* ============================================================= */}
-//     {/*                        User  Routes Starts                    */}
-//     {/* ============================================================= */}
-//     {/* <Route
-//     path="/user"
-//     element={
-//       <RoleBasedRoutes requiredRole={"user"}>
-//         {" "}
-//         <UserLayout />{" "}
-//       </RoleBasedRoutes>
-//     }
-//   >
-//     <Route index element={<UserDashboard />} />
-//     <Route path="coins-add" element={<CoinsAdd />} />
-//     <Route path="coins-add/:id" element={<CoinsCheckout />} />
-//     <Route path="group/:id" element={<UserAssociatedGroup />} />
-//     <Route path="roadmaps" element={<UserRoadmaps />} />
-//     <Route path="profile" element={<UserProfile />} />
-//     <Route
-//       path="solutions/list/:slug"
-//       element={<UserSolutionsList />}
-//     />
-//     <Route element={<UserTestOptions />} path="test-series/" />
-//     <Route element={<UserTestList />} path="test-series/:id" />
-//     <Route element={<UserPreview />} path="preview/:id" />
-//     <Route
-//       element={<UserTestPreview />}
-//       path="test/preview/:id"
-//     />
-//   </Route>
-//   <Route element={<RoleBasedRoutes requiredRole={"user"} />}>
-//     <Route element={<UserSolution />} path="user/quiz/:slug" />
-//     <Route
-//       element={<UserTestAttempt />}
-//       path="user/test/:slug"
-//     />
-//   </Route> */}
-//     {/* <Route
-//     path="user/problem/:slug"
-//     element={<UserCodingProblemsAttempt />}
-//   /> */}
-//     {/* ============================================================= */}
-//     {/*                        User  Routes Ends                     */}
-//     {/* ============================================================= */}
-//     {/* ============================================================= */}
-//     {/*                        Admin Routes Starts                    */}
-//     {/* ============================================================= */}
-
-//     {/* <Route
-//     path="/admin"
-//     element={
-//       <RoleBasedRoutes requiredRole={"admin"}>
-//         <AdminLayout />
-//       </RoleBasedRoutes>
-//     }
-//   >
-//     <Route index element={<AdminHome />} />
-//     <Route path="view/:id" element={<ViewQuiz />} />
-//     <Route path="test-series" element={<AdminTestSeries />} />
-//     <Route path="add/problem" element={<AdminAddProblem />} />
-//     <Route path="test" element={<AdminTestListing />} />
-//     <Route path="edit/test/:id" element={<AdminEditTest />} />
-//     <Route
-//       path="campustest"
-//       element={<AdmintCampusTestListing />}
-//     />
-//     <Route
-//       path="edit/campustest/:id"
-//       element={<AdminEditCampusTest />}
-//     />
-//     <Route path="problems" element={<AdminProblemsListing />} />
-//     <Route
-//       path="edit/problems/:id"
-//       element={<AdminEditProblem />}
-//     />
-//     <Route path="users" element={<></>} />
-//     <Route path="quiz" element={<AdminQuizListing />} />
-//     <Route path="edit/quiz/:id" element={<AdminEditQuiz />} />
-//     <Route
-//       path="questionbank"
-//       element={<AdminQuestionBankListing />}
-//     />
-//     <Route
-//       path="edit/questionbanks/:id"
-//       element={<AdminEditQuestionBank />}
-//     />
-//     <Route path="mail/:testId" element={<AdminMailTest />} />
-//     <Route path="groups" element={<AdminGroupsManage />} />
-//     <Route path="sections" element={<></>} />
-//   </Route> */}
-//     {/* ============================================================= */}
-//     {/*                        Admin Routes Ends                    */}
-//     {/* ============================================================= */}
-//     {/* <Route
-//     path="/campus-admin"
-//   /> */}
-//     {/* <Route
-//     path="/campus-superadmin"
-//   /> */}
-
-//     {/* <Route path="*" element={<NotFound />} /> */}
-//     {/* </Routes> */}
-// </>
 
 export default function App() {
   const ExternalRedirect = ({ redirect }: { redirect: string }) => {
@@ -269,7 +71,7 @@ export default function App() {
   const Users = lazy(() => import("./view/admin/pages/Users"));
   const EditQuiz = lazy(() => import("./view/admin/pages/EditQuiz"));
 
-  const ViewQuiz = lazy(() => import("./view/admin/pages/Quiz"));
+  const ViewQuiz = lazy(() => import("./view/admin/pages/Quiz"))
   const AdminHome = lazy(() => import("./view/admin/pages/Home"));
   const AdminTestSeries = lazy(() => import("./view/admin/pages/Test"));
   const AdminTestEdit = lazy(() => import("./view/admin/pages/TestEdit"));
@@ -420,14 +222,18 @@ export default function App() {
             {/*                        Admin Routes Starts                    */}
             {/* ============================================================= */}
 
-            <Route
+            {/* <Route
               path="/admin"
               element={
                 <RoleBasedRoutes requiredRole={"admin"}>
                   <AdminLayout />
                 </RoleBasedRoutes>
               }
-            >
+            > */}
+            <Route
+  path="/admin"
+  element={<AdminLayout />}
+>
               <Route index element={<AdminHome />} />
               <Route path="view/:id" element={<ViewQuiz />} />
               <Route path="test-series" element={<AdminTestSeries />} />
