@@ -119,8 +119,8 @@ export default function UserLayout({ children }: {
     <main
       className={`
           xs:p-1 bg-gray-100
-           md:pl-[110px]
-          md:pr-5 py-5  min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
+           md:pl-[210px]
+          md:pr-5 py-5  min-h-[calc(100vh-70px)] text-gray-800 transition-all`}
     >
       {/* {(user && !user?.profileCompleted) ? <CompleteProfile /> */}
       {/* : */}

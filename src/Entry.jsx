@@ -202,6 +202,7 @@ const App = () => {
                     path="user/binarykeeda-roadmap-sheet"
                     element={<UserRoadmaps />}
                   />
+                  <Route path="user/blog" element={<UserBlog />} />
                   <Route
                     path="user/binarykeeda-roadmap-sheet/blog/:slug"
                     element={<UserBlog />}

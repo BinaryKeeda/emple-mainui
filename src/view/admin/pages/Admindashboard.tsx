@@ -61,8 +61,8 @@ const AdminDashboardLayout = ({ children }: {
         > */}
           <main
             className={`
-           pl-5 lg:pl-[110px]
-           pr-5 py-5  bg-[#f0f0f0] min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
+           pl-5 lg:pl-[210px]
+           pr-5 py-5  bg-[#f0f0f0] min-h-[calc(100vh-70px)] text-gray-800 transition-all`}
           >
             {children || <Outlet />}
           </main>

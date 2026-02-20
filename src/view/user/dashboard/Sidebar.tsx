@@ -32,63 +32,63 @@ export default function Sidebar({ showMenu, setShowMenu }: {
 
   const NAV_ITEMS = [
     {
-      icon: <DashboardOutlined sx={{ fontSize: 18 }} />,
+      icon: <DashboardOutlined sx={{ fontSize: 24 }} />,
       label: 'Dashboard',
       path: '/user',
       type: 'private',
       badge: null
     },
     {
-      icon: <BookOutlined sx={{ fontSize: 18 }} />,
+      icon: <BookOutlined sx={{ fontSize: 24 }} />,
       label: 'Practice',
       path: '/user/practice',
       type: 'private',
       badge: null
     },
     {
-      icon: <FolderOutlined sx={{ fontSize: 18 }} />,
+      icon: <FolderOutlined sx={{ fontSize: 24 }} />,
       label: 'Resources',
       path: '/user/resources',
       type: 'public',
       badge: null
     },
     {
-      icon: <ReceiptLong sx={{ fontSize: 18 }} />,
+      icon: <ReceiptLong sx={{ fontSize: 24 }} />,
       label: 'ATS',
       path: '/user/resume',
       type: 'private',
       badge: null
     },
     {
-      icon: <ChatBubbleOutlineOutlined sx={{ fontSize: 18 }} />,
+      icon: <ChatBubbleOutlineOutlined sx={{ fontSize: 24 }} />,
       label: 'AI Interview',
       path: '/user/interview',
       type: 'public',
       badge: null
     },
-     {
-    icon: <ArticleOutlined sx={{ fontSize: 18 }} />,
-    label: 'Blog',
-    path: '/user/blog',
-    type: 'public',
-    badge: null
-  },
     {
-      icon: <ShoppingCartOutlined sx={{ fontSize: 18 }} />,
+      icon: <ArticleOutlined sx={{ fontSize: 24 }} />,
+      label: 'Blog',
+      path: '/user/blog',
+      type: 'public',
+      badge: null
+    },
+    {
+      icon: <ShoppingCartOutlined sx={{ fontSize: 24 }} />,
       label: 'Tech Shop',
       path: '/user/shop',
       type: 'public',
       badge: null
     },
     {
-      icon: <MapOutlined sx={{ fontSize: 18 }} />,
+      icon: <MapOutlined sx={{ fontSize: 24 }} />,
       label: 'Roadmaps',
       path: '/user/Roadmaps',
       type: 'public',
       badge: null
     },
     {
-      icon: <SchoolOutlined sx={{ fontSize: 18 }} />,
+      icon: <SchoolOutlined sx={{ fontSize: 24 }} />,
       label: 'UPES',
       path: '/user/group/692477a42c83325f0e199afb',
       type: 'public',
@@ -98,8 +98,8 @@ export default function Sidebar({ showMenu, setShowMenu }: {
 
   return (
     <>
-      {/* Desktop Sidebar - White UI */}
-      <aside 
+      {/* Desktop Sidebar */}
+      <aside
         className='fixed md:flex hidden flex-col bg-white top-[71px] left-0 w-[210px] h-[calc(100vh-71px)] z-[999]'
         style={{
           background: 'linear-gradient(180deg, #ffffff 0%, #f9fafb 100%)',
@@ -107,10 +107,8 @@ export default function Sidebar({ showMenu, setShowMenu }: {
           boxShadow: '2px 0 8px rgba(0, 0, 0, 0.02)'
         }}
       >
-       
-
         {/* Navigation Items */}
-        <nav style={{ flex: 1 ,paddingTop: '1.5rem' }}>
+        <nav style={{ flex: 1, paddingTop: '1.5rem' }}>
           {NAV_ITEMS.map((item, index) => {
             if (item.type === 'private' && !user) return null
             const isActive = location.pathname === item.path
@@ -124,19 +122,21 @@ export default function Sidebar({ showMenu, setShowMenu }: {
                 style={{
                   padding: '0.65rem 1rem',
                   margin: '0 0.75rem 0.375rem 0.75rem',
-                  borderRadius: '14px',
+                  borderRadius: '4px',
                   cursor: 'pointer',
-                  background: isActive 
-                    ? 'linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%)'
+                  background: isActive
+                    ? 'linear-gradient(135deg, #ff6200 0%, #f13000 100%)'
                     : isHovered
                       ? 'rgba(255, 107, 53, 0.08)'
                       : 'transparent',
-                  color: isActive ? 'white' : isHovered ? '#ff6b35' : '#6b7280',
+                  color: isActive ? 'white' : isHovered ? '#ff6b35' : '#000000',
                   fontWeight: isActive ? '600' : '500',
                   fontSize: '0.875rem',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: isActive 
-                    ? '0 4px 12px rgba(255, 107, 53, 0.25), 0 2px 4px rgba(255, 107, 53, 0.15)' 
+                  // Smooth fade transition
+                  // transition: 'background 0.4s ease-in-out, color 0.4s ease-in-out, box-shadow 0.4s ease-in-out, transform 0.3s ease-in-out',
+                  transition: 'background 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: isActive
+                    ? '0 4px 12px rgba(255, 107, 53, 0.25), 0 2px 4px rgba(255, 107, 53, 0.15)'
                     : 'none',
                   transform: isHovered && !isActive ? 'translateX(4px)' : 'translateX(0)',
                   display: 'flex',
@@ -171,33 +171,33 @@ export default function Sidebar({ showMenu, setShowMenu }: {
                       opacity: 0.6
                     }} />
                   )}
-                  
+
                   {/* Icon */}
-                  <span 
+                  <span
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      transition: 'all 0.25s ease',
+                      transition: 'transform 0.3s ease',
                       transform: isHovered ? 'scale(1.1)' : 'scale(1)',
                       color: 'inherit'
                     }}
                   >
                     {item.icon}
                   </span>
-                  
+
                   {/* Label */}
                   <span style={{ flex: 1 }}>{item.label}</span>
-                  
-                  {/* Badge for specific items */}
+
+                  {/* Badge */}
                   {item.badge && (
                     <span style={{
-                      background: isActive 
-                        ? 'rgba(255, 255, 255, 0.25)' 
+                      background: isActive
+                        ? 'rgba(255, 255, 255, 0.25)'
                         : item.badge === 'New'
                           ? 'rgba(255, 107, 53, 0.1)'
                           : 'rgba(239, 68, 68, 0.1)',
-                      color: isActive 
-                        ? 'white' 
+                      color: isActive
+                        ? 'white'
                         : item.badge === 'New'
                           ? '#ff6b35'
                           : '#ef4444',

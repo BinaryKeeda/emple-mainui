@@ -91,20 +91,31 @@ export default function CalendarComponent() {
         <div
           key={`current-${day}`}
           className={`
-            text-center py-2 text-sm rounded-full cursor-pointer transition-all relative
+            text-center py-2 text-sm cursor-pointer transition-all relative flex items-center justify-center
             ${isCurrentDay 
-              ? 'bg-orange-500 text-white font-semibold' 
+              ? 'text-white font-semibold'
               : isWeekendDay
-              ? 'text-red-500 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ? 'text-red-500 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-full'
             }
           `}
         >
-          {day}
-          {hasActivityDot && !isCurrentDay && (
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
-              <div className="w-1 h-1 bg-orange-500 rounded-full"></div>
-            </div>
+          {isCurrentDay ? (
+            <span
+              style={{ background: 'linear-gradient(135deg, #ff6200 35%, #f13000 100%)' }}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-white font-semibold"
+            >
+              {day}
+            </span>
+          ) : (
+            <>
+              {day}
+              {hasActivityDot && (
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+                  <div className="w-1 h-1 bg-orange-500 rounded-full"></div>
+                </div>
+              )}
+            </>
           )}
         </div>
       );
@@ -130,7 +141,6 @@ export default function CalendarComponent() {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 flex-1 border border-gray-200 dark:border-gray-700">
-    
 
       {/* Header with Title and Streak */}
       <div className="flex justify-between items-center mb-4">

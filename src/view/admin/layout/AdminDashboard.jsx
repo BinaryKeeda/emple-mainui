@@ -6,7 +6,7 @@ export default function AdminDashboard ({ children }) {
   return (
     <>
       <AdminHeader />
-      <main className='p-10 min-h-[calc(100vh-70px)] bg-gray-50'>{children || <Outlet />}</main>
+      <main className='p-10 min-h-[calc(100vh-70px)] bg-gray-50 '>{children || <Outlet />}</main>
     </>
   )
 }

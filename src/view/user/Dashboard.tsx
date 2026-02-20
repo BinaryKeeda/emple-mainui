@@ -26,7 +26,7 @@ export default function Dashboard() {
   
   return (
     <div>
-      <div className='p-5 min-h-screen flex flex-col gap-6 md:ml-[100px]'>
+      <div className='p-5 min-h-screen flex flex-col gap-6 '>
         <Helmet>
           <title>BinaryKeeda | Dashboard</title>
         </Helmet>
@@ -45,9 +45,10 @@ export default function Dashboard() {
               <div className='bg-white dark:bg-gray-800 rounded-full p-1 shadow-lg inline-flex gap-1'>
                 <button
                   onClick={() => setActiveTab('test')}
+                  style={activeTab === 'test' ? { background: 'linear-gradient(135deg, #ff6200 35%, #f13000 100%)' } : {}}
                   className={`px-10 py-3 rounded-full font-semibold text-sm transition-all ${
                     activeTab === 'test'
-                      ? 'bg-[#f7782a] ... text-white shadow-md'
+                      ? 'text-white shadow-md'
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
@@ -55,9 +56,10 @@ export default function Dashboard() {
                 </button>
                 <button
                   onClick={() => setActiveTab('quiz')}
+                  style={activeTab === 'quiz' ? { background: 'linear-gradient(135deg, #ff6200 35%, #f13000 100%)' } : {}}
                   className={`px-10 py-3 rounded-full font-semibold text-sm transition-all ${
                     activeTab === 'quiz'
-                      ? 'bg-[#f7782a] ... text-white shadow-md'
+                      ? 'text-white shadow-md'
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >

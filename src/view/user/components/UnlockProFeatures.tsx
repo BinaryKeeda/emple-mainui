@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function UnlockProFeatures() {
   return (
-    <div className='flex flex-col items-center justify-center bg-white rounded-lg shadow-md py-8 px-8 text-center h-[450px]'>
+    <div className='flex flex-col items-center justify-center bg-white rounded-lg shadow-md py-8 px-8 text-center h-[520px]'>
       {/* Rocket Icon */}
       <div className='text-5xl mb-3'>
         🚀
@@ -21,7 +21,8 @@ export default function UnlockProFeatures() {
       </p>
       
       {/* Upgrade Button */}
-      <button className='bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold px-10 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105'>
+      
+          <button style={{background: 'linear-gradient(135deg, #ff6200 35%, #f13000 100%)'}} className='text-white font-semibold px-10 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105'>
         Upgrade Now
       </button>
     </div>

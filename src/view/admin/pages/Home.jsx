@@ -1,3 +1,4 @@
+
 import React, { lazy, Suspense, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Button } from '@mui/material'
@@ -23,6 +24,23 @@ const AddTestModal = lazy(() => import('../modals/AddTest'))
 const AddCampusTestModal = lazy(() => import('../modals/AddCampusTest'))
 const AddProblem = lazy(() => import('../modals/AddProblem'))
 const AddQuestionBank = lazy(() => import('../modals/AddQuestionBank'))
+
+// Shared button styles
+const buttonStyles = {
+  fontSize: 13,
+  fontWeight: 500,
+  textTransform: 'none',
+  borderRadius: 2,
+  background: 'linear-gradient(135deg, #ff6200  0%, #f13000 100%)',
+  boxShadow: '0 2px 8px rgba(255, 107, 53, 0.2)',
+  '&:hover': {
+    background: 'linear-gradient(135deg, #ff5722 0%, #ff7b35 100%)',
+    boxShadow: '0 4px 12px rgba(255, 107, 53, 0.3)',
+    transform: 'translateY(-1px)'
+  },
+  transition: 'all 0.3s ease'
+}
+
 export default function Home() {
   const [showAddGroupAdmin, setShowAddGroupadmin] = useState(false)
   const [showAddQuiz, setShowAddQuiz] = useState(false)
@@ -30,6 +48,7 @@ export default function Home() {
   const [showAddCampustest, setshowAddCampustest] = useState(false)
   const [showAddProblem, setShowAddProblem] = useState(false)
   const [showAddQuestionBank, setShowAddQuestionBank] = useState(false)
+  
   const { data, isLoading } = useQuery({
     queryKey: ['adminSummary'],
     queryFn: async () => {
@@ -81,7 +100,6 @@ export default function Home() {
           onAdd={() => { }}
         />
         <DashboardCard title='Problems' count={problems} onAdd={() => { }} />
-        {/* <DashboardCard title='Question Bank' count={questionBank} onAdd={() => {}} /> */}
       </>
     )
   }
@@ -94,12 +112,7 @@ export default function Home() {
         <div className='flex gap-3 flex-wrap'>
           <Button
             variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              borderRadius: 2
-            }}
+            sx={buttonStyles}
             endIcon={<Add />}
             onClick={() => {
               setShowAddGroupadmin(true)
@@ -109,64 +122,25 @@ export default function Home() {
           </Button>
           <Button
             variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              borderRadius: 2
-            }}
+            sx={buttonStyles}
             onClick={() => setShowAddTest(true)}
           >
-            Create Test <Add16Regular />
+            Create Test <Add16Regular style={{ marginLeft: 8 }} />
           </Button>
           <Button
             variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              borderRadius: 2
-            }}
+            sx={buttonStyles}
             onClick={() => setShowAddQuestionBank(true)}
           >
-            Create Question Bank <Add16Regular />
+            Create Question Bank <Add16Regular style={{ marginLeft: 8 }} />
           </Button>
           <Button
             variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              borderRadius: 2
-            }}
+            sx={buttonStyles}
             onClick={() => setShowAddQuiz(true)}
           >
-            Add Quiz <Add16Regular />
+            Add Quiz <Add16Regular style={{ marginLeft: 8 }} />
           </Button>
-          {/* <Button
-            variant='contained'
-            sx={{
-              fontSize: 13,
-              fontWeight: 500,
-              textTransform: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.2,
-              borderRadius: 2
-            }}
-            onClick={() => setshowAddCampustest(true)}
-          >
-            Add Campus Test <Add16Regular />
-          </Button> */}
         </div>
       </section>
 
@@ -191,7 +165,7 @@ export default function Home() {
                 <Line
                   type='monotone'
                   dataKey='count'
-                  stroke='#3b82f6'
+                  stroke='#ff6b35'
                   strokeWidth={2}
                   dot={{ r: 4 }}
                   activeDot={{ r: 6 }}
@@ -260,22 +234,6 @@ const DashboardCard = ({
           <h3 className='text-sm text-gray-500 mb-1'>{title}</h3>
           <p className='text-4xl font-extrabold text-gray-800'>{count}</p>
         </div>
-        {/* {!disabled && (
-          <Button
-            onClick={onAdd}
-            variant='outlined'
-            sx={{
-              mt: 2,
-              fontSize: 12,
-              textTransform: 'none',
-              borderColor: '#000',
-              color: '#000',
-              borderRadius: 1.5
-            }}
-          >
-            Add More
-          </Button>
-        )} */}
       </>
     )}
   </div>
