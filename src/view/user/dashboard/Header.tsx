@@ -1,4 +1,5 @@
-// import React, { useState, useContext, useEffect } from 'react'
+
+// import React, { useState } from 'react'
 // import {
 //   ShortText,
 //   Notifications,
@@ -12,9 +13,7 @@
 //   Menu,
 //   MenuItem,
 // } from '@mui/material'
-// import { DARK_STRONG } from '../utils/colors'
 // import { Link } from 'react-router-dom'
-// import { LOGO } from '../../../lib/config'
 // import NotificationsDrawer from './NotificationDrawer'
 // import { Cart20Regular } from '@fluentui/react-icons'
 // import { useSnackbar } from 'notistack'
@@ -23,6 +22,8 @@
 // import { useDescope } from '@descope/react-sdk'
 // import { useLogout } from '../hooks/useLogout'
 // import { Avatar } from '@mui/material'
+// import { Sparkles, Clapperboard } from 'lucide-react'
+// import GeminiDrawer from './GeminiDrawer'
 
 // export default function Header({
 //   user, menuOpen, setMenuOpen
@@ -35,10 +36,12 @@
 //   const [notificationOpen, setNotificationOpen] = useState(false)
 //   const [badgeCount, setBadgeCount] = useState(0)
 //   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+//   const [geminiOpen, setGeminiOpen] = useState(false)
 //   const { data } = useInvitation({ userId: user?._id });
+//   const { enqueueSnackbar } = useSnackbar();
 //   const sdk = useDescope();
-
 //   const handleLogout = useLogout();
+
 //   const handleOpenNotifications = () => {
 //     setNotificationOpen(true)
 //     setBadgeCount(0)
@@ -52,43 +55,33 @@
 //     setAnchorEl(null)
 //   }
 
+//   const handleComingSoon = (feature: string) => {
+//     enqueueSnackbar(`${feature} coming soon!`, { variant: 'info' })
+//   }
+
 //   return (
 //     <>
 //       <style>{`
 //         @keyframes pulse-dot {
-//           0%, 100% {
-//             opacity: 1;
-//             transform: scale(1);
-//           }
-//           50% {
-//             opacity: 0.8;
-//             transform: scale(1.2);
-//           }
+//           0%, 100% { opacity: 1; transform: scale(1); }
+//           50% { opacity: 0.8; transform: scale(1.2); }
 //         }
 
-//         @keyframes gradient-shift {
-//           0% {
-//             background-position: 0% 50%;
-//           }
-//           50% {
-//             background-position: 100% 50%;
-//           }
-//           100% {
-//             background-position: 0% 50%;
-//           }
+//         .enhanced-navbar {
+//           background: linear-gradient(90deg, #ffffff 0%, #fffbf7 100%);
+//           backdrop-filter: blur(10px);
+//           border-bottom: 1px solid rgba(249, 115, 22, 0.1);
 //         }
 
-//         .logo-text {
-//           background: linear-gradient(135deg, #e74c3c 0%, #ff8c42 100%);
-//           -webkit-background-clip: text;
-//           -webkit-text-fill-color: transparent;
-//           background-clip: text;
+//         .logo-img {
+//           height: 35px;
+//           width: auto;
 //           transition: all 0.3s ease;
 //         }
 
-//         .logo-text:hover {
+//         .logo-img:hover {
 //           transform: scale(1.05);
-//           filter: brightness(1.1);
+//           filter: brightness(1.05);
 //         }
 
 //         .coin-badge {
@@ -105,6 +98,40 @@
 //           transform: translateY(-1px);
 //         }
 
+//         .feature-badge {
+//           display: flex;
+//           align-items: center;
+//           gap: 6px;
+//           background: #f3f4f6;
+//           border: 1.5px solid #e5e7eb;
+//           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+//           border-radius: 999px;
+//           padding: 6px 12px;
+//           cursor: pointer;
+//           transition: all 0.3s ease;
+//           font-size: 12px;
+//           font-weight: 600;
+//           color: #374151;
+//           user-select: none;
+//         }
+
+//         .feature-badge:hover {
+//           background: #fff7ed;
+//           border-color: #f97316;
+//           box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
+//           transform: translateY(-1px);
+//           color: #f97316;
+//         }
+
+//         .feature-badge svg {
+//           transition: all 0.3s ease;
+//           color: #6b7280;
+//         }
+
+//         .feature-badge:hover svg {
+//           color: #f97316;
+//         }
+
 //         .nav-icon-button {
 //           transition: all 0.3s ease;
 //         }
@@ -116,16 +143,6 @@
 
 //         .nav-icon-button:hover svg {
 //           color: #f97316 !important;
-//         }
-
-//         .notification-dot {
-//           animation: pulse-dot 2s infinite;
-//         }
-
-//         .enhanced-navbar {
-//           background: linear-gradient(90deg, #ffffff 0%, #fffbf7 100%);
-//           backdrop-filter: blur(10px);
-//           border-bottom: 1px solid rgba(249, 115, 22, 0.1);
 //         }
 
 //         .user-avatar {
@@ -171,9 +188,8 @@
 //       `}</style>
 
 //       <header className='relative h-[70px]'>
-//         <nav
-//           className='enhanced-navbar fixed left-0 shadow-lg text-gray-600 h-[70px] items-center pr-8 pl-6 flex justify-between z-40 w-full top-0'
-//         >
+//         <nav className='enhanced-navbar fixed left-0 shadow-lg text-gray-600 h-[70px] items-center pr-8 pl-6 flex justify-between z-40 w-full top-0'>
+
 //           {/* Mobile Menu Button */}
 //           <div className='lg:hidden mobile-menu-button'>
 //             <IconButton onClick={() => setMenuOpen(!menuOpen)}>
@@ -182,24 +198,19 @@
 //           </div>
 
 //           {/* Logo */}
-//           <div className='flex md:ml-[30px] gap-1 items-center'>
+//           <div className='flex md:ml-[10px] items-center'>
 //             <Link to='/'>
-//               <div className='logo-text' style={{
-//                 fontSize: '32px',
-//                 fontWeight: 700,
-//                 letterSpacing: '-1.5px',
-//                 display: 'flex',
-//                 alignItems: 'center',
-//                 height: '50px',
-//                 cursor: 'pointer'
-//               }}>
-//                 emple
-//               </div>
+//               <img
+//                 src="/emple-logo.png"
+//                 alt="Emple"
+//                 className="logo-img"
+//               />
 //             </Link>
 //           </div>
 
 //           {/* Right Side Items */}
-//           <div className='flex items-center gap-4'>
+//           <div className='flex items-center gap-3'>
+
 //             {/* Coins Display */}
 //             {user?.coins && (
 //               <div className="coin-badge flex gap-2 rounded-full items-center px-3 py-1.5 cursor-pointer">
@@ -214,20 +225,32 @@
 //             <Tooltip title="Buy More Coins" placement="bottom">
 //               <Link to={"/user/coins-add"}>
 //                 <div className="cart-icon-wrapper">
-//                   <IconButton 
+//                   <IconButton
 //                     className="nav-icon-button"
 //                     sx={{
 //                       width: 44,
 //                       height: 44,
-//                       '&:hover': {
-//                         backgroundColor: 'rgba(249, 115, 22, 0.1)'
-//                       }
+//                       '&:hover': { backgroundColor: 'rgba(249, 115, 22, 0.1)' }
 //                     }}
 //                   >
 //                     <Cart20Regular style={{ fontSize: 20 }} />
 //                   </IconButton>
 //                 </div>
 //               </Link>
+//             </Tooltip>
+
+//             {/* Media Badge Pill */}
+//             <Tooltip title="Media - Coming Soon" placement="bottom">
+//               <div className="feature-badge" onClick={() => handleComingSoon('Media')}>
+//                 <Clapperboard size={18} />
+//               </div>
+//             </Tooltip>
+
+//             {/* AI Badge Pill — Opens Gemini Drawer */}
+//             <Tooltip title="Emple AI" placement="bottom">
+//               <div className="feature-badge" onClick={() => setGeminiOpen(true)}>
+//                 <Sparkles size={18} />
+//               </div>
 //             </Tooltip>
 
 //             {user ? (
@@ -241,16 +264,13 @@
 //                     sx={{
 //                       width: 44,
 //                       height: 44,
-//                       '&:hover': {
-//                         backgroundColor: 'rgba(249, 115, 22, 0.1)'
-//                       }
+//                       '&:hover': { backgroundColor: 'rgba(249, 115, 22, 0.1)' }
 //                     }}
 //                   >
 //                     <Badge
 //                       badgeContent={badgeCount}
 //                       color='error'
-//                       sx={{ 
-//                         position: "relative",
+//                       sx={{
 //                         '& .MuiBadge-badge': {
 //                           animation: badgeCount > 0 ? 'pulse-dot 2s infinite' : 'none'
 //                         }
@@ -269,27 +289,17 @@
 //                     alt={user?.name}
 //                     onClick={handleMenuOpen}
 //                     className="user-avatar"
-//                     sx={{
-//                       width: 40,
-//                       height: 40,
-//                       cursor: "pointer"
-//                     }}
+//                     sx={{ width: 40, height: 40, cursor: "pointer" }}
 //                   />
 //                 </Tooltip>
 
-//                 {/* Enhanced Dropdown Menu */}
+//                 {/* Dropdown Menu */}
 //                 <Menu
 //                   anchorEl={anchorEl}
 //                   open={Boolean(anchorEl)}
 //                   onClose={handleMenuClose}
-//                   anchorOrigin={{
-//                     vertical: 'bottom',
-//                     horizontal: 'right',
-//                   }}
-//                   transformOrigin={{
-//                     vertical: 'top',
-//                     horizontal: 'right',
-//                   }}
+//                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+//                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 //                   PaperProps={{
 //                     sx: {
 //                       mt: 1.5,
@@ -300,29 +310,20 @@
 //                     }
 //                   }}
 //                 >
-//                   <MenuItem 
-//                     component={Link} 
-//                     to="/user/profile" 
+//                   <MenuItem
+//                     component={Link}
+//                     to="/user/profile"
 //                     onClick={handleMenuClose}
 //                     className="menu-item-enhanced"
-//                     sx={{
-//                       py: 1.5,
-//                       px: 2.5,
-//                       fontSize: '0.95rem'
-//                     }}
+//                     sx={{ py: 1.5, px: 2.5, fontSize: '0.95rem' }}
 //                   >
 //                     👤 User Profile
 //                   </MenuItem>
 //                   <Divider sx={{ my: 0.5 }} />
-//                   <MenuItem 
+//                   <MenuItem
 //                     onClick={() => { handleMenuClose(); handleLogout(); }}
 //                     className="menu-item-enhanced"
-//                     sx={{
-//                       py: 1.5,
-//                       px: 2.5,
-//                       fontSize: '0.95rem',
-//                       color: '#ef4444'
-//                     }}
+//                     sx={{ py: 1.5, px: 2.5, fontSize: '0.95rem', color: '#ef4444' }}
 //                   >
 //                     <PowerSettingsNew sx={{ mr: 1.5, fontSize: 20 }} />
 //                     Logout
@@ -340,11 +341,7 @@
 //                 <Divider
 //                   orientation='vertical'
 //                   flexItem
-//                   sx={{ 
-//                     bgcolor: 'rgba(249, 115, 22, 0.2)',
-//                     height: 24,
-//                     alignSelf: 'center'
-//                   }}
+//                   sx={{ bgcolor: 'rgba(249, 115, 22, 0.2)', height: 24, alignSelf: 'center' }}
 //                 />
 //                 <Link
 //                   to={'/signup'}
@@ -366,22 +363,12 @@
 //         notificationOpen={notificationOpen}
 //         setNotificationOpen={setNotificationOpen}
 //       />
+
+//       {/* Gemini AI Drawer */}
+//       <GeminiDrawer open={geminiOpen} onClose={() => setGeminiOpen(false)} />
 //     </>
 //   )
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -464,9 +451,14 @@ export default function Header({
           border-bottom: 1px solid rgba(249, 115, 22, 0.1);
         }
 
+        /* ✅ FIX 1: Logo bg box removed - transparent background, no border/shadow */
         .logo-img {
           height: 35px;
           width: auto;
+          display: block;
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
           transition: all 0.3s ease;
         }
 
@@ -487,40 +479,6 @@ export default function Header({
           border-color: #d1d5db;
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
           transform: translateY(-1px);
-        }
-
-        .feature-badge {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          background: #f3f4f6;
-          border: 1.5px solid #e5e7eb;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          border-radius: 999px;
-          padding: 6px 12px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 12px;
-          font-weight: 600;
-          color: #374151;
-          user-select: none;
-        }
-
-        .feature-badge:hover {
-          background: #fff7ed;
-          border-color: #f97316;
-          box-shadow: 0 2px 8px rgba(249, 115, 22, 0.2);
-          transform: translateY(-1px);
-          color: #f97316;
-        }
-
-        .feature-badge svg {
-          transition: all 0.3s ease;
-          color: #6b7280;
-        }
-
-        .feature-badge:hover svg {
-          color: #f97316;
         }
 
         .nav-icon-button {
@@ -588,13 +546,14 @@ export default function Header({
             </IconButton>
           </div>
 
-          {/* Logo */}
-          <div className='flex md:ml-[10px] items-center'>
-            <Link to='/'>
+          {/* ✅ FIX 1: Logo - removed any wrapper bg, just plain img */}
+          <div className='flex md:ml-[10px] items-center' style={{ background: 'transparent' }}>
+            <Link to='/' style={{ display: 'flex', alignItems: 'center', background: 'transparent' }}>
               <img
                 src="/emple-logo.png"
                 alt="Emple"
                 className="logo-img"
+                style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}
               />
             </Link>
           </div>
@@ -630,18 +589,34 @@ export default function Header({
               </Link>
             </Tooltip>
 
-            {/* Media Badge Pill */}
+            {/* ✅ FIX 2: Media Icon - now like notification (plain IconButton, no pill) */}
             <Tooltip title="Media - Coming Soon" placement="bottom">
-              <div className="feature-badge" onClick={() => handleComingSoon('Media')}>
-                <Clapperboard size={18} />
-              </div>
+              <IconButton
+                className="nav-icon-button"
+                onClick={() => handleComingSoon('Media')}
+                sx={{
+                  width: 44,
+                  height: 44,
+                  '&:hover': { backgroundColor: 'rgba(249, 115, 22, 0.1)' }
+                }}
+              >
+                <Clapperboard size={22} />
+              </IconButton>
             </Tooltip>
 
-            {/* AI Badge Pill — Opens Gemini Drawer */}
+            {/* ✅ FIX 2: AI Icon - now like notification (plain IconButton, no pill) */}
             <Tooltip title="Emple AI" placement="bottom">
-              <div className="feature-badge" onClick={() => setGeminiOpen(true)}>
-                <Sparkles size={18} />
-              </div>
+              <IconButton
+                className="nav-icon-button"
+                onClick={() => setGeminiOpen(true)}
+                sx={{
+                  width: 44,
+                  height: 44,
+                  '&:hover': { backgroundColor: 'rgba(249, 115, 22, 0.1)' }
+                }}
+              >
+                <Sparkles size={22} />
+              </IconButton>
             </Tooltip>
 
             {user ? (
